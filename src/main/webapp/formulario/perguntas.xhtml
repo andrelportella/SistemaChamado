@@ -1,0 +1,88 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <div id="signupbox" style=" margin-top:40px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <center><div class="panel-title"><h3>#{respostaBean.formulario.titulo}</h3></div></center>
+            </div>  
+            <div class="panel-body" >                      
+                <h:form id="form_pesq" class="form-group" >
+                    <ui:repeat value="#{respostaBean.items}" var="item" >
+                        <h:column rendered="#{item.tipo == 'Texto' }">
+                            <div  id="div_id_username" class="form-group required">
+                                <fieldset class="colorDialog col-md-12" >
+                                    <legend><p:outputLabel value="#{item.pergunta}" class="colorDialog" for="perg" /></legend>
+                                    <div  class="controls col-md-12 ">                                
+                                        <p:inputText id="perg" required="#{item.obrigatorio}"  value="#{respostaBean.resposta[item.contador]}" class="input-md  textinput textInput form-control"  maxlength="255" style="margin-bottom: 10px" >
+                                            <p:messages for="perg"/>
+                                        </p:inputText>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </h:column>
+
+                        <h:column rendered="#{item.tipo == 'Area de Texto' }">
+                            <div  id="div_id_usernameArea" class="form-group required">
+                                <fieldset class="colorDialog col-md-12" >
+                                    <legend><p:outputLabel value="#{item.pergunta}" class="colorDialog" for="pergArea" /></legend>                                   
+                                    <div  class="controls col-md-12 ">                                
+                                        <p:inputTextarea id="pergArea" counter="display" maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true" required="#{item.obrigatorio}"  value="#{respostaBean.resposta[item.contador]}" class="input-md  textinput textInput form-control"  style="margin-bottom: 10px" >
+                                            <p:messages for="pergArea"/>
+                                        </p:inputTextarea>                                    
+                                        <h:outputText  class="colorDialog"  id="display" />
+                                        <br/><br/>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </h:column>
+
+
+
+                        <h:column rendered="#{item.tipo == 'Multipla Escolha' }">
+                            <div  id="div_id_username" >                                
+                                <fieldset class="colorDialog col-md-12" >
+                                    <legend><p:outputLabel value="#{item.pergunta}" class="colorDialog" for="selectone" /> </legend>
+                                    <div class="controls col-md-12 "  style="margin-bottom: 25px">                                   
+                                        <h:selectOneRadio  id="selectone" layout="pageDirection" 
+                                                           value="#{respostaBean.resposta[item.contador]}" required="#{item.obrigatorio}"
+                                                           styleClass="inlineRadioButtons radio-inline tipoGuia"  >
+                                            <f:selectItems  class="custom-control-input" value="#{item.opcoes}"
+                                                            var="opcoes" itemLabel="#{opcoes.opcao}"
+                                                            itemValue="#{opcoes.opcao}" />
+                                            <p:messages for="selectone" />
+                                        </h:selectOneRadio>     
+                                        <h:column rendered="#{item.exibeTexto}">
+                                            <br/>
+                                            <p:outputLabel for="pergText" class="colorDialog col-md-12"  value="#{item.textoExibicao}" />
+                                            <p:inputTextarea id="pergText"  counter="display2" maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true" required="false"  value="#{respostaBean.respostaObs[item.contador]}" class="input-md  textinput textInput form-control"   style="margin-bottom: 10px" >
+                                                <p:messages for="pergText"/>
+                                            </p:inputTextarea>
+                                            <h:outputText  class="colorDialog"  id="display2" />
+                                            <br/><br/>
+                                        </h:column>  
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </h:column>                       
+                        <Br/><Br/><Br/>
+                    </ui:repeat>   
+
+                    <div class="form-group"> 
+                        <div class="aab controls col-md-12 "></div>
+                        <div  class="controls col-md-12 ">
+                            <p:commandButton ajax="true" value="Salvar"  action="#{respostaBean.salvar()}"  >
+
+                            </p:commandButton>
+                        </div>
+                    </div> 
+
+                </h:form>
+
+            </div>
+        </div>
+    </div> 
+</html>

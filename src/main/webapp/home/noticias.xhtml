@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" > 
+
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes" name="viewport"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta http-equiv="pragma" content="no-cache"/>
+        <meta http-equiv="cache-control" content="no-cache"/>
+        <meta http-equiv="expires" content="0"/>
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/dist/css/AdminLTE.min.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
+
+        <link rel="shortcut icon" type="image/x-icon"  href="#{resource['imagens/favicon.ico']}"/>
+        <link rel="shortcut icon" type="image/x-icon"  href="#{facesContext.externalContext.requestContextPath}/resources/imagens/favicon.ico"/>
+        <h:outputScript name="locale-primefaces.js" library="js"/>             
+
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/css/style.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/css/showcase.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/css/background.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/css/style.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{request.contextPath}/resources/css/botaoBS.css" />
+
+        <h:outputStylesheet name="css/core-layout.css"
+                            library="adamantium-layout" />
+        <h:outputStylesheet name="css/animate.css" library="adamantium-layout" />
+        <h:outputStylesheet name="css/adamantium-font.css"
+                            library="adamantium-layout" />
+        <h:outputStylesheet name="css/ripple-effect.css"
+                            library="adamantium-layout" />
+        <h:outputStylesheet name="css/perfect-scrollbar.css"
+                            library="adamantium-layout" />
+        <h:outputStylesheet name="css/font-awesome.css"
+                            library="adamantium-layout" />
+        <h:outputStylesheet name="css/adamantium-layout.css"
+                            library="adamantium-layout" />
+        <h:outputStylesheet library="css" name="botaoBS.css" />
+    </h:head>
+    <div class="entry">
+        <p:carousel  value="#{noticiasBean.noticias}"  id="slideShow" autoPlayInterval="6000" numVisible="2" responsive="true"  style="background-color:#FFF;"
+                     effect="easeInStrong" circular="true" var="notic" pageLinks="8" itemStyle="text-align:center; background-color:#000;" headerText="Noticias"
+                     >
+            <a target="_blank"  href="/SistemaChamadoBM/home/noticiaCadastrada.xhtml?id=#{notic.id}">
+                <p:panelGrid columns="1" style="width:100%;height: 100%;" columnClasses="value,value" layout="grid" >                   
+                    <h3>
+                        <strong>
+                            <span>
+                                <h:outputText class="dataNoticia" value="#{notic.dataPublicacao}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+
+                                <span class="tituloNoticia">
+                                    #{notic.titulo}
+                                </span>                            
+                            </span>
+                        </strong>
+                    </h3>
+
+                    <br/>
+                    <f:facet name="footer">
+                        <p:graphicImage  name="/anexos/noticias/#{notic.id}#{notic.nomeArquivo}" title="#{notic.titulo} " width="100%" height="100%"/>                        
+                    </f:facet>
+                </p:panelGrid>
+            </a>
+        </p:carousel>
+    </div>
+
+    <br/>
+</ui:composition>

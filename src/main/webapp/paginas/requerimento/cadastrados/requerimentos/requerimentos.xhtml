@@ -1,0 +1,157 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:pm="http://primefaces.org/mobile"
+                template="/WEB-INF/template.xhtml">
+
+    <!-- Dica para dar manuten��o ao c�digo, clique nos icones (+, -) para abrir e fechar as tags, pois est� p�gina
+    � enorme e se for navegar nela para ver as fun��es especificas, voc� vai perder muito tempo. todas as tags est�o
+    comentadas com suas respectivas fun��es.
+    -->
+
+    <ui:define name="corpo">       
+
+        <title>Requerimentos</title>
+        <!-- Lista de Atendimentos Cadastrados -->
+        <h:form id="req_form">
+            <p:dataTable   draggableColumns="true" filterDelay="800" rendered="#{loginBean.acesso.acessaRequerimentos}" reflow="true" value="#{requerimentoBean.requerimentos}"  id="requerimento" var="req" paginator="true" resizableColumns="true" widgetVar="celRequerimento"  
+                           rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{req.id}"  selectionMode="single" selection="#{requerimentoBean.requerimentoSelecionado}"
+                           paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                           {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" 
+                           currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                           - Página: {currentPage}/{totalPages}" >
+
+                <f:facet name="header">
+                    <p:menuButton  style="float:left; margin-left:10px;" value="Opções" class="verticalmenu"  >                        
+                        <p:menuitem action="#{requerimentoBean.anexaArquivo()}" update=":cadastrarDetal :form:grid" value="Cadastrar" oncomplete="PF('cadastrarDialog').show()" title="Cadastrar Requerimento"  />
+                        <p:menuitem rendered="#{loginBean.acesso.acessaTodosRequerimentos}" id="ostraTodos"  update="requerimento ostraTodos"  value="#{requerimentoBean.nomeCampo}" actionListener="#{requerimentoBean.listarRequerimento()}" />
+                    </p:menuButton>
+                    #{requerimentoBean.nomeTabela}
+                    <p:commandButton class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="requerimento" trigger="toggler" /> 
+                    <p:commandButton action="#{requerimentoBean.anexaArquivo()}" update=":cadastrarDetal :form:grid" class="horizontalmenu" value="Cadastrar"  oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar Requerimento" styleClass="btnCadastrar" />
+                    <p:commandButton rendered="#{loginBean.acesso.acessaTodosRequerimentos}" class="horizontalmenu" id="mostraTodos"  update="requerimento mostraTodos"  value="#{requerimentoBean.nomeCampo}" actionListener="#{requerimentoBean.listarRequerimento()}" styleClass="btnMostraTodos" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="requerimento" fileName="requerimentos" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="requerimento" fileName="requerimentos" />
+                    </h:commandLink>
+                </f:facet>
+                <p:column headerText="Ticket" priority="8" 
+                          sortBy="#{req.id}" filterBy="#{req.id}"  filterMatchMode="contains"
+                          width="4%" >
+                    <h:outputText value="#{req.id}"/>                                           
+                </p:column>
+
+                <p:column headerText="Status"  priority="8" 
+                          sortBy="#{req.status}" filterBy="#{req.status}" filterMatchMode="contains"  id="statusPESQ"
+                          width="10%" >
+
+                    <h:outputText value="#{req.status}"/>      
+                </p:column>
+
+                <p:column headerText="Abertura" 
+                          sortBy="#{req.dataAbertura}" filterBy="#{req.dataAbertura}"  filterMatchMode="contains"
+                          width="7%" >
+                    <h:outputText value="#{req.dataAbertura}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Responsavel"  
+                          sortBy="#{req.tecnico}" filterBy="#{req.tecnico}"  filterMatchMode="contains"  id="tecPesquisa" 
+                          width="9%" >
+                    <h:outputText value="#{req.tecnico}"/>                                           
+                </p:column>
+
+                <p:column headerText="Requerente"
+                          sortBy="#{req.requerente}" filterBy="#{req.requerente}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{req.requerente}"/>                                           
+                </p:column>
+
+                <p:column headerText="Local"
+                          sortBy="#{req.local}" filterBy="#{req.local}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{req.local}"/>                                           
+                </p:column>
+
+                <p:column headerText="Alterado há"   priority="10" 
+                          sortBy="#{req.tipoData}" filterBy="#{req.tipoData}"  filterMatchMode="contains"
+                          width="7%" >
+                    <h:outputText value="#{req.tipoData}"/>
+
+                </p:column>
+
+                <p:column headerText="Resumo" 
+                          sortBy="#{req.resumo}" filterBy="#{req.resumo}"  filterMatchMode="contains"
+                          width="25%" >
+                    <h:outputText value="#{req.resumo}"/>                                           
+                </p:column>
+
+                <p:column exportable="false" headerText="Menu" width="4%" >    
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >                        
+                        <p:menuitem value="Editar" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar"  action="#{requerimentoBean.editar(req)}" disabled="#{req.situacao}" />                        
+
+                        <p:menuitem value="Movimentar" icon="fa fa-arrow-circle-up" update=":movimentarDetal" oncomplete="PF('movimentarDialog').show()" title="Movimentar" action="#{requerimentoBean.movimentar(req)}" disabled="#{req.situacao}" />
+
+                        <p:menuitem value="Reenviar E-mail"  icon="fa fa-send"  title="Reenviar E-mail" action="#{requerimentoBean.sendMail(req)}" disabled="#{req.situacao}"  />
+
+                        <p:menuitem value="Visualizar" update=":requerimentoDetal" oncomplete="PF('requerimentoDialog').show()" icon="ui-icon-search" title="Visualizar"  >
+                            <f:setPropertyActionListener value="#{req}" target="#{requerimentoBean.requerimentoSelecionado}" />
+                        </p:menuitem>
+                    </p:splitButton>
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:outputLabel id="total" value="Total de Requerimentos: #{requerimentoBean.tamanho}" />
+                </f:facet>
+
+
+                <p:ajax update=":movimentosDetal" event="rowDblselect"  oncomplete="PF('movimentosDialog').show()" 
+                        listener="#{requerimentoBean.listaRequerimentoMovimentosSelecionado(requerimentoBean.requerimentoSelecionado)}" 
+                        />
+
+            </p:dataTable>          
+        </h:form>  
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>        
+
+        <!-- dialogAtendimento -->
+        <ui:include src="visualizar.xhtml"/>
+
+        <!-- movimentarDialog -->
+        <ui:include src="movimentar.xhtml"/>
+
+        <!-- arquivoDialog -->
+        <ui:include src="arquivo.xhtml"/>
+
+        <!-- movimentarDialog -->
+        <ui:include src="historico.xhtml"/>
+
+        <!-- cadastrarLocDialog -->
+        <ui:include src="cadastrarLocalizacao.xhtml"/>
+
+        <!-- cadastrarNatDialog -->
+        <ui:include src="cadastrarNatureza.xhtml"/>
+
+        <!-- cadastrarNatDialog -->
+        <ui:include src="cadastrarRequerente.xhtml"/>
+
+    </ui:define>
+
+</ui:composition>

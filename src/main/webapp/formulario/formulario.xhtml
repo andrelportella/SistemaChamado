@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:head>
+        <meta charset="utf-8"/>        
+        <title>#{respostaBean.formulario.titulo}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+        <script src="../resources/js/formulario.js"></script>  
+        <h:outputStylesheet library="css" name="formulario.css" />
+        <link rel="shortcut icon" type="image/x-icon"  href="#{facesContext.externalContext.requestContextPath}/resources/imagens/favicon.ico"/>
+    </h:head>
+   <h:body class="backBody" style="background-color:#{'#'}#{respostaBean.formulario.corFundo}">
+        <p:ajaxStatus  onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()" />
+        <p:dialog footer=""  modal="true" widgetVar="statusDialog" header="Carregando" draggable="false" closable="false" resizable="false" >            
+            <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+        </p:dialog>
+
+        <p:growl id="messages"  showDetail="true" life="9000" autoUpdate="true" />
+   
+        <div class="container">           
+            <h:column>
+                <ui:include src="perguntas.xhtml"/>
+            </h:column>
+        </div>       
+    </h:body>
+
+
+</html>

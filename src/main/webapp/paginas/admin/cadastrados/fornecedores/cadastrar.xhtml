@@ -1,0 +1,85 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""  widgetVar="cadastrarDialog"  header="Cadastrar"   resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="cadastrarDetal" class="corDialog"  >
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true" /> 
+                <div class="ui-fluid">
+
+                    <p:panelGrid  columns="4" id="grid" class="corDialog" style="width: 100%" columnClasses="value,value" >
+
+                        <p:outputLabel class="colorDialog" for="nome" value="Nome"/>
+
+                        <p:inputText id="nome"  value="#{fornecedorBean.fornecedor.nome}" required="true" requiredMessage="Por favor, informe um Nome para o fornecedor com no mínimo 3 caracteres."  >
+                            <p:message for="nome"/>
+                            <f:validateLength minimum="3" maximum="20"/>                                                     
+                        </p:inputText>
+
+                        <p:outputLabel class="colorDialog" for="razao" value="Razão Social"/>
+
+                        <p:inputText id="razao" value="#{fornecedorBean.fornecedor.razaoSocial}" required="true" requiredMessage="Por favor, informe a Razão Social para o fornecedor com no mínimo 10 caracteres."  >
+                            <p:message for="razao"/>
+                            <f:validateLength minimum="10"/>                                    
+                        </p:inputText>
+
+<!--
+                        <p:outputLabel  class="colorDialog" for="tipo" value="Tipo"/>
+                        <p:selectOneMenu value="{fornecedorBean.fornecedor.tipo}" id="tipo">
+                            <f:selectItem itemValue="PF" itemLabel="PF"/>
+                            <f:selectItem itemValue="PJ" itemLabel="PJ"/>
+                            <p:ajax update=":form:cnpj :form:cnpj2"  event="change"  />
+                        </p:selectOneMenu>
+-->
+                        <p:outputLabel  class="colorDialog" for="cnpj2" value="CNPJ"/>
+                        <p:inputText  id="cnpj2" value="#{fornecedorBean.fornecedor.cnpj}" required="true" requiredMessage="Por favor, informe um CNPJ ou CPF para o Fornecedor."  >
+                            <p:message for="cnpj2"/>
+                        </p:inputText>
+
+
+                        <p:outputLabel  class="colorDialog" for="tel" value="Telefone" />
+
+                        <p:inputMask id="tel"  value="#{fornecedorBean.fornecedor.telefone}" mask="(99)9999-9999" size="55"  required="true" requiredMessage="Por favor, informe um Telefone para o Fornecedor." >
+                            <p:message for="tel"/>
+                        </p:inputMask>
+
+                        <p:outputLabel  class="colorDialog" for="EndEmail" value="Email"/>
+
+                        <p:inputText id="EndEmail" value="#{fornecedorBean.fornecedor.email}" size="55" required="true" requiredMessage="Por favor, informe um email válido para o Fornecedor com no mínimo 10 caracteres." >
+                            <p:message for="EndEmail"/>
+                            <p:ajax update="btnSalvar" event="change" listener="#{fornecedorBean.validaMail(fornecedorBean.fornecedor.email)}" />
+                        </p:inputText>
+
+                        <p:outputLabel  class="colorDialog"  for="end" value="Endereço"/>
+
+                        <p:inputText  id="end" value="#{fornecedorBean.fornecedor.endereco}" size="55" required="true" requiredMessage="Por favor, informe um Endereço válido para o Fornecedor com no mínimo 10 caracteres." >
+                            <f:validateLength minimum="10" />
+                            <p:message for="end"/>
+                        </p:inputText>
+                    </p:panelGrid>
+                </div>
+                <br/>
+                <p:commandButton disabled="#{fornecedorBean.statusBotao}"  id="btnSalvar" value="Salvar" action="#{fornecedorBean.salvar()}" update="fornecedores_form:fornecedores " ajax="true" icon="fa fa-save" class="tamBtn" />
+            </h:form>  
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

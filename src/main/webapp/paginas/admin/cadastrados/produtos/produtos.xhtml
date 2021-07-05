@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <ui:define name="corpo"> 
+
+
+        <title>Produtos Cadastrados</title>  
+        <h:form id="usuarios_form">
+
+            <p:dataTable   filterDelay="800" draggableColumns="true" rendered="#{loginBean.acesso.acessaItens}" reflow="true" value="#{produtoBean.produtos}" id="produto" var="mov" paginator="true" resizableColumns="true" widgetVar="celAtendimento"  
+                           rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{mov.id}"  selectionMode="single" selection="#{produtoBean.produtoSelecionado}" 
+                           style="width: 100%;"
+                           paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} "
+                           currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                           - Página: {currentPage}/{totalPages}" >
+
+                <f:facet name="header">                    
+                    Produtos
+                    <p:commandButton class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right;"  icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="produto" trigger="toggler" >
+                        <p:ajax event="toggle" listener="#{produtoBean.onToggle}" />
+                    </p:columnToggler>
+                    <p:commandButton  update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" value="Cadastrar" title="Cadastrar Produto" styleClass="btnCadastrar" icon="fa fa-plus" />
+                </f:facet>
+
+
+                <f:facet name="{Exporters}">
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="produto" fileName="produtos"   />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="produto" fileName="produtos" preProcessor="#{customizadorDocumentosPF.preProcessPDF}" />
+                    </h:commandLink>
+
+                </f:facet>
+
+                <p:column  headerText="ID"  priority="9"  exportable="#{produtoBean.list[0]}" visible="#{produtoBean.list[0]}" 
+                           sortBy="#{mov.id}" filterBy="#{mov.id}"  filterMatchMode="contains" 
+                           width="5%" >
+                    <h:outputText value="#{mov.id}"/>
+                </p:column>
+
+
+                <p:column headerText="Tipo de produto"  priority="8"    exportable="#{produtoBean.list[1]}" visible="#{produtoBean.list[1]}" 
+                          sortBy="#{mov.produto}" filterBy="#{mov.produto}" filterMatchMode="contains"
+                          width="20%" >
+                    <h:outputText value="#{mov.produto}" />
+                </p:column>
+
+                <p:column headerText="Descricao"  priority="5"  id="abertura"  exportable="#{produtoBean.list[2]}" visible="#{produtoBean.list[2]}" 
+                          sortBy="#{mov.descricao}" filterBy="#{mov.descricao}"  filterMatchMode="contains"
+                          width="20%" >
+                    <h:outputText value="#{mov.descricao}">
+
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Observacao"  priority="4" visible="#{produtoBean.list[3]}"  exportable="#{produtoBean.list[3]}"
+                          sortBy="#{mov.obs} " filterBy="#{mov.obs}"  filterMatchMode="contains" 
+                          width="20%" >
+                    <h:outputText value="#{mov.obs}"/>
+                </p:column>
+
+                <p:column headerText="Saldo"  priority="6" visible="#{produtoBean.list[4]}"  exportable="#{produtoBean.list[4]}"
+                          sortBy="#{mov.saldo}" filterBy="#{mov.saldo}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{mov.saldo}"/>
+                </p:column>
+
+                <p:column headerText="Valor"  priority="7" visible="#{produtoBean.list[5]}"  exportable="#{produtoBean.list[5]}"
+                          sortBy="#{mov.valor}" filterBy="#{mov.valor}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{mov.valor}"/>
+                </p:column>
+
+                <p:column headerText="Status"  priority="7" visible="#{produtoBean.list[6]}"  exportable="#{produtoBean.list[6]}"
+                          sortBy="#{mov.status}" filterBy="#{mov.status?'Ativo':'Inativo'}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{mov.status?'Ativo':'Inativo'}"/>
+                </p:column>
+
+                <p:column exportable="false"  priority="1" headerText="Menu" visible="true"  
+                          width="5%" >    
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+                        <p:menuitem value="Editar" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar"  action="#{produtoBean.editar(mov)}" />
+                    </p:splitButton>
+                </p:column>
+
+                <p:ajax update=":produtoDetal" event="rowDblselect"  oncomplete="PF('produtoDialog').show()" listener="#{produtoBean.listaMovimentacaoProduto()}" >
+                    <f:setPropertyActionListener value="#{mov}" target="#{produtoBean.produtoSelecionado}"  /> 
+                </p:ajax>
+            </p:dataTable>
+        </h:form>
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+        <!-- dialogHistorico -->
+        <ui:include src="historico.xhtml"/>
+
+
+    </ui:define>
+
+</ui:composition>
+

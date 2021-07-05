@@ -1,0 +1,194 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <!-- dialogAtendimento -->
+    <p:dialog  id="atendimentoDetal" footer=""  header="Informações do Atendimento - Ticket: #{movimentacaoBean.atendimento.id}" widgetVar="atendimentoDialog" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="350" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel>
+            <h:form >
+                <p:panelGrid columnClasses="label,value"  style="width: 100%" >
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Data de Abertura" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.dataAbertura}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Hora de Abertura" class="dialog" />
+
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.horaAbertura}"  >
+                                <f:convertDateTime pattern="HH:mm"/>                            
+
+                            </h:outputText>
+
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Equipamento" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.equipamento}"/>                    
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Categoria" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.categoria}"/>  
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Status Atendimento" class="dialog" />                       
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.statusAtendimento ? ' Aberto' : 'Finalizado'}"/>                 
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Especie Movimentação" class="dialog" /> 
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.tipoAtendimento}"/>                                        
+                        </p:column>
+
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Técnico" class="dialog" />                  
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.tecnico}"/>
+
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Solicitante" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.solicitante}"/>  
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Data de Fechamento" class="dialog" />             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.dataFechamento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Hora de Fechamento" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.horaFechamento}">
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>                    
+                        </p:column>
+                    </p:row>                   
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Passou Email?" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.passouEmail ? ' Sim' : 'Não'}"/>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Valor " class="dialog" />                       
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.valor}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Produto" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.produto}"/>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Quantidade Produto " class="dialog" />                       
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{movimentacaoBean.atendimento.qtdProduto}" />
+                        </p:column>
+
+                    </p:row>
+
+                    <p:row>                      
+                      
+
+                        <p:column rowspan="1" colspan="1">
+                            <h:outputText value="Classificação" class="dialog" />
+                        </p:column>
+
+                        <p:column rowspan="1" colspan="1" >                              
+                            <p:rating readonly="true" value="#{movimentacaoBean.atendimento.rating}" />
+                        </p:column>
+
+                    </p:row>
+
+                    <p:row>
+
+                        <p:column rowspan="1" colspan="1" >
+                            <h:outputText value="Acompanhantes" class="dialog" /> 
+                        </p:column>
+
+                        <p:column rowspan="1" colspan="3">
+                            <h:outputText value="#{movimentacaoBean.atendimento.acompanha}" class="dialog" />
+                        </p:column>
+
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Observação" class="dialog" /> 
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="3" colspan="4" >
+                            <p:inputTextarea style="width: 98%" readonly="true"  value="#{movimentacaoBean.atendimento.obs}"/>
+                        </p:column>    
+                    </p:row>
+
+                </p:panelGrid>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

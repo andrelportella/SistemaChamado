@@ -1,0 +1,155 @@
+/*Cor de Fundo do Sistema*/
+.corDeFundo{
+    background:linear-gradient(#F5F5F5,#F5F5F5);
+}
+/*Cor de fundo do cabeçalho dos Dialogs*/
+.ui-dialog .ui-dialog-titlebar {     
+    background: #87CEFA;
+} 
+/*Cor de fundo do rodapé dos Dialogs*/
+.ui-dialog .ui-dialog-footer {     
+    background: #87CEFA;
+} 
+
+/* Cor de fundo do slide de notcias da página principal*/
+.ui-carousel .ui-carousel-header{
+    background: #0288D1;
+}
+/*Cor principal das letras do sistema*/
+.colorDialog{
+    color: black;
+
+}
+.colorDialog2 tr td:nth-of-type(1){
+    color : black;
+}
+.colorDialog2 tr td:nth-of-type(2){
+    color : black;
+}
+.colorDialog2 tr td:nth-of-type(3){
+    color : black;
+}
+/*Estilização dos dialogs*/
+.ui-dialog-title {
+    width: 90%;    
+    display: flex;
+    justify-content: center;
+    margin-right: 50% !important;
+}
+.ui-dialog-buttonpane {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+/*Cor de fundo dos dialogs*/
+.corDialog{
+    background-color: #87CEFA;
+}
+/*Cor de fundo dos dialogs de sub cadastro*/
+.corDialog2{
+    background-color: #CFCFCF;
+}
+/*Cor de fundo do cabeçalho dos dialogs de sub cadastro*/
+.corDialog2.ui-dialog-titlebar{     
+    background: #CFCFCF;
+} 
+
+/*Cor de fundo do rodapé dos dialogs de sub cadastro*/
+.corDialog2  .ui-dialog .ui-dialog-footer {     
+    background: #CFCFCF;
+} 
+
+.corDialog3{    
+    color: #0000FF;
+    cursor: pointer;
+}
+
+.logo{
+
+
+}
+.old{
+    background-color: #87CEFA;
+}
+
+/*Código para deixar o menu principal no modo celular*/
+@media screen and (min-width : 1300px) {
+    .verticalmenu {
+        display: none !important;
+    }
+}
+
+/*Código para deixar o menu principal no computador*/
+@media screen and (max-width : 1300px) {
+    .horizontalmenu {
+        display: none !important;
+    }
+}
+
+
+
+.customDialog {
+    background: #87CEFA;
+}
+
+.customDialog2 {
+    background: #0bb113;
+}
+
+
+.ui-dialog.customDialog .ui-dialog-content {
+    padding: 0;
+    margin: 20px 10px;
+}
+
+/*Tamanho e largura do botão de opções das DataTables*/
+.splitMenu{
+    height: 10px; width: 0px
+}
+
+/* Formatação da fonte do assunto da publicação*/
+.tituloNoticia{
+    color:#03A9F4;
+    font-family:Georgia,serif;
+    font-size:18px;
+    text-align:center;
+}
+/* Formatação da fonte da Data de publicação */
+.dataNoticia{
+    color:#03A9F4;
+    font-family:Comic Sans MS,cursive;
+    font-size:18px;
+    text-align:center;
+}
+
+/*Remover o botão de adicionar todos os itens do Pick list do Primefaces*/
+.ui-picklist-button-add-all {
+    visibility: hidden !important;
+}
+
+/*Remover o botão de remover todos os itens do Pick list do Primefaces*/
+.ui-picklist-button-remove-all {
+    visibility: hidden !important;
+
+}
+/*Texto de boas vindas quando o usuário está deslogado*/
+.boasVindas{
+    text-align:center;
+    color:#0000ff;
+    font-size:30px;
+    font-family:Verdana,Geneva,sans-serif;
+}
+
+/*tamanho minimo do input do selectcheckboxmen*/
+.ui-selectcheckboxmenu-multiple-container{    
+    min-height: 40px;
+}
+.tipoGuia  tr td:nth-of-type(1){
+    color : green;
+}
+.tipoGuia  tr td:nth-of-type(2){
+    color : blue;
+}
+.tipoGuia  tr td:nth-of-type(3){
+    color : red;
+}

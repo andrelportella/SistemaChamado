@@ -1,0 +1,1103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:pm="http://primefaces.org/mobile"
+                template="/WEB-INF/template.xhtml">
+
+    <!-- Dica para dar manuten��o ao c�digo, clique nos icones (+, -) para abrir e fechar as tags, pois est� p�gina
+    � enorme e se for navegar nela para ver as fun��es especificas, voc� vai perder muito tempo. todas as tags est�o
+    comentadas com suas respectivas fun��es.
+    -->
+
+    <ui:define name="corpo">       
+
+
+
+        <title>Requerimentos</title>
+        <h:form id="ajax">
+            <p:ajaxStatus  onstart="PF('statusDialog').show()" onerror="PF('statusDialog').hide()" oncomplete="PF('statusDialog').hide()" />
+            <p:growl autoUpdate="true" showDetail="true" />
+        </h:form>
+
+        <!-- Lista de Atendimentos Cadastrados -->
+        <h:form id="usuarios_form">
+
+            <p:dataTable  rendered="#{loginBean.acesso.acessaRequerimentos}" reflow="true" value="#{requerimentoBean.requerimentos}" id="requerimento" var="req" paginator="true" resizableColumns="true" widgetVar="celRequerimento"  
+                          rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{req.id}"  selectionMode="single" selection="#{requerimentoBean.requerimentoSelecionado}" 
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                          {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"    >
+
+                <f:facet name="header">
+                    <p:menuButton  style="float:left; margin-left:10px;" value="Opções" class="verticalmenu"  >                        
+                        <p:menuitem value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" title="Cadastrar Requerimento"  />
+                        <p:menuitem rendered="#{loginBean.acesso.acessaTodosRequerimentos}" id="ostraTodos"  update="requerimento ostraTodos"  value="#{requerimentoBean.nomeCampo}" actionListener="#{requerimentoBean.listarRequerimento()}" />
+                    </p:menuButton>
+                    #{requerimentoBean.nomeTabela}
+                    <p:commandButton class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="requerimento" trigger="toggler" /> 
+                    <p:commandButton class="horizontalmenu" value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar Requerimento" styleClass="btnCadastrar" />
+                    <p:commandButton rendered="#{loginBean.acesso.acessaTodosRequerimentos}" class="horizontalmenu" id="mostraTodos"  update="requerimento mostraTodos"  value="#{requerimentoBean.nomeCampo}" actionListener="#{requerimentoBean.listarRequerimento()}" styleClass="btnMostraTodos" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="requerimento" fileName="requerimentos" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="requerimento" fileName="requerimentos" />
+                    </h:commandLink>
+                </f:facet>
+
+                <p:column headerText="Ticket" priority="8" filterStyle="max-width: 20px; "
+                          sortBy="#{req.id}" filterBy="#{req.id}"  filterMatchMode="contains"
+                          width="4%" >
+                    <h:outputText value="#{req.id}"/>                                           
+                </p:column>
+                <p:column headerText="Status"  priority="8" filterStyle="max-width: 50px; "
+                          sortBy="#{req.status}" filterBy="#{req.status}" filterMatchMode="contains"  id="statusPESQ"
+                          width="10%" >
+
+                    <h:outputText value="#{req.status}"/>      
+                </p:column>
+
+                <p:column headerText="Abertura" filterStyle="max-width: 60px;"
+                          sortBy="#{req.dataAbertura}" filterBy="#{req.dataAbertura}"  filterMatchMode="contains"
+                          width="7%" >
+                    <h:outputText value="#{req.dataAbertura}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Responsavel"   filterStyle="max-width: 60px; "
+                          sortBy="#{req.tecnico}" filterBy="#{req.tecnico}"  filterMatchMode="contains"  id="tecPesquisa" 
+                          width="9%" >
+                    <h:outputText value="#{req.tecnico}"/>                                           
+                </p:column>
+
+                <p:column headerText="Requerente"
+                          sortBy="#{req.requerente}" filterBy="#{req.requerente}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{req.requerente}"/>                                           
+                </p:column>
+
+                <p:column headerText="Local" filterStyle="max-width: 90px;"
+                          sortBy="#{req.local}" filterBy="#{req.local}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{req.local}"/>                                           
+                </p:column>
+
+                <p:column headerText="Alterado há"   priority="10" filterStyle="max-width: 20px;"
+                          sortBy="#{req.tipoData}" filterBy="#{req.tipoData}"  filterMatchMode="contains"
+                          width="7%" >
+                    <h:outputText value="#{req.tipoData}"/>
+
+                </p:column>
+
+                <p:column headerText="Resumo" 
+                          sortBy="#{req.resumo}" filterBy="#{req.resumo}"  filterMatchMode="contains"
+                          width="25%" >
+                    <h:outputText value="#{req.resumo}"/>                                           
+                </p:column>
+
+                <p:column exportable="false" headerText="Menu"
+                          width="4%" >    
+
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >                        
+                        <p:menuitem value="Editar" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar"  action="#{requerimentoBean.editar(req)}" disabled="#{req.situacao}" />
+                        <p:menuitem value="Histórico" update=":movimentosDetal"  oncomplete="PF('movimentosDialog').show()"  icon="fa fa-history"  title="Histórico" action="#{requerimentoBean.listaRequerimentoMovimentosSelecionado(req)}" />
+                        <p:menuitem value="Movimentar" icon="fa fa-arrow-circle-up" update=":movimentarDetal" oncomplete="PF('movimentarDialog').show()" title="Movimentar" action="#{requerimentoBean.movimentar(req)}" disabled="#{req.situacao}" />
+                        <p:menuitem value="Reenviar E-mail"  icon="fa fa-send"  title="Reenviar E-mail" action="#{requerimentoBean.sendMail(req)}" disabled="#{req.situacao}"  />
+                        <p:menuitem value="Visualizar" update=":requerimentoDetal" oncomplete="PF('requerimentoDialog').show()" icon="ui-icon-search" title="Visualizar"  >
+                            <f:setPropertyActionListener value="#{req}" target="#{requerimentoBean.requerimentoSelecionado}" />
+                        </p:menuitem>                                        
+                    </p:splitButton>
+
+                </p:column>
+
+                <f:facet name="footer">
+                    Total de Requerimentos: #{requerimentoBean.tamanho}
+                </f:facet>
+            </p:dataTable>
+
+        </h:form>
+
+        <!-- dialogAtendimento -->
+        <p:dialog header="Informações do Requerimento"  widgetVar="requerimentoDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="350" width="60%" closeOnEscape="true" draggable="true" >
+            <p:outputPanel id="requerimentoDetal">
+                <div class="ui-fluid">
+                    <p:panelGrid rendered="#{not empty requerimentoBean.requerimentos}" columnClasses="label,value" style="width: 100%"  >
+
+                        <p:row>                       
+                            <p:column rowspan="1" colspan="4" style="text-align: center;">
+                                <h:outputText value="Ticket: " class="dialog" /> 
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.id}"/>
+                            </p:column>                            
+
+                        </p:row>  
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Data de Abertura" class="dialog" />
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.dataAbertura}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Hora de Abertura" class="dialog" />
+
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.horaAbertura}"  >
+                                    <f:convertDateTime pattern="HH:mm"/>                            
+                                </h:outputText>
+
+                            </p:column>
+
+                        </p:row>  
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Cliente" class="dialog" />                             
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.cliente}"/>                    
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Requerente" class="dialog" /> 
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.requerente}"/>  
+                            </p:column>
+
+                        </p:row>  
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Status" class="dialog" />                       
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.status}"/>                 
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Natureza" class="dialog" /> 
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.natureza}"/>                                        
+                            </p:column>
+
+                        </p:row> 
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Responsável" class="dialog" />                  
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.tecnico}"/>
+
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Embarcação / Loja" class="dialog" /> 
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.embarcacao}"/>  
+                            </p:column>                        
+                        </p:row> 
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Local" class="dialog" />             
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.local}"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Despesa" class="dialog" /> 
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.despesa}"/>                    
+                            </p:column>
+                        </p:row> 
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Data de Fechamento" class="dialog" >
+
+                                </h:outputText>             
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.dataFechamento}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>   
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Hora de Fechamento" class="dialog" />
+
+
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{requerimentoBean.requerimentoSelecionado.horaFechamento}">
+                                    <f:convertDateTime pattern="HH:mm"/>           
+                                </h:outputText>                  
+                            </p:column>
+                        </p:row> 
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Anexo" class="dialog" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputLink id="download" value="#{request.contextPath}/resources/anexos/anexosRequerimento/#{requerimentoBean.requerimentoSelecionado.nomeArquivo}" a:download="#{requerimentoBean.requerimentoSelecionado.anexo}" disabled="#{requerimentoBean.requerimentoSelecionado.anexoMovimento}"  >
+                                    #{requerimentoBean.requerimentoSelecionado.anexo}
+                                </h:outputLink>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+
+
+                        </p:row>
+                        <p:row>
+                            <p:column rowspan="1" colspan="4" style="text-align: center;">
+                                <h:outputText value="Descrição" class="dialog" /> 
+                            </p:column>                        
+                        </p:row> 
+
+                        <p:row>
+                            <p:column rowspan="3" colspan="4" >
+
+                                <h:form>                                
+                                    <p:inputTextarea  readonly="true"  value="#{requerimentoBean.requerimentoSelecionado.descricao}"/> 
+                                </h:form>
+
+                            </p:column>    
+
+                        </p:row>
+
+                    </p:panelGrid>
+                </div>
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogHistorico -->
+        <p:dialog widgetVar="movimentosDialog" header="Histórico" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="80%" closeOnEscape="true" draggable="true" >
+            <p:outputPanel id="movimentosDetal" >
+
+                <h:form id="usuarios_form_movimentar">
+                    <p:dataTable reflow="true" value="#{requerimentoBean.listaRequerimentoSelecionado}"  emptyMessage="Não há registros!" id="movimentacao" var="mov" paginator="true"
+                                 rows="20" rowsPerPageTemplate="5, 10, 15, 20,50,100" 
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                                 {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" style="height: 100%" >
+
+                        <f:facet name="header">Histórico de Movimentações</f:facet>
+
+                        <f:facet name="{Exporters}">
+                            <h:commandLink>
+                                <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                                <p:dataExporter type="xls" target="movimentacao" fileName="movimentacao"  />
+                            </h:commandLink>
+
+                            <h:commandLink>
+                                <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                                <p:dataExporter type="pdf" target="movimentacao" fileName="movimentacao"/>
+                            </h:commandLink>
+                        </f:facet>
+
+                        <p:column headerText="Data" filterStyle="max-width: 50px; "
+                                  sortBy="#{mov.dataMovimento}" filterBy="#{mov.dataMovimento}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{mov.dataMovimento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Hora" filterStyle="max-width: 30px; "
+                                  sortBy="#{mov.horaMovimento}" filterBy="#{mov.horaMovimento}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{mov.horaMovimento}">
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>
+                        </p:column>
+
+
+                        <p:column headerText="Responsavel" filterStyle="max-width: 70px; "
+                                  sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains"
+                                  width="13%" >
+                            <h:outputText value="#{mov.tecnico}"/>
+                        </p:column>
+
+                        <p:column headerText="Despesa" filterStyle="max-width: 60px; "
+                                  sortBy="#{mov.despesa}" filterBy="#{mov.despesa}"  filterMatchMode="contains"
+                                  width="12%" >
+                            <h:outputText value="#{mov.despesa}">
+                                <f:convertNumber />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Anexo"  width="10%" >
+                            <h:outputLink id="download" value="#{request.contextPath}/resources/anexos/anexosRequerimento/#{mov.nomeArquivo}" disabled="#{mov.anexoMovimento}" a:download="#{mov.anexo}"  >
+                                #{mov.anexo}
+                            </h:outputLink> 
+
+                        </p:column>
+
+                        <p:column headerText="Observacoes"  filterStyle="max-width: 200px; "  style="white-space:normal !important;"
+                                  sortBy="#{mov.observacao}" filterBy="#{mov.observacao}"  filterMatchMode="contains"
+                                  width="40%" >
+                            <p:inputTextarea readonly="true" style="width:95%" value="#{mov.observacao}" />
+                        </p:column>
+
+                        <f:facet name="footer">
+                            Total de Movimentos: #{requerimentoBean.tamanhoHist}
+                        </f:facet>
+
+                    </p:dataTable>
+
+                </h:form>                    
+
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogEditar -->
+        <p:dialog  widgetVar="editarDialog" header="Editar" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="editarDetal"    >
+                <h:form id="editar">
+                    <div class="ui-fluid">
+                        <p:panelGrid  id="grid"  class="corDialog" style="width: 100%" >
+
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog"  value="Requerente: " for="reque" />
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:selectOneMenu id="reque" value="#{requerimentoBean.editaRequerimento.id_requerente}"  required="false" requiredMessage="Informe o Requerente" filter="true" filterMatchMode="contains" autoWidth="true" >
+                                        <f:selectItem itemValue=" " itemLabel="::Selecione::"/>
+                                        <f:selectItems  value="#{requerimentoBean.requerentes}" var="req" itemLabel="#{req.nome}" itemValue="#{req.id}" />
+                                        <p:message for="reque"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog"  for="cli" value="Cliente" />
+                                </p:column>
+                                <p:column rowspan="1">
+
+                                    <p:selectOneMenu id="cli" value="#{requerimentoBean.editaRequerimento.id_cliente}" required="false" requiredMessage="Informe o Cliente" filter="true" filterMatchMode="contains" autoWidth="true" >
+                                        <f:selectItem itemValue=" " itemLabel="::Selecione::"/>
+                                        <f:selectItems value="#{requerimentoBean.clientes}" var="cli" itemLabel="#{cli.nome}" itemValue="#{cli.id}" />
+                                        <p:message for="cli"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                            </p:row>
+                            <p:row class="corDialog" >
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog"  value="Embarcaçao / Loja " for="el" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:selectOneMenu id="el" value="#{requerimentoBean.editaRequerimento.id_embarcacao}" filter="true" filterMatchMode="contains" autoWidth="true" >
+                                        <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                        <f:selectItems value="#{requerimentoBean.embarcacoes_lojas}" var="emLoja" itemLabel="#{emLoja.nomeBarco} #{emLoja.nomeVagaLoja}" itemValue="#{emLoja.id}" />                                                               
+                                        <p:message for="el"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog"  value="Natureza " for="nat"/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:selectOneMenu  id="nat" value="#{requerimentoBean.editaRequerimento.id_natureza}" filter="true" filterMatchMode="contains" required="true" requiredMessage="Informe uma Natureza" autoWidth="true" >
+                                        <f:selectItem itemValue=" " itemLabel="::Selecione::"/>
+                                        <f:selectItems value="#{requerimentoBean.natureza}" var="naturez" itemLabel="#{naturez.descricao}" itemValue="#{naturez.cod}" />
+                                        <p:message for="nat"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row >
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog"  for="loc" value="Local "/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:selectOneMenu id="loc" value="#{requerimentoBean.editaRequerimento.id_local}" required="true" requiredMessage="Informe um Local" filter="true" filterMatchMode="contains" autoWidth="true" >
+                                        <f:selectItem itemValue=" " itemLabel="::Selecione::"/>
+                                        <f:selectItems value="#{requerimentoBean.local}" var="local" itemLabel="#{local.nome}" itemValue="#{local.id}" />
+                                        <p:message for="loc"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog"  for="dtMov" value="Data"  />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:calendar id="dtMov" value="#{requerimentoBean.editaRequerimento.dataAbertura}"
+                                                pattern="dd/MM/yyyy" locale="pt_BR" mask="99/99/9999"  required="true" requiredMessage="Informe a Data de Movimentação!"  >
+                                        <p:message for="dtMov"/>
+                                    </p:calendar>
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog"  value="Hora" for="hrAber" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:calendar id="hrAber" value="#{requerimentoBean.editaRequerimento.horaAbertura}"
+                                                pattern="HH:mm" timeOnly="true"  required="true" requiredMessage="Informe a hora da Abertura da Movimentação!" mask="99:99" >
+                                        <p:message for="hrAber"/>
+                                    </p:calendar>                            
+                                </p:column>
+                            </p:row>
+
+                            <p:row class="corDialog" >
+                                <p:column rowspan="1">
+                                    <p:outputLabel value="Enviar Email?" class="colorDialog"   />
+                                </p:column>
+
+                                <p:column rowspan="1">                           
+
+                                    <p:selectBooleanCheckbox itemLabel="Requerente" value="#{requerimentoBean.editaRequerimento.enviaEmailReq}" />
+
+                                    <p:selectBooleanCheckbox itemLabel="Cliente" value="#{requerimentoBean.editaRequerimento.enviaEmailCli}" />
+
+                                </p:column>
+
+                            </p:row>
+
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="4" colspan="4">
+                                    <p:outputLabel class="colorDialog"  value="Observação: " for="obs" />
+                                    <p:inputTextarea id="obs" counter="display" value="#{requerimentoBean.editaRequerimento.descricao}"  maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true"  >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText id="display" />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+                    <p:commandButton update="grid" ajax="true" value="Editar" action="#{requerimentoBean.editarRequerimento()}" icon="fa fa-save" style="width: 100%" />
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogCadastrar -->
+        <p:dialog header="Cadastrar" widgetVar="cadastrarDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="cadastrarDetal" class="corDialog" >
+
+                <h:form id="form" enctype="multipart/form-data"  >
+                    <div class="ui-fluid">
+
+                        <p:panelGrid  id="grid"   class="corDialog" style="width: 100%" >
+
+                            <p:row class="corDialog">     
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" value="Cliente" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+
+                                    <p:selectOneMenu rendered="#{!requerimentoBean.rendCli}" id="cli" value="#{requerimentoBean.requerimento.id_cliente}" autoWidth="true" required="false" requiredMessage="Informe o Cliente" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemValue="#{null}" itemLabel="::Selecione::" />
+                                        <f:selectItems value="#{requerimentoBean.clientes}" var="cli" itemLabel="#{cli.nome}" itemValue="#{cli.id}" rendered="true"  />
+                                        <p:message for="cli"/>
+                                        <p:ajax update="el" event="change" listener="#{requerimentoBean.filtraStatus}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:selectOneMenu rendered="#{requerimentoBean.rendCli}" id="cli2" value="#{requerimentoBean.requerimento.id_cliente}" autoWidth="true" required="false" requiredMessage="Informe o Cliente" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemValue="#{null}" itemLabel="::Selecione::" />
+                                        <f:selectItems value="#{requerimentoBean.clientes}" var="cli2" itemLabel="#{cli2.nome}" itemValue="#{cli2.codigoSTAI}" />
+
+                                        <p:message for="cli2"/>
+                                        <p:ajax update="el2" event="change"
+                                                listener="#{requerimentoBean.filtraStatus}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column rowspan="1"  >
+                                    <h:commandLink>
+                                        <p:ajax update=":cadastrarReqDetal" oncomplete="PF('cadastrarReqDialog').show()" />
+                                        <p:outputLabel class="corDialog3"   value="Requerente " for="reque" />
+                                    </h:commandLink>
+
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:selectOneMenu id="reque" value="#{requerimentoBean.requerimento.id_requerente}" autoWidth="true" required="false" requiredMessage="Informe o Requerente" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                        <f:selectItems id="comboReq" value="#{requerimentoBean.requerentes}" var="req" itemLabel="#{req.nome} - #{req.cpf}" itemValue="#{req.id}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+                                <p:column rowspan="1">
+                                    <p:outputLabel  value="Embarcação | Loja "  class="colorDialog"  />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:selectOneMenu rendered="#{!requerimentoBean.rendCli}" id="el" value="#{requerimentoBean.requerimento.id_embarcacao}" autoWidth="false" required="false" requiredMessage="Informe a Embarcação / Loja" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                        <f:selectItems value="#{requerimentoBean.embarcacoes_lojas}" var="emLoja" itemLabel="#{emLoja.nomeBarco} #{emLoja.nomeVagaLoja}" itemValue="#{emLoja.id}" />
+                                        <p:message for="el"/>
+                                    </p:selectOneMenu>
+                                    
+                                    <p:selectOneMenu rendered="#{requerimentoBean.rendCli}" id="el2" value="#{requerimentoBean.requerimento.id_embarcacao}" autoWidth="false" required="false" requiredMessage="Informe a Embarcação / Loja" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                        <f:selectItems value="#{requerimentoBean.embarcacoes_lojas}" var="emLoja" itemLabel="#{emLoja.nomeBarco} #{emLoja.nomeVagaLoja}" itemValue="#{emLoja.codigoSTAI}" />
+                                        <p:message for="el2"/>
+                                    </p:selectOneMenu>
+                                    
+                                </p:column>
+
+
+                                <p:column rowspan="1">
+
+                                    <h:commandLink  >
+                                        <p:outputLabel class="corDialog3"   value="Natureza" for="nat" />
+                                        <p:ajax update=":cadastrarNatDetal" oncomplete="PF('cadastrarNatDialog').show()" />
+                                    </h:commandLink>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:selectOneMenu  id="nat" value="#{requerimentoBean.requerimento.id_natureza}" autoWidth="true" filter="true" filterMatchMode="contains" required="true" requiredMessage="Informe uma Natureza" >
+                                        <f:selectItems value="#{requerimentoBean.natureza}" var="naturez" itemLabel="#{naturez.descricao}" itemValue="#{naturez.cod}" />
+                                        <p:message for="nat"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row >
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="1">
+                                    <h:commandLink >
+                                        <p:outputLabel class="corDialog3"   value="Local " for="loc" />
+                                        <p:ajax update=":cadastrarLocDetal" oncomplete="PF('cadastrarLocDialog').show()" />
+                                    </h:commandLink>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:selectOneMenu id="loc" value="#{requerimentoBean.requerimento.id_local}" required="true" requiredMessage="Informe um Local" filter="true" filterMatchMode="contains"  autoWidth="true">
+                                        <f:selectItems id="comboLoc" value="#{requerimentoBean.local}" var="local" itemLabel="#{local.nome}" itemValue="#{local.id}" />
+                                        <p:message for="loc"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel   for="dtMov"  class="colorDialog" value="Data"  />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:calendar id="dtMov" value="#{requerimentoBean.requerimento.dataAbertura}"
+                                                pattern="dd/MM/yyyy" locale="pt_BR" mask="99/99/9999"  required="true" requiredMessage="Informe a Data de Movimentação!" style="width:50%;" >
+                                        <p:message for="dtMov"/>
+
+                                    </p:calendar>
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel value="Hora"  class="colorDialog" for="hrAber" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:calendar id="hrAber" value="#{requerimentoBean.requerimento.horaAbertura}"
+                                                pattern="HH:mm" timeOnly="true"  required="true" requiredMessage="Informe a hora da Abertura da Movimentação!" style="width:50%;" mask="99:99" >
+                                        <p:message for="hrAber"/>
+                                    </p:calendar>                            
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel  value="Arquivo"  class="colorDialog" for="img" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <h:inputFile  validator="#{requerimentoBean.valida}" label="Procurar" style="color: #026bab;" value="#{requerimentoBean.file}"  required="false" id="img" requiredMessage="Arquivo invalido" >                                    
+                                        <p:message for="img"/>
+                                    </h:inputFile>
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row>
+                                <p:column rowspan="1">
+                                    <p:outputLabel   value="Despesa" class="colorDialog" for="desp"  />
+                                </p:column>
+
+                                <p:column rowspan="1">                           
+                                    <p:inputNumber id="desp" value="#{requerimentoBean.requerimento.despesa}" />
+
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel  value="Enviar Email?" class="colorDialog"   />
+                                </p:column>
+
+                                <p:column rowspan="1">                           
+
+                                    <p:selectBooleanCheckbox itemLabel="Requerente" value="#{requerimentoBean.requerimento.enviaEmailReq}" />
+
+                                    <p:selectBooleanCheckbox itemLabel="Cliente" value="#{requerimentoBean.requerimento.enviaEmailCli}" />
+
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="4" colspan="4">
+                                    <p:outputLabel class="colorDialog"  value="Observação: " for="obs" />
+                                    <p:inputTextarea id="obs" counter="display" value="#{requerimentoBean.requerimento.descricao}" maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true"  >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText class="colorDialog" id="display" />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                    </div>
+                    <br/>                    
+                    <h:commandButton class="btn-primary" id="btnSalvar" actionListener="#{requerimentoBean.upload}" disabled="#{requerimentoBean.statusBotao}"   value="Salvar" style="width: 100%"   >
+                        <f:ajax execute="@form" render="@form"  />                        
+                        <p:ajax update="grid" delay="1000000000"  />
+                    </h:commandButton>
+                </h:form>    
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogMovimentar -->
+        <p:dialog header="Movimentar" widgetVar="movimentarDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="movimentarDetal"  >
+
+                <h:form enctype="multipart/form-data" >
+                    <p:growl id="growl" showDetail="true" sticky="true" /> 
+                    <div class="ui-fluid">
+                        <p:panelGrid  id="grid"  style="width: 100%"   >
+                            <p:row>
+
+                                <p:column rowspan="1" colspan="4" >
+
+                                    <p:outputLabel  value="Observações: " for="obs" class="colorDialog" />
+                                    <p:inputTextarea  id="obs" counter="display" value="#{requerimentoBean.movimentarRequerimento.observacao}"  maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true"  >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText id="display" class="colorDialog" />
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column rowspan="1">
+                                    <p:outputLabel  for="dtMov" value="Data" class="colorDialog"  />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:calendar id="dtMov" value="#{requerimentoBean.movimentarRequerimento.dataMovimento}"
+                                                pattern="dd/MM/yyyy" locale="pt_BR" mask="99/99/9999"  required="true" requiredMessage="Informe a Data de Movimentação!" >
+                                        <p:message for="dtMov"/>
+                                        <f:ajax listener="#{requerimentoBean.movimentarRequerimento.dataMovimento}" render="@form" />
+                                    </p:calendar>
+                                </p:column>
+                                <p:column rowspan="1">
+                                    <p:outputLabel   value="Hora" for="hrAber" class="colorDialog" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:calendar id="hrAber" value="#{requerimentoBean.movimentarRequerimento.horaMovimento}"
+                                                pattern="HH:mm" timeOnly="true"  required="true" requiredMessage="Informe a hora da Abertura da Movimentação!" style="width:90%;" mask="99:99" >
+                                        <p:message for="hrAber"/>
+                                        <f:ajax listener="#{requerimentoBean.movimentarRequerimento.horaMovimento}" render="@form" />
+                                    </p:calendar>                            
+                                </p:column>
+
+
+                            </p:row>
+                            <p:row>
+                                <p:column rowspan="1">
+                                    <p:outputLabel   for="sts" value="Status" class="colorDialog" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:selectOneMenu  id="sts" value="#{requerimentoBean.movimentarRequerimento.cod_status}" required="true" requiredMessage="Informe um Técnico" filter="true" filterMatchMode="contains" autoWidth="true" >
+                                        <f:selectItems value="#{requerimentoBean.status}" var="sts" itemLabel="#{sts.descricao}" itemValue="#{sts.cod}" />
+                                        <p:message for="sts"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel   for="tec" value="Responsável" class="colorDialog" />
+                                </p:column>
+
+
+                                <p:column rowspan="1">
+                                    <p:selectOneMenu  id="tec" value="#{requerimentoBean.movimentarTecnico.id}"  required="true" requiredMessage="Informe um Técnico" filter="true"  filterMatchMode="contains" autoWidth="true" >
+                                        <f:selectItems value="#{requerimentoBean.tecnicos}" var="tec" itemLabel="#{tec.nome}" itemValue="#{tec.id}" />
+                                        <p:message for="tec"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel  value=" Transeferir " class="colorDialog" for="transResp" /> 
+                                    <p:selectBooleanCheckbox id="transResp" value="#{requerimentoBean.opcaoTecnico}" />
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+                                <p:column rowspan="1">
+                                    <p:outputLabel  value="Arquivo"  for="img" class="colorDialog"  />
+
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <h:inputFile   validator="#{requerimentoBean.valida}"  label="Procurar" style="color: #026bab;" value="#{requerimentoBean.file}"  required="false" id="img" >                                    
+                                        <p:message for="img"/>
+
+                                    </h:inputFile>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel   value="Enviar Email?" class="colorDialog" />
+                                </p:column>
+                                <p:column rowspan="1">
+                                    <p:selectBooleanCheckbox id="mailCli" itemLabel="Cliente" value="#{requerimentoBean.movimentarRequerimento.enviaEmailCli}"  />
+                                    <p:selectBooleanCheckbox id="mailReq" itemLabel="Requerente" value="#{requerimentoBean.movimentarRequerimento.enviaEmailReq}"  />
+                                </p:column>
+
+
+                            </p:row>
+
+                            <p:row>
+                                <p:column rowspan="1">
+                                    <p:outputLabel   value="Despesa" class="colorDialog" for="desp"  />
+                                </p:column>
+
+                                <p:column rowspan="1">                           
+                                    <p:inputNumber id="desp" value="#{requerimentoBean.movimentarRequerimento.despesa}" >
+                                    </p:inputNumber>  
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+
+                    <h:commandButton class="btn-primary"  id="btnSalvar" actionListener="#{requerimentoBean.uploadMovimento()}"  value="Salvar" style="width: 100%"  >
+                        <f:ajax execute="@form" render="@form"  />
+                        <p:ajax update="grid" delay="1000000000"  />
+                    </h:commandButton>
+
+                </h:form> 
+                <br/>
+                <h:form id="movimentos_form" enctype="multipart/form-data" >
+                    <div class="ui-fluid">
+                        <p:dataTable reflow="true" value="#{requerimentoBean.listaMovimentos}" id="movimentar" var="mov" paginator="true"
+                                     rows="10" rowsPerPageTemplate="10, 15, 20" 
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                                     {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" style="width: 100%; height:50%;" >
+
+                            <f:facet name="header">Movimentações do Requerimento</f:facet>
+
+                            <f:facet name="{Exporters}">
+                                <h:commandLink>
+                                    <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                                    <p:dataExporter type="xls" target="movimentar" fileName="movimentar"  />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                                    <p:dataExporter type="pdf" target="movimentar" fileName="movimentar"/>
+                                </h:commandLink>
+                            </f:facet>
+
+                            <p:column headerText="Data" filterStyle="max-width: 50px; "
+                                      sortBy="#{mov.dataMovimento}" filterBy="#{mov.dataMovimento}"  filterMatchMode="contains"
+                                      width="10%" >
+                                <h:outputText value="#{mov.dataMovimento}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Hora" filterStyle="max-width: 30px; "
+                                      sortBy="#{mov.horaMovimento}" filterBy="#{mov.horaMovimento}"  filterMatchMode="contains"
+                                      width="8%" >
+                                <h:outputText value="#{mov.horaMovimento}">
+                                    <f:convertDateTime pattern="HH:mm"/>
+                                </h:outputText>
+                            </p:column>
+
+
+                            <p:column headerText="Responsavel" filterStyle="max-width: 70px; "
+                                      sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains"
+                                      width="13%" >
+                                <h:outputText value="#{mov.tecnico}"/>
+                            </p:column>
+
+                            <p:column headerText="Despesa" filterStyle="max-width: 60px; "
+                                      sortBy="#{mov.despesa}" filterBy="#{mov.despesa}"  filterMatchMode="contains"
+                                      width="12%" >
+                                <h:outputText value="#{mov.despesa}">
+                                    <f:convertNumber />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Anexo"  width="10%" >
+                                <h:outputLink id="download" value="#{request.contextPath}/resources/anexos/anexosRequerimento/#{mov.nomeArquivo}" disabled="#{mov.anexoMovimento}" a:download="#{mov.anexo}"  >
+                                    #{mov.anexo}
+                                </h:outputLink> 
+
+                            </p:column>
+
+                            <p:column headerText="Observacoes"  filterStyle="max-width: 200px; "  style="white-space:normal !important;"
+                                      sortBy="#{mov.observacao}" filterBy="#{mov.observacao}"  filterMatchMode="contains"
+                                      width="50%" >
+                                <p:inputTextarea readonly="true" style="width:95%" value="#{mov.observacao}" />
+                            </p:column>
+
+                            <f:facet name="footer">
+                                Total de Movimentos: #{requerimentoBean.tamanhoMov}
+                            </f:facet>
+
+                        </p:dataTable>
+                    </div>
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialog').show();
+            }
+
+            function stop() {
+                PF('statusDialog').hide();
+            }
+        </script>
+
+        <p:dialog modal="true" widgetVar="statusDialog" header="Carregando" draggable="false" closable="false" resizable="false">
+            <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+        </p:dialog>
+
+
+        <p:dialog styleClass="corDialog2" widgetVar="cadastrarReqDialog"  header="Cadastrar Requerente"  position="center" resizable="true" maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" class="corDialog2"  >
+
+            <p:outputPanel id="cadastrarReqDetal" class="corDialog2" >
+                <h:form id="formReq"  >
+                    <p:growl id="messages" showDetail="true" /> 
+                    <p:panelGrid  id="grid" class="corDialog2" >
+
+                        <p:row class="corDialog2">
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog"  value="Nome " for="nome" />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:inputText id="nome" value="#{requerimentoBean.cadRequerente.nome}"  required="true" style="width:85%;" requiredMessage="Digite um nome" >
+                                    <p:message for="nome"/>
+                                </p:inputText>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog"  for="cpf" value="CPF" />
+
+                            </p:column>
+                            <p:column rowspan="1">                       
+
+                                <p:inputMask  mask="999.999.999-99" id="cpf" value="#{requerimentoBean.cadRequerente.cpf}"  required="true" style="width:85%;" requiredMessage="Digite um CPF" >
+                                    <p:ajax update="btnSalvar " event="change" 
+                                            listener="#{requerimentoBean.status()}" />
+                                    <p:message for="cpf"/>
+                                </p:inputMask>
+
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row class="corDialog2" >
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog"  value="Telefone" for="tel" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:inputMask id="tel" value ="#{requerimentoBean.cadRequerente.telefone}" mask="(99)9999-9999"  size="55"  style="width:85%;" required="false" requiredMessage="Por favor, informe um telefone" >
+                                    <p:message for="tel"/>
+                                </p:inputMask> 
+
+                            </p:column>
+
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog"  value="Celular " for="cel"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:inputMask id="cel" value ="#{requerimentoBean.cadRequerente.celular}" mask="(99)9.9999-9999" size="55" style="width:85%;" >
+                                    <p:message for="cel"/>
+                                </p:inputMask>
+                            </p:column>
+                        </p:row >
+
+                        <p:row class="corDialog2" >
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog"  for="EndEmail" value="Email "/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:inputText id="EndEmail" value="#{requerimentoBean.cadRequerente.email}" size="55" style="width:85%;"  required="true" requiredMessage="Por favor, informe um email válido" >
+                                    <f:validateLength minimum="10" />
+                                    <p:message for="EndEmail"/>
+                                    <f:validator validatorId="validarEmail"/>
+                                    <p:ajax update="btnSalvar " event="change"
+                                            listener="#{requerimentoBean.status()}" />
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+
+                        <p:row class="corDialog2" >
+
+                            <p:column rowspan="4" colspan="4">
+                                <p:outputLabel class="colorDialog"  value="Observação: " for="obs" />
+                                <p:inputTextarea id="obs" counter="display" value="#{requerimentoBean.cadRequerente.observacao}"  style="width:95%;" maxlength="255" counterTemplate="{0} Caracteres restantes." >
+                                    <p:message for="obs"/>
+                                </p:inputTextarea>
+                                <br/>
+                                <h:outputText id="display" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                    <br/>
+
+
+                    <br/>
+                    <p:commandButton ajax="true"  action="#{requerimentoBean.atualizaCampos()}" update="grid :form:reque" id="btnSalvar" value="Salvar" disabled="#{requerimentoBean.statusBotao}" />
+
+
+
+                </h:form>    
+            </p:outputPanel>
+        </p:dialog>
+
+        <p:dialog  widgetVar="cadastrarNatDialog"  header="Cadastrar Natureza "  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" >
+
+            <p:outputPanel id="cadastrarNatDetal" class="corDialog2" >
+                <h:form id="formNat">
+                    <p:growl id="messages" showDetail="true" /> 
+
+                    <p:panelGrid  id="grid" class="corDialog2" >
+
+                        <p:row class="corDialog2">
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog"  value="Tabela Cadastro " for="tab" />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:selectOneMenu id="tab" value="#{requerimentoBean.cadNatureza.tabela}" style="width:50%;" >
+                                    <f:selectItem itemValue="18" itemLabel="18 - Natureza"/>
+                                    <p:message for="tab"/>
+
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog"  value="Descrição da Natureza: " for="desc" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:inputText id="desc" value="#{requerimentoBean.cadNatureza.descricao}" size="55"  required="true" requiredMessage="Descrição do Item Obrigatório" style="width:85%;" >
+                                    <p:message for="desc"/>
+                                </p:inputText>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:commandButton id="btnSalvar" value="Salvar" action="#{requerimentoBean.atualizaCampos()}" disabled="#{camposBean.statusBotao}"  update="grid messages :form:nat " icon="fa fa-save" ajax="true" onclick="PrimeFaces.monitorDownload(start, stop);" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+
+                </h:form>    
+            </p:outputPanel>
+        </p:dialog>
+
+        <p:dialog  widgetVar="cadastrarLocDialog"  header="Cadastrar Local"  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"   closeOnEscape="true" draggable="false" >
+
+            <p:outputPanel id="cadastrarLocDetal" class="corDialog2" >
+                <h:form id="formLoc">
+                    <p:growl id="messages" showDetail="true" /> 
+
+                    <p:panelGrid  id="grid" class="corDialog2" >
+
+                        <p:row class="corDialog2">
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog"  value="Nome " for="nome" />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:inputText id="nome" value="#{requerimentoBean.cadlocal.nome}"  required="true" style="width:90%;" requiredMessage="Digite um nome"  >
+                                    <p:message for="nome"/>
+                                </p:inputText>
+                            </p:column>
+
+
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="4" colspan="4">
+                                <p:outputLabel class="colorDialog"  value="Observação: " for="obs" />
+                                <p:inputTextarea id="obs" counter="display" value="#{requerimentoBean.cadlocal.observacao}"  style="width:95%;" maxlength="255" counterTemplate="{0} Caracteres restantes." >
+                                    <p:message for="obs"/>
+                                </p:inputTextarea>
+                                <br/>
+                                <h:outputText id="display" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                    <br/>
+                    <p:commandButton  id="btnSalvar" value="Salvar" update=":form:loc grid" action="#{requerimentoBean.atualizaCampos()}"   ajax="true" icon="fa fa-save"  onclick="PrimeFaces.monitorDownload(start, stop);" />
+
+
+                </h:form>    
+            </p:outputPanel>
+        </p:dialog>
+
+
+
+    </ui:define>
+
+</ui:composition>

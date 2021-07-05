@@ -1,0 +1,95 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+    <p:dialog footer=""  widgetVar="cadastrarDestinoDialog"  header="Cadastrar Destino "  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" >
+
+        <p:outputPanel id="cadastrarDestinoDetal" class="corDialog2" >
+            <h:form id="formDestino">
+                <p:growl id="messages" showDetail="true" autoUpdate="true" /> 
+
+                <p:panelGrid  id="grid" class="corDialog2" >
+
+                    <p:row class="corDialog2">
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Tabela Cadastro " for="tab" />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:selectOneMenu id="tab" value="#{atendimentoBean.camposDestino.tabela}" >
+                                <f:selectItem itemValue="24" itemLabel="24 - Destino"/>
+                                <p:message for="tab"/>
+
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Descrição do Destino: " for="desc" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="desc" value="#{atendimentoBean.camposDestino.descricao}" size="55"  required="true" requiredMessage="Descrição do Item Obrigatório" style="width:85%;" >
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:commandButton id="btnSalvar" value="Salvar" action="#{atendimentoBean.atualizaCampos()}"  update="grid :form:dest" icon="fa fa-save" ajax="true"  />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+            </h:form>    
+        </p:outputPanel>
+    </p:dialog>
+
+    <p:dialog footer=""  widgetVar="cadastrarBairroDialog"  header="Cadastrar Bairro "  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" >
+
+        <p:outputPanel id="cadastrarBairroDetal" class="corDialog2" >
+            <h:form id="formBairro">
+                <p:growl id="messages" showDetail="true" autoUpdate="true" /> 
+
+                <p:panelGrid  id="grid" class="corDialog2" >
+
+                    <p:row class="corDialog2">
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Tabela Cadastro " for="tab" />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:selectOneMenu id="tab" value="#{atendimentoBean.camposBairro.tabela}" >
+                                <f:selectItem itemValue="25" itemLabel="25 - Bairro"/>
+                                <p:message for="tab"/>
+
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Descrição do Bairro: " for="desc" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="desc" value="#{atendimentoBean.camposBairro.descricao}" size="55"  required="true" requiredMessage="Descrição do Item Obrigatório" style="width:85%;" >
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:commandButton id="btnSalvar" value="Salvar" action="#{atendimentoBean.atualizaCampos()}"  update="grid :form:dest  :form:bair" icon="fa fa-save" ajax="true"  />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+            </h:form>    
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

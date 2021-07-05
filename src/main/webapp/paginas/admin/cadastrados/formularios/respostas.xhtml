@@ -1,0 +1,71 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer="" header="Respostas" widgetVar="respostasDialog" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="respostasDetal"  class="corDialog" >
+            <h:form>
+                <p:dataTable resizableColumns="true" draggableColumns="true" filterDelay="800"  reflow="true" value="#{formularioBean.respostas}" id="resp" var="campo" paginator="true" widgetVar="respTable"
+                             rows="10" rowsPerPageTemplate="5,10, 15, 20"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} "
+                             currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                             - Página: {currentPage}/{totalPages}" style="width: 100%;"
+                             >
+
+                    <f:facet name="header">
+                        #{formularioBean.formularioSelecionado.titulo}
+                    </f:facet> 
+
+                    <f:facet name="{Exporters}">
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                            <p:dataExporter type="xls" target="resp" fileName="resp"  />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                            <p:dataExporter type="pdf" target="resp" fileName="resp"/>
+                        </h:commandLink>
+                    </f:facet>
+                    <p:column headerText="Pergunta"
+                              sortBy="#{campo.pergunta}" filterBy="#{campo.pergunta}"  filterMatchMode="contains"
+                              width="10%" >
+                        <h:outputText value="#{campo.pergunta}"/>
+                    </p:column>                
+
+                    <p:column headerText="Resposta"
+                              sortBy="#{campo.resposta}" filterBy="#{campo.resposta}"  filterMatchMode="contains"
+                              width="10%" >
+                        <h:outputText value="#{campo.resposta}"/>
+                    </p:column>                
+
+                    <p:column headerText="Data"
+                              sortBy="#{campo.dataResposta}" filterBy="#{campo.dataResposta}"  filterMatchMode="contains"
+                              width="10%" >
+                        <h:outputText value="#{campo.dataResposta}"/>
+                    </p:column>                
+
+                    <p:column headerText="Hora"
+                              sortBy="#{campo.horaResposta}" filterBy="#{campo.horaResposta}"  filterMatchMode="contains"
+                              width="10%" >
+                        <h:outputText value="#{campo.horaResposta}"/>
+                    </p:column>                
+                </p:dataTable>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+
+
+</ui:composition>

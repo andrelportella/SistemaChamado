@@ -1,0 +1,221 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="corpo">       
+
+        <title>Tarefas</title>        
+        <!-- Lista de Atendimentos Cadastrados -->
+        <h:form id="usuarios_form">
+
+            <p:dataTable   emptyMessage="Não há registros!" rendered="#{loginBean.acesso.acessaChamados}"  filterDelay="800" draggableColumns="true"  reflow="true" value="#{atendimentoBean.atendimentos}" id="atendimento" var="mov" paginator="true" resizableColumns="true" widgetVar="celAtendimento"  
+                           rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{mov.id}"  selectionMode="single" selection="#{atendimentoBean.atendimentoSelecionado}" 
+                           style="width: 100%;"
+                           paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} "
+                           currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                           - Página: {currentPage}/{totalPages}" >
+
+                <f:facet name="header">
+                    <p:menuButton  style="float:left; margin-left:10px;" value="Opções" class="verticalmenu" >
+                        <p:menuitem action="#{atendimentoBean.anexaArquivo()}" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()"  value="Cadastrar" title="Cadastrar Atendimento" />
+                        <p:menuitem rendered="#{loginBean.acesso.acessaTodosChamados &amp;&amp; !atendimentoBean.agendamento}" update="atendimento ostraTodos" id="ostraTodos" value="#{atendimentoBean.nomeCampo}" actionListener="#{atendimentoBean.listarAtendimento()}" />
+                    </p:menuButton>
+                    #{atendimentoBean.nomeTabela}
+                    <p:commandButton id="toggler" type="button" value="Colunas"  style="float:right;"  icon="ui-icon-calculator" class="horizontalmenu"  />
+                    <p:columnToggler datasource="atendimento" trigger="toggler" >
+                        <p:ajax event="toggle" listener="#{atendimentoBean.onToggle}" />
+                    </p:columnToggler>
+                    <p:commandButton action="#{atendimentoBean.anexaArquivo()}" update=":cadastrarDetal :form:grid" oncomplete="PF('cadastrarDialog').show()" class="horizontalmenu" value="Cadastrar" title="Cadastrar Atendimento" styleClass="btnCadastrar" icon="fa fa-plus" />
+                    <p:commandButton rendered="#{loginBean.acesso.acessaTodosChamados &amp;&amp; !atendimentoBean.agendamento}" update="usuarios_form:atendimento mostraTodos" class="horizontalmenu" id="mostraTodos" value="#{atendimentoBean.nomeCampo}" actionListener="#{atendimentoBean.listarAtendimento()}"  styleClass="btnMostraTodos" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="atendimento" fileName="atendimentos"   />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="atendimento" fileName="atendimentos" preProcessor="#{customizadorDocumentosPF.preProcessPDF}" />
+                    </h:commandLink>
+                </f:facet>
+
+                <p:column  headerText="Ticket"  priority="9"  exportable="#{atendimentoBean.list[0]}" visible="#{atendimentoBean.list[0]}" 
+                           sortBy="#{mov.id}" filterBy="#{mov.id}"  filterMatchMode="contains" 
+                           width="5%" >
+                    <h:outputText value="#{mov.id}"/>
+                </p:column>
+
+
+                <p:column headerText="Status"  priority="8"    exportable="#{atendimentoBean.list[1]}" visible="#{atendimentoBean.list[1]}" 
+                          sortBy="#{mov.statusChamado}" filterBy="#{mov.statusChamado}" filterMatchMode="contains"
+                          id="status"
+                          width="7%" >
+                    <h:outputText value="#{mov.statusAtendimento ? 'Aberto' : 'Finalizado'}" />
+                </p:column>
+
+                <p:column headerText="Abertura"  priority="5" id="abertura"  exportable="#{atendimentoBean.list[2]}" visible="#{atendimentoBean.list[2]}" 
+                          sortBy="#{mov.dataAbertura}" filterBy="#{mov.dataAbertura}"  filterMatchMode="contains"
+                          width="7%" >
+                    <h:outputText value="#{mov.dataAbertura}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Equipamento"  priority="4"  visible="#{atendimentoBean.list[3]}"  exportable="#{atendimentoBean.list[3]}"
+                          sortBy="#{mov.equipamento} " filterBy="#{mov.equipamento}"  filterMatchMode="contains" 
+                          width="12%" >
+                    <h:outputText value="#{mov.equipamento}"/>
+                </p:column>
+
+                <p:column headerText="Solicitante"  priority="7" visible="#{atendimentoBean.list[4]}"  exportable="#{atendimentoBean.list[4]}"
+                          sortBy="#{mov.solicitante}" filterBy="#{mov.solicitante}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{mov.solicitante}"/>
+                </p:column>
+
+                <p:column headerText="Tecnico"  priority="3"  id="tecPesquisa" visible="#{atendimentoBean.list[5]}"  exportable="#{atendimentoBean.list[5]}"
+
+                          sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains" 
+                          width="8%" >
+                    <h:outputText value="#{mov.tecnico}"/>
+                </p:column>
+
+                <p:column headerText="Categoria"   priority="2" visible="#{atendimentoBean.list[6]}"  exportable="#{atendimentoBean.list[6]}"
+                          sortBy="#{mov.categoria}" filterBy="#{mov.categoria}"  filterMatchMode="contains"
+                          width="12%" >
+                    <h:outputText value="#{mov.categoria}"/>
+
+                </p:column>
+                <p:column headerText="SLA"   priority="10" visible="#{atendimentoBean.list[7]}"   exportable="#{atendimentoBean.list[7]}"
+                          sortBy="#{mov.tipoData}" filterBy="#{mov.tipoData}"  filterMatchMode="contains"
+                          width="5%" >
+                    <h:outputText value="#{mov.tipoData}"/>
+
+                </p:column>
+
+
+                <p:column headerText="Resumo"  priority="6" visible="#{atendimentoBean.list[8]}" exportable="#{atendimentoBean.list[8]}"
+                          sortBy="#{mov.resumo}" filterBy="#{mov.resumo}"  filterMatchMode="contains" 
+                          width="28 %" >
+                    <h:outputText value="#{mov.resumo}" escape="false" />
+
+                </p:column>
+
+                <p:column exportable="false"  priority="1" headerText="Menu" visible="#{atendimentoBean.list[9]}"  
+                          width="4%" >    
+
+                    <p:splitButton value=" "  title="Opções"  style="height: 15px; width: 5px;" >
+                        <p:menuitem value="Editar" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar"  action="#{atendimentoBean.editar(mov)}" disabled="#{!mov.statusAtendimento}" />
+                        <p:menuitem value="Movimentar" icon="fa fa-arrow-circle-up" style="color:#0000FF;" update=":movimentarDetal" oncomplete="PF('movimentarDialog').show()" title="Movimentar" action="#{atendimentoBean.movimentar(mov)}" disabled="#{!mov.statusAtendimento}" />
+
+                        <p:menuitem value="Visualizar" update=":atendimentoDetal" oncomplete="PF('atendimentoDialog').show()" icon="ui-icon-search" title="Visualizar" rendered="true" >
+                            <f:setPropertyActionListener value="#{mov}" target="#{atendimentoBean.atendimentoSelecionado}" />
+                        </p:menuitem>                
+                        <p:menuitem value="Reenviar E-mail"  icon="fa fa-send"  title="Reenviar E-mail" action="#{atendimentoBean.sendMail(mov)}" disabled="#{!mov.statusAtendimento}"  />
+                        <p:menuitem rendered="#{loginBean.acesso.ativaChamado}" value=" Reativar Chamado" icon="fa fa-refresh"  title="Ativar Chamado" action="#{atendimentoBean.ativaChamado(mov)}" disabled="#{mov.statusAtendimento}" >
+                            <p:confirm header="Confirmação"   class="dialog" message="Você tem certeza que deseja reativar o chamado? " icon="ui-icon-alert" />
+                        </p:menuitem>
+                        <p:menuitem rendered="#{loginBean.acesso.apagaChamado}" style="color:#FF0000; " update="usuarios_form:atendimento" value=" Apagar Chamado" icon="fa fa-fw fa-remove"  title="Ativar Chamado" action="#{atendimentoBean.apagaChamado(mov)}" >
+                            <p:confirm header="Confirmação"   class="dialog" message="Você tem certeza que deseja apagar o chamado? " icon="ui-icon-alert" />
+                        </p:menuitem>
+                    </p:splitButton>
+                </p:column>
+
+                <p:column  headerText="Espécie"  visible="#{atendimentoBean.list[10]}"  exportable="#{atendimentoBean.list[10]}"
+                           sortBy="#{mov.tipoAtendimento}" filterBy="#{mov.tipoAtendimento}"  filterMatchMode="contains" 
+                           width="25%" >
+                    <h:outputText value="#{mov.tipoAtendimento}"/>
+                </p:column>
+
+                <p:column  headerText="Status Equipamento" visible="#{atendimentoBean.list[11]}"  exportable="#{atendimentoBean.list[11]}"
+                           sortBy="#{mov.status}" filterBy="#{mov.status}"  filterMatchMode="contains" 
+                           width="7%" >
+                    <h:outputText value="#{mov.status}"/>
+                </p:column>               
+
+                <p:column  headerText="Destino"  visible="#{atendimentoBean.list[12]}"  exportable="#{atendimentoBean.list[12]}"
+                           sortBy="#{mov.destino}" filterBy="#{mov.destino}"  filterMatchMode="contains" 
+                           width="10%" >
+                    <h:outputText value="#{mov.destino}"/>
+                </p:column>                
+                <p:column  headerText="Bairro"  visible="#{atendimentoBean.list[13]}"  exportable="#{atendimentoBean.list[13]}"
+                           sortBy="#{mov.bairro}" filterBy="#{mov.bairro}"  filterMatchMode="contains" 
+                           width="10%" >
+                    <h:outputText value="#{mov.bairro}"/>
+                </p:column>    
+
+                <p:column  headerText="Produto" visible="#{atendimentoBean.list[14]}"  exportable="#{atendimentoBean.list[14]}"
+                           sortBy="#{mov.produto}" filterBy="#{mov.produto}"  filterMatchMode="contains" 
+                           width="10%" >
+                    <h:outputText value="#{mov.produto}"/>
+                </p:column>                
+
+                <p:column  headerText="Quantidade"  visible="#{atendimentoBean.list[15]}"  exportable="#{atendimentoBean.list[15]}"
+                           sortBy="#{mov.qtdProduto}" filterBy="#{mov.qtdProduto}"  filterMatchMode="contains" 
+                           width="10%" >
+                    <h:outputText value="#{mov.qtdProduto}"/>
+                </p:column>
+
+                <p:column  headerText="Observacao" visible="#{atendimentoBean.list[16]}"  exportable="#{atendimentoBean.list[16]}"
+                           sortBy="#{mov.obs}" filterBy="#{mov.obs}"  filterMatchMode="contains" 
+                           width="100%" >
+                    <h:outputText value="#{mov.obs}"/>
+                </p:column>
+
+                <p:column  headerText="Valor" visible="#{atendimentoBean.list[17]}"  exportable="#{atendimentoBean.list[17]}"
+                           sortBy="#{mov.valor}" filterBy="#{mov.valor}"  filterMatchMode="contains" 
+                           width="10%" >
+                    <h:outputText value="#{mov.valor}"/>
+                </p:column>
+
+                <p:column  headerText="Cod Chamado Externo" visible="#{atendimentoBean.list[18]}"  exportable="#{atendimentoBean.list[18]}"
+                           sortBy="#{mov.codChamadoExterno}" filterBy="#{mov.codChamadoExterno}"  filterMatchMode="contains" 
+                           width="10%" >
+                    <h:outputText value="#{mov.codChamadoExterno}"/>
+                </p:column>
+
+
+                <f:facet name="footer" >                                                            
+                    <h:outputText value="Total de Atendimentos: #{atendimentoBean.tamanho}" style="float:right"/> 
+                    <h:outputText value="Total de Atendimentos Abertos: #{atendimentoBean.tamanhoAberto}" style="float:left"/>
+                    <h:outputText value="Total de Atendimentos Finalizados: #{atendimentoBean.tamanhoFinalizados}"/>
+                </f:facet>
+
+                <p:ajax update=":movimentosDetal" event="rowDblselect"  oncomplete="PF('movimentosDialog').show()" 
+                        listener="#{atendimentoBean.listaAtendimentosMovimentosSelecionado(atendimentoBean.atendimentoSelecionado)}" 
+                        />
+
+            </p:dataTable>
+
+        </h:form>
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+        <!-- dialogHistorico -->
+        <ui:include src="historico.xhtml"/>
+
+        <!-- dialogMovimentar -->
+        <ui:include src="movimentar.xhtml"/>
+
+        <!-- dialogAtendimento -->
+        <ui:include src="visualizar.xhtml"/>
+
+        <!-- arquivoDialog -->
+        <ui:include src="arquivo.xhtml"/>
+
+        <!-- -->
+        <ui:include src="subCadastros.xhtml"/>
+
+    </ui:define>
+
+</ui:composition>

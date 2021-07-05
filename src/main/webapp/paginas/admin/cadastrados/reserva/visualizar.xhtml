@@ -1,0 +1,43 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer="" header="Informação da Reserva" widgetVar="reservaDialog"   resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="300" width="60%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel class="corDialog" id="reservaDetal" style="text-align:center;">
+            <p:panelGrid  columns="2" rendered="#{not empty reservaBean.salas}" columnClasses="value,value" style="width: 100%"  >
+                <h:outputText value="Sala" class="colorDialog" /> 
+                <h:outputText value="#{reservaBean.reservaSelecionada.recurso}"/>
+                <h:outputText value="Solicitante" class="colorDialog" />                     
+                <h:outputText value="#{reservaBean.reservaSelecionada.solicitante}"/>
+                <h:outputText value="Data da Reserva" class="colorDialog" /> 
+                <h:outputText value="#{reservaBean.reservaSelecionada.dataReserva}">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </h:outputText>
+                <h:outputText value="Hora Inicio" class="colorDialog" />                                  
+                <h:outputText value="#{reservaBean.reservaSelecionada.horaInicio}">
+                    <f:convertDateTime pattern="HH:mm"/>
+                </h:outputText>
+                <h:outputText value="Hora Fim" class="colorDialog" /> 
+                <h:outputText value="#{reservaBean.reservaSelecionada.horaFim}">
+                    <f:convertDateTime pattern="HH:mm"/>
+                </h:outputText>
+                <h:outputText value="Observação" class="dialog" /> 
+                <p:row>
+                    <p:column rowspan="3" colspan="4" >
+                        <p:inputTextarea style="width: 95%" readonly="true"  value="#{reservaBean.reservaSelecionada.observacao}"/>
+                    </p:column>    
+                </p:row>
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

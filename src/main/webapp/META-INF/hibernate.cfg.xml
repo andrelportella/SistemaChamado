@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://srvsql:1433;databaseName=CONTROLE</property>
+        <property name="hibernate.connection.username">siga</property>
+        <property name="hibernate.connection.password">siga</property>
+        <property name="hibernate.connection.pool_size">1</property>
+        <property name="hibernate.current_session_context_class">thread</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.SQLServer2008Dialect</property>    
+        
+        <!-- configuration pool via c3p0-->   
+        <property name="c3p0.acquire_increment">1</property>   
+        <property name="c3p0.idle_test_period">100</property> <!-- seconds -->   
+        <property name="c3p0.max_size">100</property>   
+        <property name="c3p0.max_statements">0</property>   
+        <property name="c3p0.min_size">10</property>   
+        <property name="c3p0.timeout">100</property> <!-- seconds -->   
+        <!-- DEPRECATED very expensive property name="c3p0.validate>-->    
+    </session-factory>
+</hibernate-configuration>

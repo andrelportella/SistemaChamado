@@ -1,0 +1,85 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">x
+
+    <!-- dialogHistorico -->
+    <p:dialog widgetVar="movimentosDialog" header="Histórico" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="movimentosDetal" >
+
+            <h:form id="usuarios_form_movimentar">
+                <p:dataTable reflow="true" value="#{requerimentoBean.listaRequerimentoSelecionado}"  emptyMessage="Não há registros!" id="movimentacao" var="mov" paginator="true"
+                             rows="20" rowsPerPageTemplate="5, 10, 15, 20,50,100" 
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" style="height: 100%" >
+
+                    <f:facet name="header">Histórico de Movimentações</f:facet>
+
+                    <f:facet name="{Exporters}">
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                            <p:dataExporter type="xls" target="movimentacao" fileName="movimentacao"  />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                            <p:dataExporter type="pdf" target="movimentacao" fileName="movimentacao"/>
+                        </h:commandLink>
+                    </f:facet>
+
+                    <p:column headerText="Data" filterStyle="max-width: 50px; "
+                              sortBy="#{mov.dataMovimento}" filterBy="#{mov.dataMovimento}"  filterMatchMode="contains"
+                              width="10%" >
+                        <h:outputText value="#{mov.dataMovimento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Hora" filterStyle="max-width: 30px; "
+                              sortBy="#{mov.horaMovimento}" filterBy="#{mov.horaMovimento}"  filterMatchMode="contains"
+                              width="8%" >
+                        <h:outputText value="#{mov.horaMovimento}">
+                            <f:convertDateTime pattern="HH:mm"/>
+                        </h:outputText>
+                    </p:column>
+
+
+                    <p:column headerText="Responsavel" filterStyle="max-width: 70px; "
+                              sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains"
+                              width="13%" >
+                        <h:outputText value="#{mov.tecnico}"/>
+                    </p:column>
+
+                    <p:column headerText="Despesa" filterStyle="max-width: 60px; "
+                              sortBy="#{mov.despesa}" filterBy="#{mov.despesa}"  filterMatchMode="contains"
+                              width="12%" >
+                        <h:outputText value="#{mov.despesa}">
+                            <f:convertNumber />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column  exportable="false" headerText="Arquivos"  width="14%" >
+                        <p:commandButton style="height: 40px;" update=":arquivoDetalHis" oncomplete="PF('arquivoDialogHis').show()" value="Download" action="#{requerimentoBean.listarArquivos(mov)}" rendered="#{mov.anexoMovimento}" />
+                    </p:column>
+
+                    <p:column headerText="Observacoes"  filterStyle="max-width: 200px; "  style="white-space:normal !important;"
+                              sortBy="#{mov.observacao}" filterBy="#{mov.observacao}"  filterMatchMode="contains"
+                              width="40%" >
+                        <p:inputTextarea readonly="true" style="width:95%" value="#{mov.observacao}" />
+                    </p:column>
+
+                    <f:facet name="footer">
+                        Total de Movimentos: #{requerimentoBean.tamanhoHist}
+                    </f:facet>
+
+                </p:dataTable>
+
+            </h:form>                    
+
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition> 

@@ -1,0 +1,75 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""  widgetVar="editarDialog" header="Editar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="editarDetal"   >
+            <div class="ui-fluid">
+                <h:form id="editar">
+
+
+                    <p:panelGrid id="grid" columns="4" class="corDialog" style="width: 100%;" >
+
+                        <p:outputLabel class="colorDialog" value="Nome" for="nome"  />
+                        <p:inputText id="nome" value="#{ramaisBean.editaRamal.nome}" size="55" requiredMessage="Por favor preencher com um nome válido"  required="true" >
+                            <f:validateLength minimum="5" />
+                            <p:message for="nome" />
+                        </p:inputText>
+
+                        <p:outputLabel class="colorDialog" value="Email " for="EndEmail"  />
+                        <p:inputText id="EndEmail" value="#{ramaisBean.editaRamal.email}" size="55" placeholder="Ex: cidade@bahiamarina.com.br" required="true" requiredMessage="Por favor preencher com um email válido" >
+                            <f:validateLength minimum="10" />
+                            <f:validator validatorId="validarEmail" />
+                            <p:message for="EndEmail" />
+                        </p:inputText>
+
+                        <p:outputLabel class="colorDialog" value="Telefone " for="tel"  />
+                        <p:inputMask  id="tel" value="#{ramaisBean.editaRamal.telefone}" size="55"  required="true" requiredMessage="Por favor informe um telefone " mask="(99) 9999-9999 " >
+                            <p:message for="tel" />
+                        </p:inputMask>
+
+                        <p:outputLabel class="colorDialog" value="Setor "/>
+                        <p:selectOneMenu id="setor" value="#{ramaisBean.editaRamal.cod_setor}" required="true" requiredMessage="Por favor selecione um Setor" filter="true" filterMatchMode="contains" autoWidth="true" >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" >
+
+                            </f:selectItem>
+                            <f:selectItems value="#{ramaisBean.setor}" var="setor" itemLabel="#{setor.descricao}" itemValue="#{setor.cod}" >
+                                <p:message for="setor" />
+                            </f:selectItems>
+
+                        </p:selectOneMenu>   
+
+                        <p:outputLabel class="colorDialog" value="Site" for="site" />
+                        <p:selectOneMenu id="site" value="#{ramaisBean.editaRamal.cod_site}"  required="true" requiredMessage="Por favor selecione um Site" filter="true" filterMatchMode="contains" autoWidth="true" >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" />
+                            <f:selectItems value="#{ramaisBean.site}" var="site" itemLabel="#{site.descricao}" itemValue="#{site.cod}" >
+                                <p:message for="site" />
+                            </f:selectItems>
+
+                        </p:selectOneMenu>   
+
+                    </p:panelGrid>
+
+                    <br/>
+
+                    <p:commandButton value="Editar" action="#{ramaisBean.editar}" update=":ramais_form:ramais" ajax="true" class="tamBtn" icon="fa fa-edit" />     
+                </h:form>
+
+                <h:form>
+                    <p:commandButton id="btnClose" style="float: right; bottom: 14px; background-color: #f03369;"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+                </h:form>
+
+            </div>
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

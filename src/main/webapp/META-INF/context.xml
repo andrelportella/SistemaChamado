@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/SistemaChamadoBM">
+  <Resource auth="Container" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" maxActive="20" maxIdle="10" maxWait="-1" name="Conexao" password="siga" type="javax.sql.DataSource" url="jdbc:sqlserver://srvsql:1433;databaseName=controle" username="siga"/>
+  <Resource auth="Container" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" maxActive="20" maxIdle="10" maxWait="-1" name="ListaAniversario" password="siga" type="javax.sql.DataSource" url="jdbc:sqlserver://srvsql:1433;databaseName=MP10" username="siga"/>
+  <Resource auth="Container" factory="org.jboss.weld.resources.ManagerObjectFactory" name="BeanManager" type="javax.enterprise.inject.spi.BeanManager"/>
+</Context>

@@ -1,0 +1,63 @@
+/*SE A TELA FOR MAIOR QUE 1300PX, O BOTÃO APARECE*/
+@media screen and (min-width : 1300px) {
+    /*Botão de Cadastrar*/
+    .btnCadastrar{
+        float:left;
+        bottom:20px;
+    }
+}
+/*SE A TELA FOR MENOR QUE 1300PX, O BOTÃO SOME*/
+@media screen and (max-width : 1300px) {
+    /*Botão de Cadastrar*/
+    .btnCadastrar{
+        display: none !important;
+    }
+}
+
+/*SE A TELA FOR MAIOR QUE 1300PX, O BOTÃO APARECE*/
+@media screen and (min-width : 1300px) {
+    /*Botão de Mostrar Todas as Tarefas*/
+    .btnMostraTodos{
+        bottom:20px;
+        float:left;
+        margin-left:20px;
+    }
+}
+
+/*SE A TELA FOR MENOR QUE 1300PX, O BOTÃO SOME*/
+@media screen and (max-width : 1300px) {
+    /*Botão de Mostrar Todas as Tarefas*/
+    .btnMostraTodos{
+        display: none !important;
+    }
+}
+
+/*Botão de Salvar*/
+.tamBtn{
+    float:right;
+    background-color:#2E8B57;
+}
+
+/*Botão de Cancelar*/
+.tamBtnClose{
+    float: right; 
+    background-color: #f03369;
+
+}
+/*Botão de Sair do Menu Principal*/
+.BtnTopoMenu{
+    float: right; background-color: #f03369;
+}
+/*Botão que abre o dialog para apagar arquivos*/
+.tamBtnApagar{
+    width: 40%; float: right; background-color: #f03369;  bottom: 40px;
+}
+/*Botão que abre o dialog para apagar arquivos do Equipamento*/
+.tamBtnApagarEquip{
+    float: right; 
+    background-color: #f03369;
+}
+/*Botão de apagar arquivos*/
+.btnDeletar{
+    background-color: #f03369;
+}

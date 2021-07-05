@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+
+    <p:dialog  footer="" widgetVar="opcaoPergDialog"  header="Opções" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="50%" closeOnEscape="true" draggable="true" >   
+        <p:outputPanel id="opcaoPergDetal" class="corDialog" >
+            <h:form id="formOpcaoPerg" >
+                <p:dataTable rendered="true" resizableColumns="true" draggableColumns="true" filterDelay="800"  reflow="true" value="#{formularioBean.opcoes}" id="opcaoPergDT" var="campo" paginator="true" 
+                             rows="10" rowsPerPageTemplate="5,10, 15, 20" 
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} "
+                             currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                             - Página: {currentPage}/{totalPages}" 
+                             >
+
+                    <f:facet name="header">     
+                        #{formularioBean.perg}
+                        <br/>
+                        <p:commandButton value="Cadastrar" update=":cadastrarPergOpcaoDetal" oncomplete="PF('cadastrarPergOpcaoDialog').show()" icon="fa fa-plus" title="Cadastrar Campos" styleClass="btnCadastrar" />
+                    </f:facet>                     
+
+                    <p:column headerText="Titulo"  
+                              sortBy="#{campo.opcao}" filterBy="#{campo.opcao}"  filterMatchMode="contains"
+                              width="90%" >
+                        <h:outputText value="#{campo.opcao}"/>
+                    </p:column>
+
+                    <p:column priority="1" headerText="Menu"  exportable="false" 
+                              width="10%" >    
+                        <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+                            <p:menuitem update=":editarPergOpcaoDetal" oncomplete="PF('editarPergOpcaoDialog').show()" icon="fa fa-edit" title="Editar" value="Editar" action="#{formularioBean.editarOpcao(campo)}" />
+                            <p:menuitem style="color:#FF0000; " icon="fa fa-fw fa-remove" value="Excluir" action="#{formularioBean.excluirOpcao(campo)}" >
+                                <p:confirm header="Confirmação" class="dialog" message="Você tem certeza?" icon="ui-icon-alert" />
+                            </p:menuitem>
+
+                        </p:splitButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+
+
+    <!-- dialogCadastrar -->
+    <ui:include src="cadastrarOpcaoPergunta.xhtml"/>
+
+    <!-- dialogCadastrar -->
+    <ui:include src="editarOpcaoPergunta.xhtml"/>
+
+</ui:composition>
+

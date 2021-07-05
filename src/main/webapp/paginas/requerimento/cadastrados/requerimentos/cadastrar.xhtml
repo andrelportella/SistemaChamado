@@ -1,0 +1,222 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+    <!-- dialogCadastrar -->
+    <p:dialog header="Cadastrar" widgetVar="cadastrarDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="cadastrarDetal" class="corDialog" >
+
+            <h:form id="form" >
+                <div class="ui-fluid">
+
+                    <p:panelGrid  id="grid"   class="corDialog" style="width: 100%" >
+
+                        <p:row class="corDialog">     
+
+                            <p:column rowspan="1">
+                                <p:outputLabel id="cliLbl" rendered="#{!requerimentoBean.rendCli}" for="cli" class="colorDialog" value="Cliente" />
+                                <p:outputLabel id="cliLbl2" rendered="#{requerimentoBean.rendCli}" for="cli2" class="colorDialog" value="Cliente" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+
+                                <p:selectOneMenu rendered="#{!requerimentoBean.rendCli}" id="cli" value="#{requerimentoBean.requerimento.id_cliente}" autoWidth="true" required="#{requerimentoBean.requerimento.id_requerente == null}" requiredMessage="Informe o Cliente" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::" />
+                                    <f:selectItems value="#{requerimentoBean.clientes}" var="cli" itemLabel="#{cli.nome}" itemValue="#{cli.id}" rendered="true"  />
+                                    <p:message for="cli"/>
+                                    <p:ajax update="el reque requeLbl" event="change" listener="#{requerimentoBean.filtraStatus}"/>
+                                </p:selectOneMenu>
+
+                                <p:selectOneMenu rendered="#{requerimentoBean.rendCli}" id="cli2" value="#{requerimentoBean.requerimento.id_cliente}" autoWidth="true" required="#{requerimentoBean.requerimento.id_requerente == null}" requiredMessage="Informe o Cliente" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::" />
+                                    <f:selectItems value="#{requerimentoBean.clientes}" var="cli2" itemLabel="#{cli2.nome}" itemValue="#{cli2.codigoSTAI}" />
+                                    <p:message for="cli2" />
+                                    <p:ajax update="el2 reque requeLbl" event="change" listener="#{requerimentoBean.filtraStatus}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1"  >
+                                <h:commandLink>
+                                    <p:ajax update=":cadastrarReqDetal" oncomplete="PF('cadastrarReqDialog').show()" />
+                                    <p:outputLabel id="requeLbl"  class="corDialog3"   value="Requerente " for="reque" />
+                                </h:commandLink>
+
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:selectOneMenu id="reque" value="#{requerimentoBean.requerimento.id_requerente}" autoWidth="true" required="#{requerimentoBean.requerimento.id_cliente == null}" requiredMessage="Informe o Requerente" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems id="comboReq" value="#{requerimentoBean.requerentes}" var="req" itemLabel="#{req.nome} - #{req.cpf}" itemValue="#{req.id}" />
+                                    <p:ajax update="cli2 cli cliLbl2 cliLbl" event="change" />
+                                </p:selectOneMenu>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row class="corDialog" >
+                            <p:column rowspan="1">
+                                <p:outputLabel  value="Embarcação | Loja "  class="colorDialog"  />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu rendered="#{!requerimentoBean.rendCli}" id="el" value="#{requerimentoBean.requerimento.id_embarcacao}" autoWidth="false" required="false" requiredMessage="Informe a Embarcação / Loja" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{requerimentoBean.embarcacoes_lojas}" var="emLoja" itemLabel="#{emLoja.nomeBarco} #{emLoja.nomeVagaLoja}" itemValue="#{emLoja.id}" />
+                                    <p:message for="el"/>
+                                </p:selectOneMenu>
+
+                                <p:selectOneMenu rendered="#{requerimentoBean.rendCli}" id="el2" value="#{requerimentoBean.requerimento.id_embarcacao}" autoWidth="false" required="false" requiredMessage="Informe a Embarcação / Loja" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{requerimentoBean.embarcacoes_lojas}" var="emLoja" itemLabel="#{emLoja.nomeBarco} #{emLoja.nomeVagaLoja}" itemValue="#{emLoja.codigoSTAI}" />
+                                    <p:message for="el2"/>
+                                </p:selectOneMenu>
+
+                            </p:column>
+
+
+                            <p:column rowspan="1">
+
+                                <h:commandLink  >
+                                    <p:outputLabel class="corDialog3"   value="Natureza" for="nat" />
+                                    <p:ajax update=":cadastrarNatDetal" oncomplete="PF('cadastrarNatDialog').show()" />
+                                </h:commandLink>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu  id="nat" value="#{requerimentoBean.requerimento.id_natureza}" autoWidth="true" filter="true" filterMatchMode="contains" required="true" requiredMessage="Informe uma Natureza" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::" />
+                                    <f:selectItems value="#{requerimentoBean.natureza}" var="naturez" itemLabel="#{naturez.descricao}" itemValue="#{naturez.cod}" />
+                                    <p:message for="nat"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row >
+
+                        <p:row class="corDialog" >
+
+                            <p:column rowspan="1">
+                                <h:commandLink >
+                                    <p:outputLabel class="corDialog3"   value="Local " for="loc" />
+                                    <p:ajax update=":cadastrarLocDetal" oncomplete="PF('cadastrarLocDialog').show()" />
+                                </h:commandLink>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu id="loc" value="#{requerimentoBean.requerimento.id_local}" required="true" requiredMessage="Informe um Local" filter="true" filterMatchMode="contains"  autoWidth="true">
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::" />
+                                    <f:selectItems id="comboLoc" value="#{requerimentoBean.local}" var="local" itemLabel="#{local.nome}" itemValue="#{local.id}" />
+                                    <p:message for="loc"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel   for="dtMov"  class="colorDialog" value="Data"  />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="dtMov" value="#{requerimentoBean.requerimento.dataAbertura}"
+                                            pattern="dd/MM/yyyy" locale="pt_BR" mask="99/99/9999"  required="true" requiredMessage="Informe a Data de Movimentação!" style="width:50%;" >
+                                    <p:message for="dtMov"/>
+
+                                </p:calendar>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row class="corDialog" >
+
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Hora"  class="colorDialog" for="hrAber" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="hrAber" value="#{requerimentoBean.requerimento.horaAbertura}"
+                                            pattern="HH:mm" timeOnly="true"  required="true" requiredMessage="Informe a hora da Abertura da Movimentação!" style="width:50%;" mask="99:99" >
+                                    <p:message for="hrAber"/>
+                                </p:calendar>                            
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Arquivo"  class="colorDialog" for="fileUpload" />
+                            </p:column>
+
+
+                            <p:column rowspan="1">
+                                <p:fileUpload id="fileUpload" 
+                                              fileUploadListener="#{requerimentoBean.upload}"
+                                              mode="advanced" 
+                                              label="Escolher" uploadLabel="Enviar"
+                                              cancelLabel="Cancelar" 					
+                                              sizeLimit="10240000" 
+                                              invalidSizeMessage="O tamanho máximo permitido é de 10MB."
+                                              multiple="true" auto="true"                                                
+                                              dragDropSupport="true"  update="txtArq"
+
+                                              />
+                                <h:outputText  class="colorDialog" id="txtArq" escape="false" value="#{requerimentoBean.textoArquivo}"/>
+                            </p:column>
+
+
+
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <p:outputLabel   value="Despesa" class="colorDialog" for="desp"  />
+                            </p:column>
+
+                            <p:column rowspan="1">                           
+                                <p:inputNumber id="desp" value="#{requerimentoBean.requerimento.despesa}" />
+
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel  value="Enviar Email?" class="colorDialog"   />
+                            </p:column>
+
+                            <p:column rowspan="1">                           
+
+                                <p:selectBooleanCheckbox itemLabel="Requerente" value="#{requerimentoBean.requerimento.enviaEmailReq}" />
+
+                                <p:selectBooleanCheckbox itemLabel="Cliente" value="#{requerimentoBean.requerimento.enviaEmailCli}" />
+
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row class="corDialog" >
+
+                            <p:column rowspan="4" colspan="4">
+                                <p:outputLabel class="colorDialog"  value="Observação: " for="obs" />
+                                <p:inputTextarea id="obs" counter="display" value="#{requerimentoBean.requerimento.descricao}" maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true"  >
+                                    <p:message for="obs"/>
+                                </p:inputTextarea>
+                                <br/>
+                                <h:outputText class="colorDialog" id="display" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+                </div>
+                <br/>                    
+
+                <p:commandButton id="btnSalvar" styleClass="tamBtn" actionListener="#{requerimentoBean.salvar()}" disabled="#{requerimentoBean.statusBotao}"    icon="fa fa-save" value="Salvar"  />
+            </h:form> 
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

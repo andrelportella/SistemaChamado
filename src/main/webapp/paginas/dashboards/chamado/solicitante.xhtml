@@ -1,0 +1,368 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""  widgetVar="solicitanteDialog" header="Chamados do Solicitante" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="90%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="solicitanteDetal" >
+
+            <h:form id="formSolicitante"  >
+                <p:dataTable   draggableColumns="true"  reflow="true" value="#{atendimentoDashBean.chamadoSolicitante}" id="atendimento" var="mov" paginator="true" resizableColumns="true" 
+                               rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{mov.id}"  selectionMode="single" selection="#{atendimentoDashBean.solicitanteSelecionado}" 
+                               style="width: 100%;"
+                               paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                               {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} " currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                                 - Página: {currentPage}/{totalPages}" >
+
+                    <f:facet name="header">
+                        Chamados do Solicitante
+                        <p:commandButton id="toggler" type="button" value="Colunas"  style="float:right;"  icon="ui-icon-calculator" class="horizontalmenu"  />
+                        <p:columnToggler datasource="atendimento" trigger="toggler" >
+                            <p:ajax event="toggle" listener="#{atendimentoDashBean.onToggle}" />
+                        </p:columnToggler>                            
+                    </f:facet>
+
+
+                    <f:facet name="{Exporters}">
+
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                            <p:dataExporter type="xls" target="atendimento" fileName="atendimentos"   />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                            <p:dataExporter type="pdf" target="atendimento" fileName="atendimentos" preProcessor="#{customizadorDocumentosPF.preProcessPDF}" />
+                        </h:commandLink>
+
+                    </f:facet>
+
+                    <p:column  headerText="Ticket"  priority="9" filterStyle="max-width: 20px; " exportable="#{atendimentoDashBean.list[0]}" visible="#{atendimentoDashBean.list[0]}" 
+                               sortBy="#{mov.id}" filterBy="#{mov.id}"  filterMatchMode="contains" 
+                               width="5%" >
+                        <h:outputText value="#{mov.id}"/>
+                    </p:column>
+
+
+                    <p:column headerText="Status"  priority="8" filterStyle="max-width: 50px; min-width: 40px; "   exportable="#{atendimentoDashBean.list[1]}" visible="#{atendimentoDashBean.list[1]}" 
+                              sortBy="#{mov.statusChamado}" filterBy="#{mov.statusChamado}" filterMatchMode="contains"
+                              id="status"
+                              width="7%" >
+                        <h:outputText value="#{mov.statusAtendimento ? 'Aberto' : 'Finalizado'}" />
+                    </p:column>
+
+                    <p:column headerText="Abertura"  priority="5" filterStyle="max-width: 60px;" id="abertura"  exportable="#{atendimentoDashBean.list[2]}" visible="#{atendimentoDashBean.list[2]}" 
+                              sortBy="#{mov.dataAbertura}" filterBy="#{mov.dataAbertura}"  filterMatchMode="contains"
+                              width="7%" >
+                        <h:outputText value="#{mov.dataAbertura}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Equipamento"  priority="4" filterStyle="max-width: 55px; " visible="#{atendimentoDashBean.list[3]}"  exportable="#{atendimentoDashBean.list[3]}"
+                              sortBy="#{mov.equipamento} " filterBy="#{mov.equipamento}"  filterMatchMode="contains" 
+                              width="12%" >
+                        <h:outputText value="#{mov.equipamento}"/>
+                    </p:column>
+
+                    <p:column headerText="Solicitante"  priority="7" visible="#{atendimentoDashBean.list[4]}"  exportable="#{atendimentoDashBean.list[4]}"
+                              sortBy="#{mov.solicitante}" filterBy="#{mov.solicitante}"  filterMatchMode="contains"
+                              width="10%" >
+                        <h:outputText value="#{mov.solicitante}"/>
+                    </p:column>
+
+
+                    <p:column headerText="Tecnico"  priority="3"  id="tecPesquisa" visible="#{atendimentoDashBean.list[5]}"  exportable="#{atendimentoDashBean.list[5]}"
+                              filterStyle="max-width: 50px; "
+                              sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains" 
+                              width="8%" >
+                        <h:outputText value="#{mov.tecnico}"/>
+                    </p:column>
+
+                    <p:column headerText="Categoria"   priority="2" visible="#{atendimentoDashBean.list[6]}"  exportable="#{atendimentoDashBean.list[6]}"
+                              sortBy="#{mov.categoria}" filterBy="#{mov.categoria}"  filterMatchMode="contains"
+                              width="12%" >
+                        <h:outputText value="#{mov.categoria}"/>
+
+                    </p:column>
+                    <p:column headerText="Alterado há"   priority="10" filterStyle="max-width: 20px;" visible="#{atendimentoDashBean.list[7]}"   exportable="#{atendimentoDashBean.list[7]}"
+                              sortBy="#{mov.tipoData}" filterBy="#{mov.tipoData}"  filterMatchMode="contains"
+                              width="7%" >
+                        <h:outputText value="#{mov.tipoData}"/>
+
+                    </p:column>
+
+
+                    <p:column headerText="Resumo"  priority="6" filterStyle="max-width: 200px; min-width: 200px; " visible="#{atendimentoDashBean.list[8]}" exportable="#{atendimentoDashBean.list[8]}"
+                              sortBy="#{mov.resumo}" filterBy="#{mov.resumo}"  filterMatchMode="contains" 
+                              width="28 %" >
+                        <h:outputText value="#{mov.resumo}" escape="false" />
+
+                    </p:column>
+
+                    <p:column exportable="false"  priority="1" headerText="Menu" visible="#{atendimentoDashBean.list[9]}"  
+                              width="4%" >    
+
+                        <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >                                
+                            <p:menuitem value="Visualizar" update=":visualizarSolicitante" oncomplete="PF('visualizarSolicitanteDialog').show()" icon="ui-icon-search" title="Visualizar" rendered="true" >
+                                <f:setPropertyActionListener value="#{mov}" target="#{atendimentoDashBean.solicitanteSelecionado}" />
+                            </p:menuitem>                
+                        </p:splitButton>
+                    </p:column>
+
+                    <p:column  headerText="Espécie" filterStyle="max-width: 100px; " visible="#{atendimentoDashBean.list[10]}"  exportable="#{atendimentoDashBean.list[10]}"
+                               sortBy="#{mov.tipoAtendimento}" filterBy="#{mov.tipoAtendimento}"  filterMatchMode="contains" 
+                               width="25%" >
+                        <h:outputText value="#{mov.tipoAtendimento}"/>
+                    </p:column>
+
+                    <p:column  headerText="Status Equipamento" filterStyle="max-width: 40px; " visible="#{atendimentoDashBean.list[11]}"  exportable="#{atendimentoDashBean.list[11]}"
+                               sortBy="#{mov.status}" filterBy="#{mov.status}"  filterMatchMode="contains" 
+                               width="7%" >
+                        <h:outputText value="#{mov.status}"/>
+                    </p:column>
+
+                    <p:column  headerText="Acompanhar" filterStyle="max-width: 60px; " visible="#{atendimentoDashBean.list[12]}"  exportable="#{atendimentoDashBean.list[12]}"
+                               sortBy="#{mov.acompanha}" filterBy="#{mov.acompanha}"  filterMatchMode="contains" 
+                               width="10%" >
+                        <h:outputText value="#{mov.acompanha}"/>
+                    </p:column>
+
+                    <p:ajax update=":historicoSolicitante" event="rowDblselect"  oncomplete="PF('historicoSolicitanteDialog').show()" 
+                            listener="#{atendimentoDashBean.listaAtendimentosMovimentosSelecionado(atendimentoDashBean.solicitanteSelecionado)}" 
+                            />
+
+                </p:dataTable>
+
+            </h:form>
+
+        </p:outputPanel>
+    </p:dialog>
+
+
+    <p:dialog footer=""  widgetVar="historicoSolicitanteDialog" header="Histórico"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="historicoSolicitante" >
+
+            <h:form id="formHistSolicitante" enctype="multipart/form-data">
+                <p:dataTable reflow="true" value="#{atendimentoDashBean.listaHistoricoSolicitante}"  emptyMessage="Não há registros!" id="movimentacao" var="mov" paginator="true"   
+                             rows="10" rowsPerPageTemplate="5, 10, 15, 20,50,100" 
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"  >
+
+                    <f:facet name="header">Histórico do Atendimento</f:facet>
+
+                    <f:facet name="{Exporters}">
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                            <p:dataExporter type="xls" target="movimentacao" fileName="movimentacao"  />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                            <p:dataExporter type="pdf" target="movimentacao" fileName="movimentacao"  />
+                        </h:commandLink>
+                    </f:facet>
+                    <p:column headerText="Ticket" width="8%" filterStyle="max-width: 60px;"
+                              sortBy="#{mov.id_atendimento.id}" filterBy="#{mov.id_atendimento.id}"  filterMatchMode="contains"
+                              >
+                        <h:outputText value="#{mov.id_atendimento.id}">
+
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Data" width="12%" filterStyle="max-width: 60px;"
+                              sortBy="#{mov.dataMovimento}" filterBy="#{mov.dataMovimento}"  filterMatchMode="contains"
+                              >
+                        <h:outputText value="#{mov.dataMovimento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Hora" width="10%" filterStyle="max-width: 40px;"
+                              sortBy="#{mov.horaMovimento}" filterBy="#{mov.horaMovimento}"  filterMatchMode="contains"
+                              >
+                        <h:outputText value="#{mov.horaMovimento}">
+                            <f:convertDateTime pattern="HH:mm"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Técnico" width="11%" filterStyle="max-width: 60px; "
+                              sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains"
+                              >
+                        <h:outputText value="#{mov.tecnico}"/>
+                    </p:column>
+
+                    <p:column headerText="Email"  width="9%" sortBy="#{mov.passouEmail}" >
+                        <h:outputText value="#{mov.passouEmail ? ' Sim' : 'Não'}"/>
+                    </p:column>                      
+
+                    <p:column headerText="Observação"  width="50%" filterStyle="max-width: 1000px; "
+                              sortBy="#{mov.observacao}" filterBy="#{mov.observacao}"  filterMatchMode="contains"
+                              >
+                        <p:inputTextarea readonly="true" style="width:95%" value="#{mov.observacao}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>                    
+
+        </p:outputPanel>
+    </p:dialog>
+
+
+    <p:dialog footer="" header="Informações do Atendimento" widgetVar="visualizarSolicitanteDialog" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="350" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="visualizarSolicitante">
+            <h:form enctype="multipart/form-data">
+                <p:panelGrid columnClasses="label,value"  style="width: 100%" >
+
+                    <p:row>                       
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Ticket: " class="dialog" /> 
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.id}"/>
+                        </p:column>                            
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Data de Abertura" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.dataAbertura}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Hora de Abertura" class="dialog" />
+
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.horaAbertura}"  >
+                                <f:convertDateTime pattern="HH:mm"/>                            
+
+                            </h:outputText>
+
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Equipamento" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.equipamento}"/>                    
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Categoria" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.categoria}"/>  
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Status Atendimento" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.statusAtendimento ? ' Aberto' : 'Finalizado'}"/>                 
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Especie Movimentação" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.tipoAtendimento}"/>                                        
+                        </p:column>
+
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Técnico" class="dialog" />                  
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.tecnico}"/>
+
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Solicitante" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.solicitante}"/>  
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Data de Fechamento" class="dialog" />             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.dataFechamento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Hora de Fechamento" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.horaFechamento}">
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>                    
+                        </p:column>
+                    </p:row> 
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Acompanhando" class="dialog" /> 
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.acompanha}" class="dialog" /> 
+
+                        </p:column>                           
+                    </p:row>
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Passou Email?" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{atendimentoDashBean.solicitanteSelecionado.passouEmail ? ' Sim' : 'Não'}"/>
+                        </p:column>
+
+
+                    </p:row>
+
+
+                    <p:row>
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Observação" class="dialog" /> 
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="3" colspan="4" >
+                            <p:inputTextarea style="width: 95%" readonly="true"  value="#{atendimentoDashBean.solicitanteSelecionado.obs}"/>
+                        </p:column>    
+
+                    </p:row>
+
+                </p:panelGrid>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

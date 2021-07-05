@@ -1,0 +1,46 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""  widgetVar="softwareDialog"  header="Inserir Softwares"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="330" width="50%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="softwareDetal" class="corDialog" >
+            <h:form id="form_softwares">
+                <p:pickList id="myPickList" 
+                            value="#{equipamentoBean.listModel}"
+                            var="emp" required="false"                   
+                            requiredMessage="Pelo menos 1 Software deve ser selecionado"
+                            itemLabel="#{emp.nome}" 
+                            itemValue="#{emp.id}"  
+                            addAllLabel="Adicionar Todos" addLabel="Adicionar"
+                            moveBottomLabel="Mover Para a Base" moveDownLabel="Mover Para Baixo" moveTopLabel="Mover Para o Topo"
+                            moveUpLabel="Mover para Cima" removeAllLabel="Remover Todos" removeLabel="Remover"  effect="bounce"
+                            showTargetFilter="true" showSourceFilter="true" showCheckbox="false" responsive="true"
+                            >  
+                    <p:ajax event="transfer" listener="#{equipamentoBean.onTransfer}" />
+                    <f:facet name="sourceCaption">Disponíveis</f:facet>
+                    <f:facet name="targetCaption">Selecionados</f:facet>
+                </p:pickList>
+                <p:commandButton style="top: 16px;" value="Salvar"  styleClass="tamBtn" id="btnSalvar"  icon="fa fa-save" action="#{equipamentoBean.salvarSoftware()}" />                
+            </h:form>
+
+            <br/>
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('softwareDialog').hide()" value="Fechar"  />
+            </h:form>
+
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

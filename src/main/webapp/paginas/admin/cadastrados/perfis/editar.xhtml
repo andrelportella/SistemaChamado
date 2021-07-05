@@ -1,0 +1,104 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+
+    <p:dialog footer="" widgetVar="editarDialog" header="Editar" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="90%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="editarDetal"   >
+
+            <h:form id="editar" >
+                <p:growl id="messages" showDetail="true" /> 
+                <p:panelGrid id="grid7" class="corDialog" columns="1" layout="grid">
+                    <p:panelGrid style="width: 100%" id="grid1" class="corDialog" columns="2" columnClasses="ui-grid-col-1, ui-grid-col-11" >
+                        <p:outputLabel  class="colorDialog" value="Nome Perfil " for="nome" />
+                        <p:inputText style="width: 98%" id="nome" value="#{controleAcessoBean.editaPerfil.tipoPerfil}" />
+                    </p:panelGrid>
+                    <p:panelGrid id="grid" class="corDialog" columns="4" layout="grid">
+
+                        <p:panelGrid id="grid5" class="corDialog" columns="1">
+
+                            <p:selectBooleanCheckbox  itemLabel="Acessa Menu Painel?" class="colorDialog" styleClass="colorDialog" id="amp" value="#{controleAcessoBean.editaPerfil.acessaPainelADM}" />        
+                            <p:separator/>                         
+                            <p:selectBooleanCheckbox  itemLabel="Acessa Agenda?" class="colorDialog" id="aAgenda" value="#{controleAcessoBean.editaPerfil.acessaAgenda}" />
+                            <p:selectBooleanCheckbox  itemLabel="Acessa Solicitante?" class="colorDialog" id="as" value="#{controleAcessoBean.editaPerfil.acessaUsuario}" />                                        
+                            <p:selectBooleanCheckbox  itemLabel="Acessa Controle de Acesso?"  class="colorDialog"  id="ap" value="#{controleAcessoBean.editaPerfil.acessaPerfil}" />        
+                            <p:selectBooleanCheckbox  itemLabel="Acessa Nagios?"  class="colorDialog"  id="an" value="#{controleAcessoBean.editaPerfil.acessaNagios}" />        
+                            <p:selectBooleanCheckbox  itemLabel="Acessa Parametros?"  class="colorDialog"  id="acessaParametro" value="#{controleAcessoBean.editaPerfil.acessaParametros}" />        
+                            <p:selectBooleanCheckbox  itemLabel="Cadastra Noticia?"  class="colorDialog"  id="cadastraNot" value="#{controleAcessoBean.editaPerfil.cadastraNoticia}" />        
+                            <p:selectBooleanCheckbox  itemLabel="Cadastra Ramal?"  class="colorDialog"  id="cadastraRamal" value="#{controleAcessoBean.editaPerfil.cadastraRamal}" />        
+                            <p:selectBooleanCheckbox  itemLabel="Cadastra Aniversariante?"  class="colorDialog"  id="cadastraNiver" value="#{controleAcessoBean.editaPerfil.cadastraNiver}" />        
+                            <p:selectBooleanCheckbox  itemLabel="Cadastra Campos?"  class="colorDialog"  id="cadastraCampos" value="#{controleAcessoBean.editaPerfil.cadastraCampos}" />
+                        </p:panelGrid>
+
+                        <p:panelGrid id="grid4" class="corDialog" columns="1">
+                            <p:selectBooleanCheckbox itemLabel="Acessa Menu Cadastro?" id="amcads" value="#{controleAcessoBean.editaPerfil.acessaMenuCadastro}" />        
+                            <p:separator/>
+                            <p:selectBooleanCheckbox itemLabel="Acessa Base Conhecimento?" id="abc" value="#{controleAcessoBean.editaPerfil.acessaBaseConhecimento}" />        
+                            <p:selectBooleanCheckbox itemLabel="Acessa Campo?" id="acampo" value="#{controleAcessoBean.editaPerfil.acessaCampos}" />        
+                            <p:selectBooleanCheckbox itemLabel="Acessa Equipamento?" id="aequip" value="#{controleAcessoBean.editaPerfil.acessaEquipamentos}" />        
+                            <p:selectBooleanCheckbox itemLabel="Acessa Equipamento Geral?" id="aEquipGeral" value="#{controleAcessoBean.editaPerfil.acessaEquipGeral}" />        
+                            <p:selectBooleanCheckbox itemLabel="Acessa Equipamento Informática?" id="aEquipInfor" value="#{controleAcessoBean.editaPerfil.acessaEquipInfor}" />        
+                            <p:selectBooleanCheckbox itemLabel="Acessa Fornecedor?" id="af" value="#{controleAcessoBean.editaPerfil.acessaFornecedores}" />        
+                            <p:selectBooleanCheckbox itemLabel="Acessa Produto?" id="ai" value="#{controleAcessoBean.editaPerfil.acessaItens}" />        
+                            <p:selectBooleanCheckbox itemLabel="Acessa Softwares?" id="aSoft" value="#{controleAcessoBean.editaPerfil.acessaSoftware}" />
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="grid3" class="corDialog" columns="1">
+                            <p:selectBooleanCheckbox itemLabel="Acessa Menu Tarefas?" id="amc" value="#{controleAcessoBean.editaPerfil.acessaMenuChamado}" />
+                            <p:separator/>
+                            <p:selectBooleanCheckbox itemLabel="Acessa Tarefas?" id="acs" value="#{controleAcessoBean.editaPerfil.acessaChamados}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Tarefas Agendados?" id="acessaAgendados" value="#{controleAcessoBean.editaPerfil.acessaChamadosAgendados}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Tarefas Juridicas?" id="acessaJuridicas" value="#{controleAcessoBean.editaPerfil.acessaChamadosJuridicos}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Tarefas Admin?" id="acsa" value="#{controleAcessoBean.editaPerfil.acessaChamadosAdm}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Dashboard?" id="adbc" value="#{controleAcessoBean.editaPerfil.acessaDashChamado}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Movimentacoes?" id="aM" value="#{controleAcessoBean.editaPerfil.acessaMovimentacao}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Todas as Tarefas?" id="acessaTc" value="#{controleAcessoBean.editaPerfil.acessaTodosChamados}" />        
+                            <p:selectBooleanCheckbox itemLabel="Ativa Tarefas?" id="ativacH" value="#{controleAcessoBean.editaPerfil.ativaChamado}" />
+                            <p:selectBooleanCheckbox itemLabel="Apaga Tarefas?" id="apagacH" value="#{controleAcessoBean.editaPerfil.apagaChamado}" />
+                            <p:selectBooleanCheckbox itemLabel="Perfil Atendimento?" id="perfilAtendimento" value="#{controleAcessoBean.editaPerfil.perfilAtendimento}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Reserva?" id="acessaReserva" value="#{controleAcessoBean.editaPerfil.acessaReserva}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Todas Reservas?" id="acessaTodasReserva" value="#{controleAcessoBean.editaPerfil.acessaTodasReservas}" />
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="grid2" class="corDialog" columns="1" >
+                            <p:selectBooleanCheckbox itemLabel="Acessa Menu Requerimento?" id="amr" value="#{controleAcessoBean.editaPerfil.acessaMenuRequerimento}" />
+                            <p:separator/>
+
+                            <p:selectBooleanCheckbox itemLabel="Acessa Requerimentos?" id="ars" value="#{controleAcessoBean.editaPerfil.acessaRequerimentos}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Dashboard?" id="adbr" value="#{controleAcessoBean.editaPerfil.acessaDashRequerimento}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Alertas?" id="aa" value="#{controleAcessoBean.editaPerfil.acessaAlertas}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Cliente?" id="ac" value="#{controleAcessoBean.editaPerfil.acessaCliente}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Embarcação?" id="ae" value="#{controleAcessoBean.editaPerfil.acessaEmbarcacao}" />                                
+                            <p:selectBooleanCheckbox itemLabel="Acessa Local?" id="al" value="#{controleAcessoBean.editaPerfil.acessaLocal}" />
+                            <p:selectBooleanCheckbox itemLabel="Acessa Requerente?" id="ar" value="#{controleAcessoBean.editaPerfil.acessaRequerente}" />                                                                
+                            <p:selectBooleanCheckbox itemLabel="Acessa Todos Requerimentos?" id="atc" value="#{controleAcessoBean.editaPerfil.acessaTodosRequerimentos}" />        
+                            <p:selectBooleanCheckbox itemLabel="Ativa Requerimento?" id="atr" value="#{controleAcessoBean.editaPerfil.ativaRequerimento}" />
+                            <p:selectBooleanCheckbox itemLabel="Apaga Requerimento?" id="apagaReq" value="#{controleAcessoBean.editaPerfil.apagaRequerimento}" />
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </p:panelGrid>
+                <br/>
+
+                <p:commandButton value="Editar" action="#{controleAcessoBean.editarPerfil}" update=":perfis_form:perfis" ajax="true" class="tamBtn" icon="fa fa-edit"  />
+            </h:form>
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

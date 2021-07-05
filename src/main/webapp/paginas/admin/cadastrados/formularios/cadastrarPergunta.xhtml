@@ -1,0 +1,79 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+    <p:dialog  footer="" widgetVar="cadastrarPergDialog"  header="Cadastrar Pergunta" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="50%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="cadastrarPergDetal" class="corDialog"  >
+            <h:form id="formPerg">
+                <!--<p:growl id="messages" showDetail="true" /> -->
+                <div class="ui-fluid">
+                    <p:panelGrid  columns="2"  columnClasses="value,value" id="grid" class="corDialog" style="width: 100%" >
+
+                        <p:outputLabel for="perg" value="Descrição da Pergunta" class="colorDialog" /> 
+                        <p:inputText id="perg" required="true" requiredMessage="Por favor, Informe uma Pergunta!" value="#{formularioBean.pergunta.pergunta}">
+                            <p:message for="perg" />
+                        </p:inputText>                  
+
+                        <p:outputLabel for="tipo" value="Tipo da Pergunta" class="colorDialog" /> 
+                        <p:selectOneMenu id="tipo" required="true" requiredMessage="Por favor, Informe uma Pergunta!" value="#{formularioBean.pergunta.tipo}">                            
+                            <f:selectItem itemLabel="Texto" itemValue="Texto" />
+                            <f:selectItem itemLabel="Múltipla Escolha" itemValue="Multipla Escolha" />
+                            <f:selectItem itemLabel="Area de Texto" itemValue="Area de Texto" />
+                            <p:message for="tipo" />
+                            <p:ajax  update="group1 group2"  />
+                        </p:selectOneMenu>                       
+
+                        <h:panelGroup id="group1" >
+                            <p:outputLabel  rendered="#{formularioBean.pergunta.tipo == 'Multipla Escolha'}" class="colorDialog" for="booleanBtnET" value="Exibir Texto na Pergunta? " />                       
+                            <p:selectBooleanButton  rendered="#{formularioBean.pergunta.tipo == 'Multipla Escolha'}" required="true" requiredMessage="Campo Obrigatório" value="#{formularioBean.pergunta.exibeTexto}" id="booleanBtnET" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close">
+                                <p:ajax update="group2" event="change" />
+                            </p:selectBooleanButton>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup id="group2" >
+                            <p:outputLabel id="pergTexttxt" rendered="#{formularioBean.pergunta.exibeTexto &amp;&amp; formularioBean.pergunta.tipo == 'Multipla Escolha'}" for="pergText" value="Texto da Resposta" class="colorDialog" /> 
+                            <p:inputText rendered="#{formularioBean.pergunta.exibeTexto &amp;&amp; formularioBean.pergunta.tipo == 'Multipla Escolha'}" id="pergText" required="true" requiredMessage="Por favor, Informe uma Pergunta!" value="#{formularioBean.pergunta.textoExibicao}">
+                                <p:message for="pergText" />
+                            </p:inputText>                  
+                        </h:panelGroup>
+                        
+                        <h:panelGroup>
+                            <p:outputLabel class="colorDialog" for="booleanBtn" value="Obrigatório" />
+                            <p:selectBooleanButton  required="true" requiredMessage="Campo Obrigatório" value="#{formularioBean.pergunta.obrigatorio}" id="booleanBtn" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close"/>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup >
+                            <p:outputLabel class="colorDialog" for="booleanBtnVS" value="Visualiza no Slide" />
+                            <p:selectBooleanButton   required="true" requiredMessage="Campo Obrigatório" value="#{formularioBean.pergunta.visualizaSlide}" id="booleanBtnVS" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close"/>
+                        </h:panelGroup>
+                        
+                        <p:outputLabel for="respCerta" value="Resposta Certa" class="colorDialog" /> 
+                        <p:inputText id="respCerta" required="false" requiredMessage="Por favor, Informe uma Resposta!" value="#{formularioBean.pergunta.respostaCerta}">
+                            <p:message for="respCerta" />
+                        </p:inputText>                  
+
+                    </p:panelGrid>
+                </div>
+                <br/>
+                <p:commandButton id="btnSalvar" value="Salvar" action="#{formularioBean.salvarPergunta()}" update="grid :formLista:campos" icon="fa fa-save"  ajax="true" class="tamBtn" />
+
+            </h:form>    
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('cadastrarPergDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

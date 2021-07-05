@@ -1,0 +1,169 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile"> 
+
+    <p:dialog header="Informações do Requerimento"  widgetVar="requerimentoDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="350" width="60%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="requerimentoDetal">
+            <div class="ui-fluid">
+                <p:panelGrid rendered="#{not empty requerimentoBean.requerimentos}" columnClasses="label,value" style="width: 100%"  >
+
+                    <p:row>                       
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Ticket: " class="dialog" /> 
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.id}"/>
+                        </p:column>                            
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Data de Abertura" class="dialog" />
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.dataAbertura}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Hora de Abertura" class="dialog" />
+
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.horaAbertura}"  >
+                                <f:convertDateTime pattern="HH:mm"/>                            
+                            </h:outputText>
+
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Cliente" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.cliente}"/>                    
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Requerente" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.requerente}"/>  
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Status" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.status}"/>                 
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Natureza" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.natureza}"/>                                        
+                        </p:column>
+
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Responsável" class="dialog" />                  
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.tecnico}"/>
+
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Embarcação / Loja" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.embarcacao}"/>  
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Local" class="dialog" />             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.local}"/>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Despesa" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.despesa}"/>                    
+                        </p:column>
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Data de Fechamento" class="dialog" >
+
+                            </h:outputText>             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.dataFechamento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>   
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Hora de Fechamento" class="dialog" />
+
+
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerimentoBean.requerimentoSelecionado.horaFechamento}">
+                                <f:convertDateTime pattern="HH:mm"/>           
+                            </h:outputText>                  
+                        </p:column>
+                    </p:row> 
+                    <p:row>
+                        <p:column rowspan="1" colspan="1">
+                            <h:outputText value="Arquivos" class="dialog" />
+                        </p:column>
+
+                        <p:column rowspan="1" colspan="1" >                              
+                            <p:commandButton style="height: 35px; width:150px " update=":arquivoDetal" oncomplete="PF('arquivoDialog').show()" value="Download" rendered="#{requerimentoBean.requerimentoSelecionado.anexoMovimento}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+
+                    </p:row>
+                    <p:row>
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Descrição" class="dialog" /> 
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="3" colspan="4" >
+
+                            <h:form>                                
+                                <p:inputTextarea  readonly="true"  value="#{requerimentoBean.requerimentoSelecionado.descricao}"/> 
+                            </h:form>
+
+                        </p:column>    
+
+                    </p:row>
+
+                </p:panelGrid>
+            </div>
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

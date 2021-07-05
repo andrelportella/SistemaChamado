@@ -1,0 +1,58 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""  widgetVar="arquivoDialog" header="Arquivos" resizable="true" class="corDialog"  maximizable="true" minimizable="true" fitViewport="true"  height="200" width="40%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="arquivoDetal" >
+            <h:form>
+                <p:dataTable value="#{noticiasBean.baseSelecionado.arquivo}" var="file"
+                             id="dataTable">
+                    <p:column width="200" headerText="Download">
+                        <p:commandButton value="Baixar" ajax="false"
+                                         actionListener="#{noticiasBean.download(file)}"
+                                         icon="ui-icon-arrowthick-1-s">
+                            <p:fileDownload value="#{noticiasBean.downloadFile}" />
+                        </p:commandButton>
+                    </p:column>
+
+
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{file.name}" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+    <p:dialog footer=""  widgetVar="arquivoDialogEdit" header="Arquivos" resizable="true" class="corDialog"  maximizable="true" minimizable="true" fitViewport="true"  height="200" width="40%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="arquivoDetalEdit" >
+            <h:form>
+                <p:dataTable value="#{noticiasBean.baseSelecionado.arquivo}" var="file"
+                             id="dataTable">                    
+
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{file.name}" />
+                    </p:column>
+                    
+                    <p:column width="120" headerText="Deletar">
+                        <p:commandButton styleClass="btnDeletar" value="Deletar" ajax="true"
+                                         actionListener="#{noticiasBean.deletarArquivo(file)}"
+                                         icon="fa fa-close" update="base_form:base" >       
+                            <p:confirm header="Confirmação"   class="dialog" message="Você tem certeza que deseja excluir o arquivo?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

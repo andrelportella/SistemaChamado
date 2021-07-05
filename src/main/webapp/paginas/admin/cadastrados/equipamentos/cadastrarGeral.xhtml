@@ -1,0 +1,253 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""  widgetVar="cadastrarDialogGeral"  header="Cadastrar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="85%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="cadastrarDetalGeral" class="corDialog" >
+            <h:form id="formGeral"   >
+                <p:growl id="growl" showDetail="true" sticky="true" /> 
+                <div class="ui-fluid">
+                    <p:panelGrid id="grid" columns="4" class="corDialog" style="width: 100%;" columnClasses="value,value">
+
+                        <p:outputLabel for="gcm"  class="colorDialog"  value="Código"  />
+                        <p:inputMask mask="aaa" id="gcm" value="#{equipamentoBean.equipamentoGeral.nome}"  required="true"  requiredMessage="Campo nome Obrigatório"  >
+                            <p:message for="gcm"/>
+                        </p:inputMask>
+
+                        <p:outputLabel for="desc" class="colorDialog"  value="Descrição: " />
+                        <p:inputText id="desc" value="#{equipamentoBean.equipamentoGeral.descricao}"   required="true" >
+                            <p:message for="desc"/>
+                        </p:inputText>
+
+                        <h:commandLink>
+                            <p:ajax update=":cadastrarTipoEquipDetal" oncomplete="PF('cadastrarTipoEquipDialog').show()" />                            
+                            <p:outputLabel for="TipoEquip"  class="corDialog3" value="Tipo"/>
+                        </h:commandLink>
+
+                        <p:selectOneMenu id="TipoEquip" value="#{equipamentoBean.equipamentoGeral.cod_tipoMaq}" required="true" requiredMessage="Campo Obrigatório" filter="true" filterMatchMode="contains" >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" />
+                            <f:selectItems value="#{equipamentoBean.tipoMaq}" var="tipoMaq" itemLabel="#{tipoMaq.descricao}" itemValue="#{tipoMaq.cod}" />
+                            <p:message for="TipoEquip"/>
+                        </p:selectOneMenu>   
+
+                        <h:commandLink>
+                            <p:ajax update=":cadastrarSiteDetal" oncomplete="PF('cadastrarSiteDialog').show()" />
+                            <p:outputLabel for="Site"  class="corDialog3" value="Local / Site "/>
+                        </h:commandLink>
+
+                        <p:selectOneMenu id="Site" value="#{equipamentoBean.equipamentoGeral.cod_site}"  required="true" requiredMessage="Campo Obrigatório" filter="true" filterMatchMode="contains"  >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" />
+                            <f:selectItems value="#{equipamentoBean.site}" var="site" itemLabel="#{site.descricao}" itemValue="#{site.cod}" />
+                            <p:message for="Site"/>
+                        </p:selectOneMenu>   
+
+                        <h:commandLink>
+                            <p:ajax update=":cadastrarSetorDetal" oncomplete="PF('cadastrarSetorDialog').show()" />
+                            <p:outputLabel for="Setor"  class="corDialog3" value="Setor"/>
+                        </h:commandLink>
+                        <p:selectOneMenu id="Setor" value="#{equipamentoBean.equipamentoGeral.cod_setor}"  required="true" requiredMessage="Campo Obrigatório" filter="true" filterMatchMode="contains"  >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" />
+                            <f:selectItems value="#{equipamentoBean.setor}" var="setor" itemLabel="#{setor.descricao}" itemValue="#{setor.cod}" />
+                            <p:message for="Setor"/>
+                        </p:selectOneMenu>   
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="matCart" class="colorDialog"  value="Matricula Cartório"  />
+                        <p:inputText  rendered="#{equipamentoBean.bens}" id="matCart" value="#{equipamentoBean.equipamentoGeral.matriculaCartorio}"   >
+                            <p:message for="matCart"/>
+                        </p:inputText>
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="renavam" class="colorDialog"  value="RENAVAM"  />
+                        <p:inputText rendered="#{equipamentoBean.bens}"  id="renavam" value="#{equipamentoBean.equipamentoGeral.renavam}" >
+                            <p:message for="renavam" />
+                        </p:inputText>
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="incra" class="colorDialog"  value="Incra"  />
+                        <p:inputText  rendered="#{equipamentoBean.bens}" id="incra" value="#{equipamentoBean.equipamentoGeral.incra}"   >
+                            <p:message for="incra"/>
+                        </p:inputText>
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="vlrIncra" class="colorDialog"  value="Valor Incra"  />
+                        <p:inputNumber  rendered="#{equipamentoBean.bens}" id="vlrIncra" value="#{equipamentoBean.equipamentoGeral.valorIncra}" >
+                            <p:message for="vlrIncra"/>
+                        </p:inputNumber>
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="iptu" class="colorDialog"  value="IPTU"  />
+                        <p:inputText  rendered="#{equipamentoBean.bens}" id="iptu" value="#{equipamentoBean.equipamentoGeral.iptu}"   >
+                            <p:message for="iptu"/>
+                        </p:inputText>
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="vlrIptu" class="colorDialog"  value="Valor IPTU"  />
+                        <p:inputNumber  rendered="#{equipamentoBean.bens}" id="vlrIptu" value="#{equipamentoBean.equipamentoGeral.valorIptu}"   >
+                            <p:message for="vlrIptu"/>
+                        </p:inputNumber>
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="itr" class="colorDialog"  value="ITR"  />
+                        <p:inputText  rendered="#{equipamentoBean.bens}" id="itr" value="#{equipamentoBean.equipamentoGeral.itr}"   >
+                            <p:message for="itr"/>
+                        </p:inputText>
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="vlrItr" class="colorDialog"  value="Valor ITR"  />
+                        <p:inputNumber  rendered="#{equipamentoBean.bens}" id="vlrItr" value="#{equipamentoBean.equipamentoGeral.valorIptu}"   >
+                            <p:message for="vlrItr"/>
+                        </p:inputNumber>
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="seguro" class="colorDialog"  value="Seguro (N° Apolice)"  />
+                        <p:inputText  rendered="#{equipamentoBean.bens}" id="seguro" value="#{equipamentoBean.equipamentoGeral.seguro}"   >
+                            <p:message for="seguro"/>
+                        </p:inputText>
+
+                        <p:outputLabel rendered="#{equipamentoBean.bens}" for="vlrSeguro" class="colorDialog"  value="Valor Seguro"  />
+                        <p:inputNumber  rendered="#{equipamentoBean.bens}" id="vlrSeguro" value="#{equipamentoBean.equipamentoGeral.valorSeguro}"   >
+                            <p:message for="vlrSeguro"/>
+                        </p:inputNumber>
+
+                        <p:outputLabel for="dtComp" class="colorDialog"  value="Data da Compra"  />
+                        <p:calendar id="dtComp" value="#{equipamentoBean.equipamentoGeral.dtCompra}"
+                                    mask="99/99/9999"  pattern="dd/MM/yyyy" locale="pt_BR"  required="true" requiredMessage="Informe a Data de Compra do Aparelho"  >
+                            <p:message for="dtComp"/>
+                        </p:calendar>
+
+                        <p:outputLabel for="valor" value="Valor"  class="colorDialog"  />
+
+                        <p:inputNumber id="valor" value="#{equipamentoBean.equipamentoGeral.valor}" >
+                            <p:message for="valor"/>
+                        </p:inputNumber>
+
+                        <h:commandLink>
+                            <p:ajax update=":cadastrarMarcaDetal" oncomplete="PF('cadastrarMarcaDialog').show()" />
+                            <p:outputLabel for="Marca"  class="corDialog3" value="Marca"/>
+                        </h:commandLink>
+
+                        <p:selectOneMenu id="Marca" value="#{equipamentoBean.equipamentoGeral.cod_marca}" required="false" requiredMessage="Campo Obrigatório" filter="true" filterMatchMode="contains"  >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" />
+                            <f:selectItems value="#{equipamentoBean.marca}" var="marca" itemLabel="#{marca.descricao}" itemValue="#{marca.cod}" />
+                            <p:message for="Marca"/>
+                        </p:selectOneMenu>   
+
+                        <p:outputLabel for="mod" class="colorDialog"  value="Modelo"  />
+                        <p:inputText id="mod" value="#{equipamentoBean.equipamentoGeral.modelo}"   >
+                            <p:message for="mod"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Fornecedor / Responsável" class="colorDialog"  for="fornecedor" />
+                        <p:selectOneMenu id="fornecedor" value="#{equipamentoBean.fornecedor.id}" required="true" requiredMessage="Campo Obrigatório" filter="true" filterMatchMode="contains"  >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" />
+                            <f:selectItems value="#{equipamentoBean.fornecedores}" var="fornecedor" itemLabel="#{fornecedor.nome}" itemValue="#{fornecedor.id}" />
+                            <p:message for="fornecedor"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="tam"  class="colorDialog"  value="Tamanho"  />
+                        <p:inputText id="tam" value="#{equipamentoBean.equipamentoGeral.tamanho}" >
+                            <p:message for="tam"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="peso" class="colorDialog" value="Peso:"  />
+                        <p:inputText id="peso" value="#{equipamentoBean.equipamentoGeral.peso}" >
+                            <p:message for="peso"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="cap" class="colorDialog" value="Capacidade"  />
+                        <p:inputText id="cap" value="#{equipamentoBean.equipamentoGeral.capacidade}"   >
+                            <p:message for="cap"/>
+                        </p:inputText>
+
+
+                        <p:outputLabel  for="serie"  class="colorDialog" value="N° Série"  />
+                        <p:inputText  id="serie" value="#{equipamentoBean.equipamentoGeral.numSerie}"  >
+                            <p:message for="serie"/>
+                        </p:inputText>
+
+                        <h:commandLink>
+                            <p:ajax update=":cadastrarStatusDetal" oncomplete="PF('cadastrarStatusDialog').show()" />
+                            <p:outputLabel for="Status"  class="corDialog3" value="Status"/>
+                        </h:commandLink>
+
+                        <p:selectOneMenu id="Status" value="#{equipamentoBean.equipamentoGeral.cod_Status}" required="true" requiredMessage="Campo Obrigatório" filter="true" filterMatchMode="contains" >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" />
+                            <f:selectItems value="#{equipamentoBean.status}" var="status" itemLabel="#{status.descricao}" itemValue="#{status.cod}" />
+                            <p:message for="Status"/>                                
+                        </p:selectOneMenu>
+                                            
+                        <p:outputLabel value="Empresa da NF" class="colorDialog"  for="emp"/>
+                        <p:selectOneMenu id="emp" value="#{equipamentoBean.equipamentoGeral.cod_empresa}"  autoWidth="true" required="true" requiredMessage="Empresa Obrigatório" filter="true" filterMatchMode="contains" >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" />
+                            <f:selectItems value="#{equipamentoBean.empresa}" var="empresa"  itemLabel="#{empresa.descricao}" itemValue="#{empresa.cod}" />
+                            <p:message for="emp"/>
+                        </p:selectOneMenu>  
+                        
+                        <p:outputLabel rendered="#{!equipamentoBean.bens}" value="Usuário"  class="colorDialog" for="user" />
+                        <p:selectOneMenu rendered="#{!equipamentoBean.bens}" id="user" value="#{equipamentoBean.equipamentoGeral.cod_usrResp}"  required="false" requiredMessage="Campo Obrigatório" filter="true" filterMatchMode="contains"  >
+                            <f:selectItem itemLabel="::Selecione::" value="#{null}" />
+                            <f:selectItems value="#{equipamentoBean.usuarios}" var="usuarios" itemLabel="#{usuarios.nome}" itemValue="#{usuarios.id}" />
+                            <p:message for="user"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="numNF"  class="colorDialog" value="N° NF"  />
+                        <p:inputText  id="numNF" value="#{equipamentoBean.equipamentoGeral.nfSoftware}"  >
+                            <p:message for="numNF"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="fileUploadCadGeral" value="Arquivos"  class="colorDialog"  />
+                        <p:fileUpload 
+                            id="fileUploadCadGeral" 
+                            fileUploadListener="#{equipamentoBean.uploadGeral}"
+                            mode="advanced" 
+                            label="Escolher" uploadLabel="Enviar"
+                            cancelLabel="Cancelar" 					
+                            sizeLimit="10240000" 
+                            invalidSizeMessage="O tamanho máximo permitido é de 10MB."
+                            multiple="true" auto="true"                                                
+                            dragDropSupport="true" update="txtArq"
+                            >
+                            <br/>
+                            <h:outputText id="txtArq"  class="colorDialog" escape="false" value="#{equipamentoBean.textoArquivoGeral}"/>
+                        </p:fileUpload>
+
+                        <p:outputLabel for="rest" value="Restrição ?"  class="colorDialog"  />
+                        <p:selectBooleanButton required="true" requiredMessage="Informe o Status" id="rest" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{equipamentoBean.equipamentoGeral.restricao}" style="width: 40%" >
+                            <p:message for="rest"/>
+                        </p:selectBooleanButton>
+
+                        <p:outputLabel for="obsRestricao" value="Observação da Restrição"  class="colorDialog"  />                        
+                        <p:column>
+                            <p:inputTextarea id="obsRestricao" counter="display2" value="#{equipamentoBean.equipamentoGeral.resctricaoObs}" maxlength="255" counterTemplate="{0} Caracteres restantes." autoResize="true" required="false" requiredMessage="Por favor, insira uma observação com no mínimo 3 caracteres." minQueryLength="0" >                                
+                                <p:message for="obsRestricao"/>
+                            </p:inputTextarea>
+                            <h:outputText  class="colorDialog"  id="display2" />
+                        </p:column>
+
+                        <p:outputLabel for="obs" value="Observação"  class="colorDialog"  />
+                        <p:column>
+                            <p:inputTextarea id="obs" counter="display" value="#{equipamentoBean.equipamentoGeral.observacao}" maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true" required="false" requiredMessage="Por favor, insira uma observação com no mínimo 3 caracteres." minQueryLength="0" >                                
+                                <p:message for="obs"/>
+                            </p:inputTextarea>
+                            <h:outputText  class="colorDialog"  id="display" />
+                        </p:column>
+
+
+
+                    </p:panelGrid>
+                </div>
+                <br/>
+                <p:commandButton value="Salvar" class="tamBtn"  action="#{equipamentoBean.salvarGeral()}" update="formTab:geral:equipamentos"  icon="fa fa-save" />
+            </h:form>
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('cadastrarDialogGeral').hide()" value="Cancelar"  />
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

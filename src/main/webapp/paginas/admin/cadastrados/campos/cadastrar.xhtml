@@ -1,0 +1,62 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+    <p:dialog  footer="" widgetVar="cadastrarDialog"  header="Cadastrar"   resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="cadastrarDetal" class="corDialog"  >
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true" /> 
+
+
+                <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+                    <p:row class="corDialog">
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Tabela " for="tab" class="colorDialog"  />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:selectOneMenu id="tab" value="#{camposBean.campos.tabela}" required="true" requiredMessage="Informe a Tabela" filter="true" filterMatchMode="contains" autoWidth="true" >
+                                <f:selectItem itemValue="0" itemDisabled="#{camposBean.renderizar()}"  itemLabel="0 - Nova Tabela"/>
+                                <f:selectItems value="#{camposBean.camposListTabela}" var="tipo" itemLabel="#{tipo.cod} - #{tipo.descricao}" itemValue="#{tipo.cod}" />
+                                <p:message for="tab"/>
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Descrição: " for="desc" class="colorDialog"  />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="desc" value="#{camposBean.campos.descricao}" size="55" required="true" requiredMessage="Descrição do Item Obrigatório"  >
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>                                
+
+                    </p:row>
+
+                </p:panelGrid>
+
+                <br/>
+                <p:commandButton id="btnSalvar" value="Salvar" action="#{camposBean.salvar}" update="grid :formLista:campos" icon="fa fa-save"  ajax="true" disabled="#{camposBean.verificaAcesso()}" class="tamBtn" />
+
+            </h:form>    
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

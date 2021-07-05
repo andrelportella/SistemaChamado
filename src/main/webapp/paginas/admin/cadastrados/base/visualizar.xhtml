@@ -1,0 +1,94 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+    <!-- dialogAtendimento -->
+    <p:dialog footer="" header="Informações"  widgetVar="baseDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="400" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="baseDetal">
+            <h:form >
+                <p:panelGrid  style="width: 100%" rendered="#{not empty baseConhecimentoBean.bases}" columnClasses="label,value"  >
+
+                    <p:row>                       
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Codigo: " class="dialog" /> 
+                            <h:outputText value="#{baseConhecimentoBean.baseSelecionado.id}"/>
+                        </p:column>                            
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Data da Revisão" class="dialog" />
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{baseConhecimentoBean.baseSelecionado.dataRevisao}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Resumo" class="dialog" />
+
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{baseConhecimentoBean.baseSelecionado.resumo}"  />                                                                                   
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Responsável" class="dialog" />    
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{baseConhecimentoBean.baseSelecionado.responsavel}"/>                    
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Categoria" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{baseConhecimentoBean.baseSelecionado.categoria}"/>  
+                        </p:column>
+
+                    </p:row>                    
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Anexo" class="dialog" />
+                        </p:column>
+
+                        <p:column rowspan="1">                              
+
+                            <p:commandButton update=":arquivoDetal" oncomplete="PF('arquivoDialog').show()" value="Download" rendered="#{baseConhecimentoBean.baseSelecionado.anexoMovimento}" />
+
+                        </p:column>
+
+                    </p:row>
+
+                    <p:row>
+                        <p:column rowspan="3" colspan="4" >
+
+                            <h:form>                                
+                                <h:outputText value="Observações" class="dialog" /> 
+                                <p:inputTextarea  readonly="true" style="width: 100%;"  value="#{baseConhecimentoBean.baseSelecionado.observacoes}"  />
+                            </h:form>
+
+                        </p:column>    
+
+                    </p:row>
+
+                </p:panelGrid>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

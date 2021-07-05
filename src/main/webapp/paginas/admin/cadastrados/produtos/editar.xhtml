@@ -1,0 +1,112 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""   widgetVar="editarDialog" header="Editar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="260" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="editarDetal"   >
+            <h:form id="editar">
+                <div class="ui-fluid">                                                                                    
+                    <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+                        <p:row class="corDialog">
+                            <p:column rowspan="1">
+                                <p:outputLabel  class="colorDialog" value="Produto " for="prod" />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:selectOneMenu id="prod" value="#{produtoBean.produtoEdit.cod_produto}" autoWidth="true" required="true" requiredMessage="Informe o tipo de Produto" filter="true" filterMatchMode="contains" >
+                                    <f:selectItems value="#{produtoBean.camposProdutos}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}" />
+                                    <p:message for="prod"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel for="desc" class="colorDialog"  value="Descrição do Item" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+
+                                <p:inputText  required="true" requiredMessage="Informe a descrição do item" id="desc" value="#{produtoBean.produtoEdit.descricao}"  >
+                                    <p:message for="desc"/>
+                                </p:inputText>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="1" >
+                                <p:outputLabel for="valor" value="Valor"  class="colorDialog"  />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:inputNumber id="valor" value="#{produtoBean.produtoEdit.valor}" >
+                                    <p:message for="valor"/>
+                                </p:inputNumber>
+                            </p:column>
+
+                            <p:column rendered="#{loginBean.negocioView.cod_negocio == 2}" rowspan="1">
+                                <p:outputLabel for="cb" class="colorDialog"  value="Codigo de Barras" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:inputText  rendered="#{loginBean.negocioView.cod_negocio == 2}" required="false" requiredMessage="Informe o codigo de barras" id="cb" value="#{produtoBean.produtoEdit.obs2}"  >
+                                    <p:message for="cb"/>
+                                </p:inputText>
+                            </p:column>                            
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="1" >
+                                <p:outputLabel for="status" value="Status"  class="colorDialog"  />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:selectBooleanButton required="true" requiredMessage="Informe o Status do Produto" id="status" onLabel="Ativo" offLabel="Inativo" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{produtoBean.produtoEdit.status}" style="width: 50%" >
+                                    <p:message for="status"/>
+                                </p:selectBooleanButton>
+                            </p:column>
+                        </p:row>
+
+                        <p:row class="corDialog" >
+
+                            <p:column rowspan="4" colspan="4">
+                                <p:outputLabel  rendered="#{loginBean.negocioView.cod_negocio != 2}" class="colorDialog" value="Observação: " for="obs"  />
+                                <p:outputLabel  rendered="#{loginBean.negocioView.cod_negocio == 2}" class="colorDialog" value="Observação: (Se for cadastrar produto da B2Click, colocar o código da B2Click aqui) " for="obs"  />
+                                <p:inputTextarea id="obs" counter="display" value="#{produtoBean.produtoEdit.obs}"  maxlength="255" counterTemplate="{0} Caracteres restantes." autoResize="true" required="false" requiredMessage="Por favor, insira uma observação com no mínimo 3 caracteres." minQueryLength="3" >
+                                    <p:message for="obs"/>
+                                </p:inputTextarea>
+                                <br/>
+                                <h:outputText  class="colorDialog"  id="display" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </div>
+
+                <br/>
+
+                <p:commandButton update=":usuarios_form:produto " id="btnSalvar" styleClass="tamBtn" actionListener="#{produtoBean.editarProduto()}" icon="fa fa-edit" value="Editar"  />                  
+
+            </h:form> 
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

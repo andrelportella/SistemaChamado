@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <ui:define name="corpo"> 
+
+        <title>Plantas Cadastradas</title>  
+
+        <h:form id="formLista" >
+
+            <p:dataTable rendered="true" resizableColumns="true" draggableColumns="true" filterDelay="800"  reflow="true" value="#{plantaBean.plantas}" id="campos" var="campo" paginator="true" widgetVar="camposTable"
+                         rows="10" rowsPerPageTemplate="5,10, 15, 20" rowKey="#{campo.id}"  selectionMode="single" selection="#{plantaBean.plantaSelecionado}" 
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} "
+                         currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                         - Página: {currentPage}/{totalPages}" style="width: 100%;"
+                         >
+
+                <f:facet name="header">
+                    Plantas Cadastradas
+                    <p:commandButton id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="campos" trigger="toggler" >
+                        <p:ajax event="toggle" listener="#{plantaBean.onToggle}" />
+                    </p:columnToggler> 
+                    <p:commandButton value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar Campos" styleClass="btnCadastrar" />
+                </f:facet> 
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="campos" fileName="campos"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="campos" fileName="campos"/>
+                    </h:commandLink>
+                </f:facet>
+                <p:column headerText="ID"  exportable="#{plantaBean.list[0]}" visible="#{plantaBean.list[0]}" 
+                          sortBy="#{campo.id}" filterBy="#{campo.id}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{campo.id}"/>
+                </p:column>
+
+                <p:column headerText="Titulo"  exportable="#{plantaBean.list[1]}" visible="#{plantaBean.list[1]}" 
+                          sortBy="#{campo.titulo}" filterBy="#{campo.titulo}"  filterMatchMode="contains"
+                          width="30%" >
+                    <h:outputText value="#{campo.titulo}"/>
+                </p:column>
+
+                <p:column headerText="Descricao"  exportable="#{plantaBean.list[2]}" visible="#{plantaBean.list[2]}" 
+                          sortBy="#{campo.obs}" filterBy="#{campo.obs}"  filterMatchMode="contains"
+                          width="35%" >
+                    <h:outputText value="#{campo.obs}"/>
+                </p:column>
+
+                <p:column headerText="Link da Planta"  exportable="#{plantaBean.list[2]}" visible="#{plantaBean.list[2]}"                           
+                          width="20%" >                    
+                    <a target="_blank"  href="#{campo.link}">
+                        Clique Aqui para acessar a planta.
+                    </a>
+                </p:column>                
+
+                <p:column priority="1" headerText="Menu"  exportable="false" visible="#{plantaBean.list[3]}"
+                          width="5%" >    
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+                        <p:menuitem update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar" value="Editar" action="#{plantaBean.editar(campo)}" />
+
+                    </p:splitButton>
+                </p:column>
+
+                <p:ajax  update="camposDetal"   event="rowDblselect" oncomplete="PF('camposDialog').show()" >
+                    <f:setPropertyActionListener value="#{campo}" target="#{plantaBean.plantaSelecionado}" />
+                </p:ajax>
+            </p:dataTable>
+
+
+
+        </h:form>
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+        <!-- dialogAtendimento -->
+        <ui:include src="visualizar.xhtml"/>
+
+    </ui:define>
+
+</ui:composition>
+

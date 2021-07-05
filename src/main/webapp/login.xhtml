@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "htth://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:event listener="#{loginBean.verificaUsuarioLogado()}" type="preRenderView" />      
+
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes" name="viewport"/>
+        <title>Login</title>
+        <h:outputStylesheet library="css" name="login.css" />
+        <h:outputStylesheet library="css" name="botaoBS.css" />
+        <link rel="shortcut icon" type="image/x-icon"  href="#{facesContext.externalContext.requestContextPath}/resources/imagens/favicon.ico"/>
+        <h:outputScript name="locale-primefaces.js" library="js"/>
+        <link href="#{facesContext.externalContext.requestContextPath}/resources/js/login.js" rel="script" />
+        <script language="javascript" src="#{request.contextPath}/resources/js/login.js"></script>
+        <p:ajaxStatus  onstart="PF('statusDialog').show()" onerror="PF('sessaoExpirada').show()" oncomplete="PF('statusDialog').hide()" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous"/>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    </h:head>
+
+    <h:body style="background:#60a3bc;">        
+        <p:growl  showDetail="true" autoUpdate="true" life="9000" />     
+        <p:dialog footer=""  modal="true" widgetVar="sessaoExpirada" header="Sessão expirada"  draggable="false" closable="false" resizable="false" >
+            <h:outputText  class="colorDialog" style="text-align: center;" value="Sua sessão expirou porque você ficou " /> <br/>
+            <h:outputText  class="colorDialog" style="text-align: center;" value="muito tempo inativo, por favor, " /><br/>
+            <h:outputText  class="colorDialog" style="text-align: center;" value="faça o login novamente!" /> <br/><br/>
+            <p:button outcome="/login" value="Fazer Login Novamente"  />
+        </p:dialog> 
+        <p:dialog footer=""  modal="true" widgetVar="statusDialog" header="Carregando" draggable="false" closable="false" resizable="false" >            
+            <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+        </p:dialog>
+        <div class="container">
+            <div class="card card-container ">
+                <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+                <img id="profile-img" src="#{request.contextPath}/resources/imagens/logo02.png"  />
+
+                <h:form class="form_container">
+                    <span id="reauth-email" class="reauth-email"></span>
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>                                
+                        <p:inputText value="#{loginBean.username}" id="inputEmail" class="form-control input_user" placeholder="Login" required="true" >
+                            <p:ajax update="form:neg" event="change" 
+                                    listener="#{loginBean.listaNegocio(loginBean.username)}"/>
+                        </p:inputText>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>                                
+                        <p:password id="inputPassword"  value="#{loginBean.password}" class="form-control input_pass" placeholder="Senha" />
+                    </div>
+                    <p:commandButton  class="btn btn-lg btn-primary btn-block btn-signin" id="button" value="Acessar" action="#{loginBean.validaUsuario()}"/>
+                    <h:messages />
+                </h:form><!-- /form -->
+                <div class="mt-4">                      
+                    <div class="d-flex justify-content-center links">
+                        <a href="#" onclick="PF('senhaDialog').show();" >Esqueceu sua senha?</a>
+                    </div>
+                </div>
+            </div><!-- /card-container -->
+        </div><!-- /container -->
+
+        <!-- dialogCadastrar -->
+        <p:dialog  footer=""  modal="true" widgetVar="cadastrarDialog"  header="Selecione um Negocio"  resizable="false" maximizable="false" minimizable="false" fitViewport="true"  height="100" width="350" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel rendered="true" id="cadastrarDetal" class="corDialog" >
+                <div class="ui-fluid">
+                    <h:form id="form"  >
+
+                        <p:selectOneMenu  class="form-control" id="neg" value="#{loginBean.negocio.cod_negocio}" style="width:100%;" required="false" requiredMessage="Informe um Negocio" filter="true" filterMatchMode="contains" >
+                            <f:selectItems value="#{loginBean.negocios}" var="campos" itemLabel="#{campos.negocio}" itemValue="#{campos.cod_negocio}" />
+                            <p:message for="neg"/>                      
+                        </p:selectOneMenu>
+
+                        <p:commandButton onclick="PF('statusDialog').show();" class="tamBtn" id="button" value="Selecionar" action="#{loginBean.doLogin}" ajax="false" />
+                    </h:form>                                   
+
+                </div>
+            </p:outputPanel>
+        </p:dialog>
+
+        <p:dialog  footer=""  modal="true" widgetVar="senhaDialog"  header="Recuperar Senha"  resizable="false" maximizable="false" minimizable="false" fitViewport="true"  height="100" width="350" closeOnEscape="true" draggable="true" >
+            <h:form class="form_container">
+
+                <div class="input-group mb-3">
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    </div>                                
+                    <p:inputText style="width:87%" value="#{loginBean.username}" id="inputEmail" class="input_user" placeholder="Digite seu Login ou email" requiredMessage="Por favor informe um Email ou Login"  required="true" />
+                </div>
+
+                <p:commandButton  class="btn btn-lg btn-primary btn-block btn-signin" id="button" value="Enviar Solicitação" action="#{loginBean.solicitarRecuperacao()}"/>
+                <h:messages />
+            </h:form><!-- /form -->                           
+        </p:dialog>
+    </h:body>
+</html>

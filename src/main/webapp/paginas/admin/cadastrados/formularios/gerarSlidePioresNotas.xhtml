@@ -1,0 +1,75 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+    <p:dialog  id="slidePioresNotas" modal="false" footer="" widgetVar="slidePioresNotasDialog"  header="#{formularioBean.formularioSelecionado.titulo}" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="60%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="slidePioresNotasDetal" class="corDialog"  >
+            <h:form id="formSlidePioresNotasDetal">
+                <p:growl id="messages" showDetail="true" /> 
+                <p:panelGrid  columns="4"  columnClasses="label,value" id="grid" class="corDialog" style="width: 100%" >
+
+                    <p:outputLabel class="colorDialog" for="dataDe" value="Data De: " />
+                    <p:calendar required="true" requiredMessage="Por favor, Informe a DATA"  id="dataDe" value="#{formularioBean.dataDe}" pattern="dd/MM/yyyy" mask="true" showOn="button" >
+                        <p:messages for="dataDe"/>
+                    </p:calendar>
+
+                    <p:outputLabel  class="colorDialog" for="dataAte" value="Data Até: " />
+                    <p:calendar required="true" requiredMessage="Por favor, Informe a DATA" id="dataAte" value="#{formularioBean.dataAte}"  pattern="dd/MM/yyyy" mask="true" showOn="button" >
+                        <p:messages for="dataAte"/>
+                    </p:calendar>                    
+
+                </p:panelGrid>
+
+                <br/>
+                <p:commandButton id="btnSalvar" value="Emitir Slide" icon="fa fa-file-powerpoint-o" update="formDtSlide:campos" ajax="true" class="tamBtn" action="#{formularioBean.gerarSlidePioresNotas()}" />
+
+            </h:form>    
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('slidePioresNotasDialog').hide()" value="Cancelar"  />
+            </h:form>
+            <br/><br/><br/>
+            <h:form id="formDtSlide">
+                <p:dataTable resizableColumns="true" draggableColumns="true" filterDelay="800"  reflow="true" value="#{formularioBean.pioresNotas}" id="campos" var="campo" paginator="true" widgetVar="notasTable"
+                             rows="50" rowsPerPageTemplate="5,10,20,50,100"  emptyMessage="Não há registros."
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} "
+                             currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                             - Página: {currentPage}/{totalPages}" style="width: 100%;"
+                             >
+                    <f:facet name="header">
+                        Notas
+                    </f:facet>
+                    <p:column headerText="Nome" 
+                              sortBy="#{campo.nome}" filterBy="#{campo.nome}"  filterMatchMode="contains"
+                              width="65%" >
+                        <h:outputText value="#{campo.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="Nota" 
+                              sortBy="#{campo.nota}" filterBy="#{campo.nota}"  filterMatchMode="contains"
+                              width="10%" >
+                        <h:outputText value="#{campo.nota}"/>
+                    </p:column>
+
+                    <p:column headerText="Visualizar Questionario"                               
+                              width="25%" >                        
+                        <p:link href="http://bahiamarina-cidade.dyndns.info:9090/SistemaChamadoBM/respostaFormulario.xhtml?formulario_id=#{formularioBean.formularioSelecionado.id}&amp;resposta_id=#{campo.id_resposta}" target='_blank' rel='noopener'> Clique aqui para visualizar.</p:link>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

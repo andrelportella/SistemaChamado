@@ -1,0 +1,70 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <!-- dialogHistorico -->
+    <p:dialog footer=""  id="movimentosDetal"  widgetVar="movimentosDialog" header="Histórico do Chamado - "  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="480" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel >
+
+            <h:form id="usuarios_form_movimentar" >
+            
+                <p:dataTable filterDelay="800" reflow="true" value="#{movimentacaoBean.movimentacoesSelecionada}"  emptyMessage="Não há registros!" id="movimentacao" var="mov" paginator="true"   
+                             rows="10" rowsPerPageTemplate="5, 10, 15, 20,50,100"  rowKey="#{mov.id}"  
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"  >
+
+                    <f:facet name="{Exporters}">
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                            <p:dataExporter type="xls" target="movimentacao" fileName="movimentacao"  />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                            <p:dataExporter type="pdf" target="movimentacao" fileName="movimentacao"  />
+                        </h:commandLink>
+                    </f:facet>                       
+                    <p:column headerText="Data" width="12%" 
+                              sortBy="#{mov.dataMovimento}" filterBy="#{mov.dataMovimento}"  filterMatchMode="contains"
+                              >
+                        <h:outputText value="#{mov.dataMovimento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Hora" width="10%" 
+                              sortBy="#{mov.horaMovimento}" filterBy="#{mov.horaMovimento}"  filterMatchMode="contains"
+                              >
+                        <h:outputText value="#{mov.horaMovimento}">
+                            <f:convertDateTime pattern="HH:mm"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Técnico" width="11%" 
+                              sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains"
+                              >
+                        <h:outputText value="#{mov.tecnico}"/>
+                    </p:column>
+
+                    <p:column headerText="Email"  width="9%" sortBy="#{mov.passouEmail}" >
+                        <h:outputText value="#{mov.passouEmail ? ' Sim' : 'Não'}"/>
+                    </p:column>
+
+                    <p:column headerText="Observação"  width="50%" 
+                              sortBy="#{mov.observacao}" filterBy="#{mov.observacao}"  filterMatchMode="contains"
+                              >
+                        <p:inputTextarea readonly="true" style="width:95%" value="#{mov.observacao}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>                    
+
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

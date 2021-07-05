@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui" >
+    <ui:define name="corpo">
+        <html lang="en">
+            <h:head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+                <meta name="description" content=""/>
+                <meta name="author" content=""/>
+                <h:outputStylesheet library="css" name="style.css" />
+                <h:outputStylesheet library="css" name="showcase.css" />
+                <h:outputStylesheet library="css" name="background.css" />
+                <title>#{paginaNoticiaBean.visualizaNoticia.titulo}</title>
+
+                <!-- Bootstrap core CSS -->
+                <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+                <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
+                <!-- Custom styles for this template -->
+                <link href="css/blog-post.css" rel="stylesheet"/>
+                <h:outputScript name="clipboard.min.js" library="js" />
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+                      integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous"/>            
+                <div id="fb-root"></div>
+                <script>
+                    (function (d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id))
+                            return;
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = 'https://connect.facebook.net/pt_BR/sdk.js#xfbml=1version=v3.1';
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));
+                </script>
+                <!-- Posicione esta tag no cabeçalho ou imediatamente antes da tag de fechamento do corpo. -->
+                <script src="https://apis.google.com/js/platform.js" async="" defer="">
+                    {
+                        lang: 'pt-BR'
+                    }
+                </script>
+                <script>
+                    function myFunction() {
+                        alert("Link Copiado.");
+                    }
+                </script>
+                <script>
+                    var clipboard = new ClipboardJS('.btn');
+                    clipboard.on('success', function (e) {
+                        console.log(e);
+                    });
+                    clipboard.on('error', function (e) {
+                        console.log(e);
+                    });
+                </script>
+            </h:head>
+
+            <body>
+
+                <!-- Conteudo da página -->
+                <div class="container">
+
+                    <div class="row">
+
+                        <!-- Coluna do conteudo da publicação -->
+                        <div class="col-lg-8">
+
+                            <!-- Titulo da publicação -->
+                            <h1 class="mt-4">#{paginaNoticiaBean.visualizaNoticia.titulo}</h1>
+
+                            <!-- Autor da publicação -->
+                            <p class="lead">
+                                Por
+                                <a href="#">#{paginaNoticiaBean.visualizaNoticia.autor}</a>
+                            </p>
+
+                            <hr/>
+
+                            <!-- Data da publicação -->
+                            <p> Postado em <p:outputLabel value="#{paginaNoticiaBean.visualizaNoticia.dataPublicacao}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                            </p>
+
+                            <hr/>
+
+                            <!-- Imagem da publicação -->
+                            <p:graphicImage  class="img-fluid rounded" name="/anexos/noticias/#{paginaNoticiaBean.visualizaNoticia.id}#{paginaNoticiaBean.visualizaNoticia.nomeArquivo}" title="#{paginaNoticiaBean.visualizaNoticia.titulo}" />
+                            <hr/>
+
+                            <!-- Conteudo da publicação-->
+                            <p class="lead">
+                                <h:outputText escape="false" value="#{paginaNoticiaBean.visualizaNoticia.descricao}"/>
+                            </p>
+                            <hr/>
+                        </div>
+                    </div>  
+                    <h5>
+                        Compartilhar 
+                    </h5>
+                    <br/>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1 col-xs-12">
+                                <div class="fb-share-button"  data-href="http://bahiamarina-cidade.dyndns.info:9090/SistemaChamadoBM/home/noticiaCadastrada.xhtml?id=#{paginaNoticiaBean.visualizaNoticia.id}" data-layout="button_count" data-size="small" data-mobile-iframe="true" title="Compartilhar no Facebook">
+                                    <a target="_blank"  href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbahiamarina-cidade.dyndns.info%3A9090%2FSistemaChamadoBM%2Fhome%2FnoticiaCadastrada.xhtml%3Fid%3D#{paginaNoticiaBean.visualizaNoticia.id}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
+                                        Facebook 
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-xs-12">
+                                <!-- Posicione esta tag onde você quer que o botão compartilhar apareça. -->
+                                <div class="g-plus" data-action="share" data-href="http://bahiamarina-cidade.dyndns.info:9090/SistemaChamadoBM/home/noticiaCadastrada.xhtml?id=#{paginaNoticiaBean.visualizaNoticia.id}"/>
+                                <!-- Your share button code -->
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <!-- Trigger -->
+                                <button  onclick="myFunction()" style="margin: 0px 20px 20px;" class="btn btn-primary" data-clipboard-text="http://bahiamarina-cidade.dyndns.info:9090/SistemaChamadoBM/home/noticiaCadastrada.xhtml?id=#{paginaNoticiaBean.visualizaNoticia.id}">
+                                    Compartilhar Link
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </body>
+        </html>
+    </ui:define>
+</ui:composition>

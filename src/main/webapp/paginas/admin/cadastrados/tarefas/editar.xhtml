@@ -1,0 +1,316 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <!-- dialogEditar -->
+    <p:dialog footer=""   widgetVar="editarDialog" header="Editar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="480" width="90%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="editarDetal"   >
+            <h:form id="editar">
+                <div class="ui-fluid">                    
+                    <p:panelGrid  id="grid"  style="width: 100%;"  class="corDialog"  >
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Espécie: "  class="colorDialog" for="console2" />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:selectOneMenu id="console2" value="#{atendimentoBean.editaAtendimento.cod_tipoAtendimento}" autoWidth="true" required="true" requiredMessage="Informe o tipo de Movimentação" filter="true" filterMatchMode="contains" disabled="true" >
+                                    <f:selectItems value="#{atendimentoBean.tipo}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}" />
+                                    <p:message for="console2"/>                                                
+                                </p:selectOneMenu>                                            
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel for="sa"  class="colorDialog" value="Status Atendimento" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+
+                                <p:selectBooleanButton   style="width: 50%" required="true" disabled="true" requiredMessage="Informe o Status do Atendimento" id="sa" onLabel="Aberto" offLabel="Finalizado" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{atendimentoBean.editaAtendimento.statusAtendimento}" >
+                                    <p:message for="sa"/>
+                                </p:selectBooleanButton>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row class="corDialog"  rendered="#{atendimentoBean.ativaDestino}" >
+                            <p:column rowspan="1">
+                                <p:outputLabel  class="colorDialog" value="Destino " for="dest" />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:selectOneMenu id="dest" value="#{atendimentoBean.editaAtendimento.cod_destino}" autoWidth="true" required="true" requiredMessage="Informe um Destino" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{atendimentoBean.destino}" var="dest" itemLabel="#{dest.descricao}" itemValue="#{dest.cod}" />                                                               
+                                    <p:message for="dest"/>                                              
+                                </p:selectOneMenu>
+                            </p:column>
+
+
+                            <p:column rowspan="1">
+                                <p:outputLabel  class="colorDialog" value="Bairro " for="bair"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu  required="true" id="bair" value="#{atendimentoBean.editaAtendimento.cod_bairro}" autoWidth="true" filter="true" filterMatchMode="contains" requiredMessage="Informe um Bairro" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{atendimentoBean.bairro}" var="bairro" itemLabel="#{bairro.descricao}" itemValue="#{bairro.cod}" />
+                                    <p:message for="bair"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row >
+
+                        <p:row class="corDialog"  rendered="#{!atendimentoBean.ativaDestino and !atendimentoBean.juridico}" >
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Equipamento: " class="colorDialog"  for="equip" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu id="equip" value="#{atendimentoBean.editaAtendimento.cod_equipamento}" autoWidth="true" required="false" requiredMessage="Informe um Equipamento" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{atendimentoBean.equipamentos}" var="equips" itemLabel="#{equips.nome} - #{equips.descricao} " itemValue="#{equips.id}" />
+                                    <p:message for="equip"/>
+                                    <p:ajax update="sts" event="change"
+                                            listener="#{atendimentoBean.filtraStatus}" />
+                                </p:selectOneMenu>
+                            </p:column>
+
+
+                            <p:column rowspan="1">
+                                <p:outputLabel  class="colorDialog" value="Status Equipamento: " for="sts"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu  id="sts" value="#{atendimentoBean.editaAtendimento.cod_status}" autoWidth="true" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{atendimentoBean.status}" var="status" itemLabel="#{status.descricao}" itemValue="#{status.cod}" />
+                                    <p:message for="sts"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+
+                        <p:row class="corDialog"  rendered="#{atendimentoBean.juridico}" >
+                            <p:column rowspan="1" >
+                                <p:outputLabel  class="colorDialog" value="Posição do Processo " for="posProc" />
+                            </p:column>
+
+                            <p:column rowspan="1"  >
+                                <p:selectOneMenu id="posProc" value="#{atendimentoBean.editaAtendimento.cod_posicaoProcesso}" autoWidth="true" required="true" requiredMessage="Informe uma Posição para o processo" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{atendimentoBean.posicaoProcesso}" var="equips" itemLabel="#{equips.descricao}" itemValue="#{equips.cod}" />
+                                    <p:message for="posProc"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+
+                            <p:column rowspan="1">                                
+                            </p:column>
+
+                            <p:column rowspan="1">
+
+                            </p:column>
+                        </p:row >
+
+                        <p:row rendered="#{atendimentoBean.ativaSuprimento}" >
+                            <p:column rowspan="1" >
+                                <p:outputLabel for="Produto" value="Produto"  class="colorDialog"  />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu  rendered="#{loginBean.negocioView.cod_negocio != 2}" id="Produto" value="#{atendimentoBean.editaAtendimento.cod_produto}" autoWidth="true" required="true" requiredMessage="Informe um Produto" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{atendimentoBean.produtos}" var="prod" itemLabel="#{prod.descricao}" itemValue="#{prod.id}" />                                    
+                                    <p:message for="Produto"/>
+                                </p:selectOneMenu>
+
+                                <p:selectOneMenu  rendered="#{loginBean.negocioView.cod_negocio == 2}" id="Produto2" value="#{atendimentoBean.editaAtendimento.cod_produto}" autoWidth="true" required="true" requiredMessage="Informe um Produto" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{atendimentoBean.produtos}" var="prod" itemLabel="#{prod.obs2} - #{prod.descricao}" itemValue="#{prod.id}" />
+                                    <p:message for="Produto2"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:outputLabel for="qtd" value="Quantidade"  class="colorDialog"  />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:inputNumber required="true" minValue="1" decimalSeparator="," decimalPlaces="0" thousandSeparator="." id="qtd" value="#{atendimentoBean.editaAtendimento.qtdProduto}" requiredMessage="Informe uma Quantidade" >
+                                    <p:message for="qtd"/>
+                                </p:inputNumber>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <p:outputLabel for="dtMov"  class="colorDialog" value="Data de Abertura"  />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="dtMov" value="#{atendimentoBean.editaAtendimento.dataAbertura}"
+                                            disabled="true" pattern="dd/MM/yyyy" locale="pt_BR" mask="99/99/9999" placeholder="Data da Movimentacao" required="true" requiredMessage="Informe a Data de Abertura!" >
+                                    <p:message for="dtMov"/>
+                                </p:calendar>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Hora De Abertura"  class="colorDialog" for="hrAber" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="hrAber" value="#{atendimentoBean.editaAtendimento.horaAbertura}"
+                                            pattern="HH:mm" timeOnly="true"  placeholder="00:00" required="true" requiredMessage="Informe a hora da Abertura da Movimentação!" mask="99:99" >
+                                    <p:message for="hrAber"/>
+                                </p:calendar>                            
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel for="tec"  class="colorDialog" value="Técnico: "/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu disabled="true" id="tec" value="#{atendimentoBean.tecnico.id}" autoWidth="true" required="true" requiredMessage="Informe um Técnico" filter="true" filterMatchMode="contains" >
+                                    <f:selectItems value="#{atendimentoBean.tecnicos}" var="tec" itemLabel="#{tec.nome}" itemValue="#{tec.id}" />
+                                    <p:message for="tec"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel for="sol" class="colorDialog"  value="Solicitante: "/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu id="sol" value="#{atendimentoBean.usuario.id}" autoWidth="true" required="true" requiredMessage="Informe um Solicitante"  filter="true" filterMatchMode="contains" >
+                                    <f:selectItems value="#{atendimentoBean.usuarios}" var="user" itemLabel="#{user.nome}" itemValue="#{user.id}"  />
+                                    <p:message for="sol"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                        </p:row>
+                        <p:row>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel for="cate"  class="colorDialog" value="Categoria:"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu id="cate" value="#{atendimentoBean.editaAtendimento.cod_categoria}" autoWidth="true" required="true" filter="true" filterMatchMode="contains" requiredMessage="Informe um Solicitante"  >
+                                    <f:selectItems value="#{atendimentoBean.categoria}" var="categ" itemLabel="#{categ.descricao}" itemValue="#{categ.cod}"  />
+                                    <p:message for="cate"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel for="acomp" class="colorDialog" value="Acompanhar "/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectCheckboxMenu  converter="javax.faces.Long" panelStyle="width:250px" multiple="true" label="" id="acomp" value="#{atendimentoBean.editaAtendimento.listaAcompanhante}"  required="false" requiredMessage="Informe um Acompanhante" filter="true" filterMatchMode="contains" >
+                                    <f:selectItems value="#{atendimentoBean.usuarios}" var="tec" itemLabel="#{tec.nome}" itemValue="#{tec.id}"  />
+                                    <p:message for="acomp" />                                    
+                                </p:selectCheckboxMenu>
+                            </p:column>   
+                        </p:row>
+                        <p:row>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Arquivo"  class="colorDialog" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+
+                                <p:fileUpload 
+                                    id="fileUpload" 
+                                    fileUploadListener="#{atendimentoBean.editUpload}"
+                                    mode="advanced" 
+                                    label="Selecionar Arquivo" uploadLabel="Enviar"
+                                    cancelLabel="Cancelar" 					
+                                    sizeLimit="10240000" 
+                                    invalidSizeMessage="O tamanho máximo permitido é de 10MB."
+                                    multiple="true" auto="true"                                                
+                                    dragDropSupport="true" update="txtArq"
+                                    />
+                                <p:commandButton icon="fa fa-close" styleClass="tamBtnApagar" style="width: 40%" update=":arquivoDetalEdit" oncomplete="PF('arquivoDialogEdit').show()" value="Apagar Arquivo" rendered="#{atendimentoBean.editaAtendimento.anexoMovimento}" />
+                                <br/><br/>
+                                <h:outputText  class="colorDialog" id="txtArq" escape="false" value="#{atendimentoBean.textoArquivo}"/>
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:outputLabel for="custo" value="Valor"  class="colorDialog"  />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:inputNumber decimalSeparator="," thousandSeparator="." id="custo" value="#{atendimentoBean.editaAtendimento.valor}" >
+                                    <p:message for="custo"/>
+                                </p:inputNumber>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row >
+                            <p:column rendered="#{atendimentoBean.agendamento}" rowspan="1" >
+                                <p:outputLabel for="qtdDiaAgenda" value="Qtd Dias Agendamento"  class="colorDialog"  />
+                            </p:column>
+
+                            <p:column  rendered="#{atendimentoBean.agendamento}" rowspan="1" >
+                                <p:inputNumber decimalPlaces="0" id="qtdDiaAgenda" value="#{atendimentoBean.editaAtendimento.qtdDiasAgendamento}" >
+                                    <p:message for="qtdDiaAgenda"/>
+                                </p:inputNumber>
+                            </p:column>
+
+                            <p:column  rendered="#{atendimentoBean.editaAtendimento.cod_tipoAtendimento == 1}" rowspan="1" >
+                                <p:outputLabel for="codChamadoExt" value="Codigo Chamado Externo"  class="colorDialog"  />
+                            </p:column>
+
+                            <p:column  rendered="#{atendimentoBean.editaAtendimento.cod_tipoAtendimento == 1}" rowspan="1" >
+                                <p:inputNumber decimalPlaces="0" id="codChamadoExt" value="#{atendimentoBean.editaAtendimento.codChamadoExterno}" >
+                                    <p:message for="codChamadoExt"/>
+                                </p:inputNumber>
+                            </p:column>
+
+
+                        </p:row>
+
+
+                        <p:row>
+
+                            <p:column rowspan="4" colspan="4">
+                                <p:outputLabel value="Observação: "  class="colorDialog" for="obs" />
+                                <p:inputTextarea id="obs" value="#{atendimentoBean.editaAtendimento.obs}"  maxlength="8000" counterTemplate="{0} Caracteres restantes." counter="display2" autoResize="true" style="width: 98%" >
+                                    <p:message for="obs"/>
+                                </p:inputTextarea>
+                                <br/>
+                                <h:outputText id="display2"  class="colorDialog" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+
+                </div>
+                <br/>
+
+                <p:commandButton value="Editar" action="#{atendimentoBean.editarAtendimento()}" icon="fa fa-save" class="tamBtn" />
+            </h:form>
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

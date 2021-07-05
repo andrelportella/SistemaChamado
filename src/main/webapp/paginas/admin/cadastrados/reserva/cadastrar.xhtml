@@ -1,0 +1,132 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+
+    <p:dialog footer=""   widgetVar="cadastrarDialog"  header="Cadastrar"   resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="340" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="cadastrarDetal" class="corDialog" >
+            <h:form id="form" >
+                <div class="ui-fluid">
+                    <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+                        <p:row class="corDialog" >
+                            <p:column rowspan="1">
+                                <p:outputLabel  class="colorDialog" value="Recurso " for="recurso" />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:selectOneMenu id="recurso" value="#{reservaBean.reserva.cod_recurso}" autoWidth="true" required="true" requiredMessage="Informe o Recurso" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{reservaBean.salas}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}" />
+                                    <p:message for="recurso"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column rowspan="1">
+                                <p:outputLabel for="dtMov"  class="colorDialog" value="Data da Reserva"  />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="dtMov" value="#{reservaBean.reserva.dataReserva}"
+                                            pattern="dd/MM/yyyy" locale="pt_BR" mask="99/99/9999" placeholder="Data da Reserva" required="true" requiredMessage="Informe a Data da Reserva!" style="width:90%;" >
+                                    <p:message for="dtMov"/>
+                                </p:calendar>
+                            </p:column> 
+
+                        </p:row>
+
+                        <p:row class="corDialog">
+                            <p:column rowspan="1">
+                                <p:outputLabel  class="colorDialog" value="Solicitante " for="solic" />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:selectOneMenu id="solic" value="#{reservaBean.reserva.cod_solicitante}" autoWidth="true" required="true" requiredMessage="Informe o Solicitante" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{reservaBean.solicitantes}" var="tipo" itemLabel="#{tipo.nome}" itemValue="#{tipo.id}" />
+                                    <p:message for="solic"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputLabel for="part"  class="colorDialog" value="Participantes "/>
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:selectCheckboxMenu  panelStyle="width:250px" multiple="true" label="Participantes" id="part" value="#{reservaBean.reserva.listaAcompanhante}"  required="false" requiredMessage="Informe um Participante" filter="true" filterMatchMode="contains" converter="javax.faces.Long" >
+                                    <f:selectItems value="#{reservaBean.participantes}" var="part" itemLabel="#{part.nome}" itemValue="#{part.id}"  />
+                                    <p:message for="part" />
+                                </p:selectCheckboxMenu>
+                            </p:column>  
+
+
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Hora Inicio" class="colorDialog"  for="inicio" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="inicio" value="#{reservaBean.reserva.horaInicio}"
+                                            pattern="HH:mm" timeOnly="true"   placeholder="HH:mm"   required="true" requiredMessage="Informe a hora de inicio!" style="width:90%;" mask="99:99" >
+                                    <p:message for="inicio"/>
+                                </p:calendar>                            
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel   value="Hora Fim" class="colorDialog"  for="fim" />
+                            </p:column>
+
+                            <p:column rowspan="1">                                
+                                <p:calendar id="fim" value="#{reservaBean.reserva.horaFim}"
+                                            disabled="#{reservaBean.reserva.indeterminado}" minHour="#{reservaBean.reserva.horaInicio}" pattern="HH:mm" timeOnly="true"  placeholder="HH:mm" required="true" requiredMessage="Informe a hora do fim!" style="width:90%;" mask="99:99" >
+                                    <p:message for="fim"/>
+                                </p:calendar>     
+                                <p:selectBooleanCheckbox  value="#{reservaBean.reserva.indeterminado}"  class="colorDialog" itemLabel="Indeterminado"  >
+                                    <p:ajax  update="fim" />
+                                </p:selectBooleanCheckbox>
+                            </p:column>
+                        </p:row>
+
+                        <p:row class="corDialog" >
+
+                            <p:column rowspan="4" colspan="4">
+                                <p:outputLabel  class="colorDialog" value="Observação: " for="obs"  />
+                                <p:inputTextarea id="obs" counter="display" value="#{reservaBean.reserva.observacao}"  maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true" required="false" requiredMessage="Por favor, insira uma observação com no mínimo 3 caracteres." minQueryLength="3" >
+                                    <p:message for="obs"/>
+                                </p:inputTextarea>
+                                <br/>
+                                <h:outputText  class="colorDialog"  id="display" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </div>
+
+                <br/>
+
+                <p:commandButton update=":usuarios_form:reservas " id="btnSalvar" styleClass="tamBtn" actionListener="#{reservaBean.salvar()}" icon="fa fa-save" value="Salvar"  />                  
+
+            </h:form> 
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+        </p:outputPanel>
+
+    </p:dialog>
+
+
+</ui:composition>

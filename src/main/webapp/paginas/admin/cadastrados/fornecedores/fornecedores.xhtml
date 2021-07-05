@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+
+    <ui:define name="corpo">              
+
+        <title>Fornecedores Cadastrados</title>
+
+        <h:form id="fornecedores_form">
+
+            <p:dataTable rendered="#{loginBean.acesso.acessaFornecedores}" draggableColumns="true" resizableColumns="true" filterDelay="800" reflow="true" value="#{fornecedorBean.fornecedores}" id="fornecedores" var="forn" paginator="true" 
+                         rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{forn.id}" selectionMode="single" selection="#{fornecedorBean.fornecedorSelecionado}"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                         currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                         - Página: {currentPage}/{totalPages}" style="width: 100%;" >
+
+                <f:facet name="header">Fornecedores Cadastrados
+                    <p:commandButton  class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right; width: 110px;  " icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="fornecedores" trigger="toggler" >
+                        <p:ajax event="toggle" listener="#{fornecedorBean.onToggle}" />
+                    </p:columnToggler>
+                    <p:commandButton icon=" fa fa-plus" value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" title="Cadastrar Fornecedor" styleClass="btnCadastrar" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="fornecedores" fileName="fornecedores"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="fornecedores" fileName="fornecedores"/>
+                    </h:commandLink>
+                </f:facet>
+                <p:column headerText="Nome" 
+                          exportable="#{fornecedorBean.list[0]}" visible="#{fornecedorBean.list[0]}"
+                          sortBy="#{forn.nome}" filterBy="#{forn.nome}"  filterMatchMode="contains"
+                          width="12%" >
+                    <h:outputText value="#{forn.nome}"/>
+                </p:column>
+
+                <p:column headerText="CNPJ" filterStyle="max-width: 80px;" 
+                          exportable="#{fornecedorBean.list[1]}" visible="#{fornecedorBean.list[1]}"
+                          sortBy="#{forn.cnpj}" filterBy="#{forn.cnpj}"  filterMatchMode="contains"
+                          width="11%" >
+                    <h:outputText value="#{forn.cnpj}"/>
+                </p:column>               
+
+                <p:column headerText="Endereco"
+                          exportable="#{fornecedorBean.list[2]}" visible="#{fornecedorBean.list[2]}"
+                          sortBy="#{forn.endereco}" filterBy="#{forn.endereco}"  filterMatchMode="contains"
+                          width="40%" >
+                    <h:outputText value="#{forn.endereco}"/>
+                </p:column>
+
+                <p:column headerText="Email"
+                          exportable="#{fornecedorBean.list[3]}" visible="#{fornecedorBean.list[3]}"
+                          sortBy="#{forn.email}" filterBy="#{forn.email}"  filterMatchMode="contains"
+                          width="17%" >
+                    <h:outputText value="#{forn.email}"/>
+                </p:column>
+
+                <p:column headerText="Telefone"
+                          exportable="#{fornecedorBean.list[4]}" visible="#{fornecedorBean.list[4]}"
+                          sortBy="#{forn.telefone}" filterBy="#{forn.telefone}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{forn.telefone}"/>
+                </p:column>     
+
+                <p:column headerText="Razão Social" 
+                          exportable="#{fornecedorBean.list[5]}" visible="#{fornecedorBean.list[5]}"
+                          sortBy="#{forn.razaoSocial}" filterBy="#{forn.razaoSocial}"  filterMatchMode="contains"
+                          width="40%" >
+                    <h:outputText value="#{forn.razaoSocial}"/>
+                </p:column>
+
+                <p:column headerText="ID" 
+                          exportable="#{fornecedorBean.list[6]}" visible="#{fornecedorBean.list[6]}"
+                          sortBy="#{forn.id}" filterBy="#{forn.id}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{forn.id}"/>
+                </p:column>
+
+                <p:column exportable="false"  priority="1" headerText="Menu"
+                          width="5%" >    
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >                   
+                        <p:menuitem value="Editar" icon="fa fa-edit"
+                                    action="#{fornecedorBean.editarFornecedor(forn)}" update=":editarDetal" oncomplete="PF('editarDialog').show()" title="Editar" />
+                    </p:splitButton>
+                </p:column>
+
+                <p:ajax update=":fornDetal" event="rowDblselect"  oncomplete="PF('fornDialog').show()" >
+                    <f:setPropertyActionListener value="#{forn}" target="#{fornecedorBean.fornecedorSelecionado}" /> 
+                </p:ajax>
+
+
+            </p:dataTable>
+
+        </h:form>     
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+        <!-- dialogAtendimento -->
+        <ui:include src="visualizar.xhtml"/>
+
+
+    </ui:define>
+
+</ui:composition>

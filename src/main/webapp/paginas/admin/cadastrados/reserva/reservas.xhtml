@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <ui:define name="corpo"> 
+
+
+        <title>Reservas</title>  
+        <h:form id="usuarios_form">
+
+
+            <p:dataTable    emptyMessage="Nenhuma Reserva Cadastrada!" filterDelay="800" draggableColumns="true" rendered="#{loginBean.acesso.acessaReserva}" reflow="true" value="#{reservaBean.reservas}" id="reservas" var="mov" paginator="true" resizableColumns="true" widgetVar="celReserva"  
+                            rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{mov.id}"  selectionMode="single" selection="#{reservaBean.reservaSelecionada}" 
+                            style="width: 100%;" 
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} "
+                            currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                            - Página: {currentPage}/{totalPages}" > 
+
+                <f:facet name="header">                    
+                    #{reservaBean.nomeTabela}
+                    <p:commandButton class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right;"  icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="reservas" trigger="toggler" >
+                        <p:ajax event="toggle" listener="#{reservaBean.onToggle}" />
+                    </p:columnToggler>                    
+                    <p:menuButton  style="float:left; margin-left:10px;" value="Opções" >
+                        <p:menuitem  update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" value="Cadastrar" title="Cadastrar" styleClass="btnCadastrar" icon="fa fa-plus" />
+                        <p:menuitem update="usuarios_form:reservas"  class="horizontalmenu" id="mostraPart" value="Reservas Que Estou Participando" actionListener="#{reservaBean.reservasParticipante()}"   styleClass="btnMostraTodos" />                        
+                        <p:menuitem rendered="#{!loginBean.acesso.acessaTodasReservas}" update="usuarios_form:reservas mostraTodos mostraTodos2" class="horizontalmenu" id="mostraTodos" value="Mostrar Suas Reservas" actionListener="#{reservaBean.reservasSomenteEu()}"  styleClass="btnMostraTodos" />
+                        <p:menuitem rendered="#{loginBean.acesso.acessaTodasReservas}" update="usuarios_form:reservas mostraTodos mostraTodos2" class="horizontalmenu" id="mostraTodos2" value="#{reservaBean.nomeCampo}" actionListener="#{reservaBean.listaReservas()}"  styleClass="btnMostraTodos" /> 
+                    </p:menuButton>
+                </f:facet>
+
+
+                <f:facet name="{Exporters}">
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="produto" fileName="reservas"   />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="produto" fileName="reservas" preProcessor="#{customizadorDocumentosPF.preProcessPDF}" />
+                    </h:commandLink>
+
+                </f:facet>
+
+                <p:column  headerText="Recurso"  priority="9"  exportable="#{reservaBean.list[0]}" visible="#{reservaBean.list[0]}" 
+                           sortBy="#{mov.recurso}" filterBy="#{mov.recurso}"  filterMatchMode="contains" 
+                           width="15%" >
+                    <h:outputText value="#{mov.recurso}"/>
+                </p:column>
+
+
+                <p:column headerText="Data Reserva"  priority="8"    exportable="#{reservaBean.list[1]}" visible="#{reservaBean.list[1]}" 
+                          sortBy="#{mov.dataReserva}" filterBy="#{mov.dataReserva}" filterMatchMode="contains"
+                          width="9%" >
+                    <h:outputText value="#{mov.dataReserva}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Hora Inicio"  priority="5"  id="abertura"  exportable="#{reservaBean.list[2]}" visible="#{reservaBean.list[2]}" 
+                          sortBy="#{mov.horaInicio}" filterBy="#{mov.horaInicio}"  filterMatchMode="contains"
+                          width="8%" >
+                    <h:outputText value="#{mov.horaInicio}">
+                        <f:convertDateTime pattern="HH:mm" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Hora Fim"  priority="4" visible="#{reservaBean.list[3]}"  exportable="#{reservaBean.list[3]}"
+                          sortBy="#{mov.horaFim} " filterBy="#{mov.horaFim}"  filterMatchMode="contains" 
+                          width="8%" >
+                    <h:outputText value="#{mov.horaFim}">
+                        <f:convertDateTime pattern="HH:mm" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Solicitante"  priority="6" visible="#{reservaBean.list[4]}"  exportable="#{reservaBean.list[4]}"
+                          sortBy="#{mov.solicitante}" filterBy="#{mov.solicitante}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{mov.solicitante}"/>
+                </p:column>
+
+                <p:column headerText="Observação"  priority="7" visible="#{reservaBean.list[5]}"  exportable="#{reservaBean.list[5]}"
+                          sortBy="#{mov.observacao}" filterBy="#{mov.observacao}"  filterMatchMode="contains"
+                          width="30%" >
+                    <h:outputText value="#{mov.observacao}"/>
+                </p:column>
+
+                <p:column headerText="Status"  priority="7" visible="#{reservaBean.list[6]}"  exportable="#{reservaBean.list[6]}"
+                          sortBy="#{mov.status ? 'Finalizado':'Em Andamento'}" filterBy="#{mov.status ? 'Finalizado':'Em Andamento'}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{mov.status ? 'Finalizado':'Em Andamento'}"/>
+                </p:column>
+
+                <p:column exportable="false"  priority="1" headerText="Menu" visible="true"  
+                          width="5%" >    
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+                        <p:menuitem value="Editar" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar"  action="#{reservaBean.editar(mov)}" />
+                        <p:menuitem value="Finalizar" rendered="#{!mov.status}" update="usuarios_form" icon="fa fa-check" title="Finalizar"  action="#{reservaBean.finalizar(mov)}" />
+                    </p:splitButton>
+                </p:column>
+
+                <p:ajax update=":reservaDetal" event="rowDblselect"  oncomplete="PF('reservaDialog').show()"  >
+                    <f:setPropertyActionListener value="#{mov}" target="#{reservaBean.reservaSelecionada}"  /> 
+                </p:ajax>
+            </p:dataTable>
+        </h:form>
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+        <!-- dialogVisualizar -->
+        <ui:include src="visualizar.xhtml"/>
+
+
+    </ui:define>
+
+</ui:composition>
+

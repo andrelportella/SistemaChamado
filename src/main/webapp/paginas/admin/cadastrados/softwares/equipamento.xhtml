@@ -1,0 +1,72 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog id="equipamentoDetal" footer="" header="Informação do Equipamento" widgetVar="equiDialogInfor"   resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel class="corDialog" id="equipDetalInfor" style="text-align:center;">
+            <p:panelGrid  columns="4" rendered="#{not empty softwareBean.selecEquipInfor}" columnClasses="value,value" style="width: 100%"  >
+                <h:outputText value="Código" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.nome}"/>
+                <h:outputText value="Descrição" class="colorDialog" />                     
+                <h:outputText value="#{softwareBean.selecEquipInfor.descricao}"/>
+                <h:outputText value="IP" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.ip}"/>                    
+                <h:outputText value="Peso" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.peso}"/>
+                <h:outputText value="Tag / Licença" class="colorDialog"/> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.tagLicenca}"/>
+                <h:outputText value="Capacidade" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.capacidade}"/>                    
+                <h:outputText value="Tamanho" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.tamanho}"/>
+                <h:outputText value="Modelo" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.modelo}"/>
+                <h:outputText value="N° Serie" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.numSerie}"/>
+                <h:outputText value="Data da Compra" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.dtCompra}">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </h:outputText>
+                <h:outputText value="Site" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.site}"/>
+                <h:outputText value="Tipo Máquina" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.tipoMaq}"/>
+                <h:outputText value="Status" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.status}"/>
+                <h:outputText value="Tamanho HD" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.HD}"/>
+                <h:outputText value="Sistema Operacional" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.SO}"/>
+                <h:outputText value="Memória" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.memoria}"/>
+                <h:outputText value="Setor" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.setor}"/>
+                <h:outputText value="Placa Mãe" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.placaMae}"/>
+                <h:outputText value="Processador" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.processador}"/>
+                <h:outputText value="Marca" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.marca}"/>
+                <h:outputText value="Fornecedor" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.fornecedor}"/>
+                <h:outputText value="Valor" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.valor}"/>
+                <h:outputText value="Usuário" class="colorDialog" /> 
+                <h:outputText value="#{softwareBean.selecEquipInfor.usuario}"/>      
+                <h:outputText value="Arquivo" class="colorDialog" />
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

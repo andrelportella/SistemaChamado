@@ -1,0 +1,221 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+
+    <ui:define name="corpo">       
+
+
+        <title>Locais Cadastrados</title>
+
+        <!-- Lista de Atendimentos Cadastrados -->
+        <h:form id="usuarios_form">
+            <p:dataTable  rendered="#{loginBean.acesso.acessaLocal}" reflow="true" value="#{localBean.locais}" id="local" var="req" paginator="true" resizableColumns="true" widgetVar="celRequerimento"  
+                          rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{req.id}"  selectionMode="single" selection="#{localBean.localSelecionado}" 
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                          {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" style="width: 100%;"   >
+
+                <f:facet name="header">
+                    Locais
+                    <p:commandButton  class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="local" trigger="toggler" /> 
+                    <p:commandButton value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar local" styleClass="btnCadastrar" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="local" fileName="locais"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="local" fileName="locais"/>
+                    </h:commandLink>
+                </f:facet>
+
+                <p:column headerText="Código SGR" filterStyle="max-width: 50px; "
+                          sortBy="#{req.id}" filterBy="#{req.id}" filterMatchMode="contains"
+                          width="10%">
+
+                    <h:outputText value="#{req.id}"  />
+                </p:column>
+
+                <p:column headerText="Nome" 
+                          sortBy="#{req.nome}" filterBy="#{req.nome}"  filterMatchMode="contains"
+                          width="40%">
+                    <h:outputText value="#{req.nome}"/>                                           
+                </p:column>
+
+                <p:column headerText="Observação" 
+                          sortBy="#{req.observacao}" filterBy="#{req.observacao}"  filterMatchMode="contains"
+                          width="45%">
+                    <h:outputText value="#{req.observacao}"/>                                           
+                </p:column>
+
+                <p:column exportable="false"  priority="1" headerText="Menu"
+                          width="5%" >
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+
+                        <p:menuitem value="Visualizar" update=":localDetal" oncomplete="PF('localDialog').show()" icon="ui-icon-search" title="Visualizar" >
+                            <f:setPropertyActionListener value="#{req}" target="#{localBean.localSelecionado}" />
+                        </p:menuitem>
+
+                        <p:menuitem value="Editar"  update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar" 
+                                    actionListener="#{localBean.editar(req)}"   />                                
+
+                    </p:splitButton>
+                </p:column> 
+                <f:facet name="footer">
+
+                </f:facet>
+            </p:dataTable>           
+
+        </h:form>
+
+        <!-- dialogAtendimento -->
+        <p:dialog header="Informações do local" widgetVar="localDialog" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+            <p:outputPanel id="localDetal">
+                <h:form>
+                    <p:panelGrid style="width: 100%" rendered="#{not empty localBean.locais}" columnClasses="label,value"  >
+
+                        <p:row>                       
+                            <p:column rowspan="1" colspan="4" style="text-align: center;">
+                                <h:outputText value="Código: " class="colorDialog" /> 
+                                <h:outputText value="#{localBean.localSelecionado.id}"/>
+                            </p:column>                            
+
+                        </p:row>  
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Nome do Local" class="colorDialog" />
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{localBean.localSelecionado.nome}">
+
+                                </h:outputText>
+                            </p:column>                                    
+
+                        </p:row> 
+
+                        <p:row  >
+
+                            <p:column rowspan="4" colspan="4">
+                                <p:outputLabel value="Observação " class="colorDialog" />
+                                <p:inputTextarea readonly="true" style="width: 98%" value="#{localBean.localSelecionado.observacao}" />
+                            </p:column>
+                        </p:row>
+
+
+                    </p:panelGrid>
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogEditar -->
+        <p:dialog  widgetVar="editarDialog" header="Editar" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="editarDetal"   >
+                <h:form id="editar">
+                    <div class="ui-fluid">
+                        <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel value="Nome do Local"  class="colorDialog" for="nome" />
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:inputText id="nome" value="#{localBean.editaLocal.nome}"  required="true" requiredMessage="Digite um nome"  >
+                                        <p:message for="nome"/>
+                                    </p:inputText>
+                                </p:column>
+
+
+                            </p:row>
+                            <p:row>
+                                <p:column rowspan="4" colspan="4">
+                                    <p:outputLabel value="Observação "  class="colorDialog" for="obs" />
+                                    <p:inputTextarea id="obs" counter="display" value="#{localBean.editaLocal.observacao}"  maxlength="255" counterTemplate="{0} Caracteres restantes." >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText id="display"  class="colorDialog" />
+                                </p:column>
+
+                            </p:row>
+
+
+
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+                    <p:commandButton update=":usuarios_form:local" ajax="true" class="tamBtn" value="Editar" action="#{localBean.editarLocal()}" icon="fa fa-save" />
+
+                </h:form>
+
+                <h:form>
+                    <p:commandButton id="btnClose" style="float: right; bottom: 14px; background-color: #f03369;"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+                </h:form>
+
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogCadastrar -->
+        <p:dialog  widgetVar="cadastrarDialog"  header="Cadastrar" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="cadastrarDetal" class="corDialog" >
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true" /> 
+                    <div class="ui-fluid">
+                        <p:panelGrid style="width:100%" id="grid" class="corDialog" >
+
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel value="Nome do Local"  class="colorDialog" for="nome" />
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:inputText id="nome" value="#{localBean.local.nome}"  required="true"  requiredMessage="Digite um nome"  >
+                                        <p:message for="nome"/>
+                                    </p:inputText>
+                                </p:column>
+
+
+                            </p:row>
+                            <p:row>
+                                <p:column rowspan="4" colspan="4">
+                                    <p:outputLabel value="Observação "  class="colorDialog" for="obs" />
+                                    <p:inputTextarea id="obs" counter="display" value="#{localBean.local.observacao}"  maxlength="255" counterTemplate="{0} Caracteres restantes." >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText id="display" class="colorDialog" />
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+                    <p:commandButton  id="btnSalvar" value="Salvar"  action="#{localBean.salvar()}" update=":usuarios_form:local" class="tamBtn" ajax="true" icon="fa fa-save" />
+                </h:form>    
+                <h:form>
+                    <p:commandButton id="btnClose" style="float: right; bottom: 14px; background-color: #f03369;"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+                </h:form>
+
+            </p:outputPanel>
+        </p:dialog>
+
+
+    </ui:define>
+
+</ui:composition>

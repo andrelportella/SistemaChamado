@@ -1,0 +1,161 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog  id="chamadoDetal" footer=""  header="Informações do Atendimento - Ticket: #{produtoBean.atendimentoSelecionado.id}" widgetVar="chamadoDialog" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="300" width="70%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel>
+            <h:form >
+                <p:panelGrid  columnClasses="label,value"  style="width: 100%" >
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Data de Abertura" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.dataAbertura}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Hora de Abertura" class="dialog" />
+
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.horaAbertura}"  >
+                                <f:convertDateTime pattern="HH:mm"/>                            
+
+                            </h:outputText>
+
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Equipamento" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.equipamento}"/>                    
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Categoria" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.categoria}"/>  
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Status Atendimento" class="dialog" />                       
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.statusAtendimento ? ' Aberto' : 'Finalizado'}"/>                 
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Especie Movimentação" class="dialog" /> 
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.tipoAtendimento}"/>                                        
+                        </p:column>
+
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Técnico" class="dialog" />                  
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.tecnico}"/>
+
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Solicitante" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.solicitante}"/>  
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Data de Fechamento" class="dialog" />             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.dataFechamento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Hora de Fechamento" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.horaFechamento}">
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>                    
+                        </p:column>
+                    </p:row>                   
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Passou Email?" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.passouEmail ? ' Sim' : 'Não'}"/>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Valor " class="dialog" />                       
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.valor}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Produto" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.produto}"/>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Quantidade Produto " class="dialog" />                       
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{produtoBean.atendimentoSelecionado.qtdProduto}" />
+                        </p:column>
+                        
+                    </p:row>
+
+                    <p:row>
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Observação" class="dialog" /> 
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="3" colspan="4" >
+                            <p:inputTextarea style="width: 98%" readonly="true"  value="#{produtoBean.atendimentoSelecionado.obs}"/>
+                        </p:column>    
+
+                    </p:row>
+
+                </p:panelGrid>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

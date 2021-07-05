@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "htth://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+        <title>Slide Sistema Chamado</title>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>        
+        <link rel="stylesheet" href="../../resources/css/reset.css" />
+        <link rel="stylesheet" href="../../resources/css/reveal.css" />
+        <link rel="stylesheet" href="../../resources/css/theme/black.css" />
+        <link rel="shortcut icon" type="image/x-icon"  href="#{facesContext.externalContext.requestContextPath}/resources/imagens/favicon.ico"/>
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="../../resources/lib/css/monokai.css" />
+        <link rel="stylesheet" href="../../resources/css/selectItaigara.css" />
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match(/print-pdf/gi) ? '../../resources/css/print/pdf.css' : '../../resources/css/print/paper.css';
+            document.getElementsByTagName('head')[0].appendChild(link);
+        </script>
+
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <script type="text/javascript">
+            // 3. On Reveal.js ready event, copy header/footer <div> into each `.slide-background` </div>
+            var header = $('#header').html();
+            if (window.location.search.match(/print-pdf/gi)) {
+                Reveal.addEventListener('ready', function (event) {
+                    $('.slide-background').append(header);
+                });
+            } else {
+                $('div.reveal').append(header);
+            }
+        </script>
+
+
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <p:column rendered="#{slideBean.items.size()>0}">
+                    <ui:include src="PNB.xhtml"/>
+                </p:column>
+            </div>
+        </div>
+
+        <script src="../../resources/js/reveal.js"></script>
+
+        <script>
+            // More info about config e dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+                dependencies: [
+                    {src: '../../resources/plugin/markdown/marked.js'},
+                    {src: '../../resources/plugin/markdown/markdown.js'},
+                    {src: '../../resources/plugin/notes/notes.js', async: true},
+                    {src: '../../resources/plugin/highlight/highlight.js', async: true}
+                ],
+                slideNumber: true,
+                hash: true,
+                mouseWheel: true
+            });
+        </script>
+
+
+    </body>
+</html>

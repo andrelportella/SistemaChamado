@@ -1,0 +1,104 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""  header="Movimentação do Produto" widgetVar="produtoDialog" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="350" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="produtoDetal">
+            <h:form id="movimentosProduto_form">
+
+                <p:dataTable   filterDelay="800" draggableColumns="true" reflow="true" value="#{produtoBean.movimentacaoProdutos}" id="produto" var="mov" paginator="true" resizableColumns="true" 
+                               rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{mov.id}"  selectionMode="single" selection="#{produtoBean.produtoSelecionadoChamado}" 
+                               style="width: 100%;"
+                               paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} " >
+
+                    <f:facet name="header">                    
+                        Movimentações do Produto
+                        <p:commandButton id="toggler" type="button" value="Colunas"  style="float:right;"  icon="ui-icon-calculator" />
+                        <p:columnToggler datasource="produto" trigger="toggler" >                                    
+                        </p:columnToggler>
+                    </f:facet>
+
+
+                    <f:facet name="{Exporters}">
+
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                            <p:dataExporter type="xls" target="produto" fileName="produtos"   />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                            <p:dataExporter type="pdf" target="produto" fileName="produtos" preProcessor="#{customizadorDocumentosPF.preProcessPDF}" />
+                        </h:commandLink>
+
+                    </f:facet> 
+
+                    <p:column headerText="Data"  filterStyle="max-width: 55px; "
+                              sortBy="#{mov.dataMovimentacao}" filterBy="#{mov.dataMovimentacao}"  filterMatchMode="contains"
+                              width="10%" >
+                        <h:outputText value="#{mov.dataMovimentacao}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Ticket" filterStyle="max-width: 50px; "
+                              sortBy="#{mov.cod_atendimento}" filterBy="#{mov.cod_atendimento}" filterMatchMode="contains"
+                              width="10%" >
+                        <h:outputText value="#{mov.cod_atendimento}" />
+                    </p:column>                           
+
+                    <p:column headerText="Tipo de Movimentacao" 
+                              sortBy="#{mov.tipoMovimentacao}" filterBy="#{mov.tipoMovimentacao}" filterMatchMode="contains"
+                              width="17%" >
+                        <h:outputText value="#{mov.tipoMovimentacao}" />
+                    </p:column> 
+                    
+                    <p:column headerText="Categoria" 
+                              sortBy="#{mov.categoria}" filterBy="#{mov.categoria}" filterMatchMode="contains"
+                              width="17%" >
+                        <h:outputText value="#{mov.categoria}" />
+                    </p:column> 
+
+                    <p:column headerText="Quantidade" filterStyle="max-width: 55px; "
+                              sortBy="#{mov.qtd} " filterBy="#{mov.qtd}"  filterMatchMode="contains" 
+                              width="10%" >
+                        <h:outputText value="#{mov.qtd}"/>
+                    </p:column>
+
+                    <p:column headerText="Solicitante"  
+                              sortBy="#{mov.solicitante}" filterBy="#{mov.solicitante}"  filterMatchMode="contains"
+                              width="30%" >
+                        <h:outputText value="#{mov.solicitante}"/>
+                    </p:column>
+
+                    <p:column headerText="Tecnico"  
+                              sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains"
+                              width="28%" >
+                        <h:outputText value="#{mov.tecnico}"/>
+                    </p:column>      
+
+                    <p:ajax update="chamadoDetal" event="rowDblselect"  oncomplete="PF('chamadoDialog').show()" listener="#{produtoBean.listaChamadoProduto(produtoBean.produtoSelecionadoChamado)}" >
+                        <f:setPropertyActionListener value="#{mov}" target="#{produtoBean.produtoSelecionadoChamado}"  /> 
+                    </p:ajax>
+                </p:dataTable>
+
+            </h:form>
+
+
+            <!-- chamadoDialog -->
+            <ui:include src="tarefas.xhtml"/>
+
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

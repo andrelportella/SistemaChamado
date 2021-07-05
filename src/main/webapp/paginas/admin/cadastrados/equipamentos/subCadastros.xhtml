@@ -1,0 +1,233 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+    <p:dialog footer=""  widgetVar="cadastrarSiteDialog"  header="Cadastrar Site "  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" >
+
+        <p:outputPanel id="cadastrarSiteDetal" class="corDialog2" >
+            <h:form id="formSite">
+                <p:growl id="messages" showDetail="true" autoUpdate="true" /> 
+
+                <p:panelGrid  id="grid" class="corDialog2" >
+
+                    <p:row class="corDialog2">
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Tabela Cadastro " for="tab" />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:selectOneMenu id="tab" value="#{equipamentoBean.camposSite.tabela}" >
+                                <f:selectItem itemValue="2" itemLabel="2 - Site"/>
+                                <p:message for="tab"/>
+
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Descrição da Natureza: " for="desc" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="desc" value="#{equipamentoBean.camposSite.descricao}" size="55"  required="true" requiredMessage="Descrição do Item Obrigatório" style="width:85%;" >
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:commandButton id="btnSalvar" value="Salvar" action="#{equipamentoBean.atualizaCampos()}"  update="grid :form:Site :formGeral:Site " icon="fa fa-save" ajax="true"  />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+
+            </h:form>    
+        </p:outputPanel>
+    </p:dialog>
+
+
+    <p:dialog footer=""  widgetVar="cadastrarSetorDialog"  header="Cadastrar Setor "  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" >
+
+        <p:outputPanel id="cadastrarSetorDetal" class="corDialog2" >
+            <h:form id="formSetor">
+                <p:growl id="messages" showDetail="true" autoUpdate="true" /> 
+
+                <p:panelGrid  id="grid" class="corDialog2" >
+
+                    <p:row class="corDialog2">
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Tabela Cadastro " for="tab" />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:selectOneMenu id="tab" value="#{equipamentoBean.camposSetor.tabela}" >
+                                <f:selectItem itemValue="4" itemLabel="4 - Setor"/>
+                                <p:message for="tab"/>
+
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Descrição" for="desc" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="desc" value="#{equipamentoBean.camposSetor.descricao}" size="55"  required="true" requiredMessage="Descrição do Item Obrigatório" style="width:85%;" >
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:commandButton id="btnSalvar" value="Salvar" action="#{equipamentoBean.atualizaCampos()}" disabled="#{equipamentoBean.statusBotao}"  update="grid :form:Setor :formGeral:Setor " icon="fa fa-save" ajax="true"  />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+
+            </h:form>    
+        </p:outputPanel>
+    </p:dialog>
+
+
+    <p:dialog footer=""  widgetVar="cadastrarStatusDialog"  header="Cadastrar Status "  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" >
+
+        <p:outputPanel id="cadastrarStatusDetal" class="corDialog2" >
+            <h:form id="formStatus">
+                <p:growl id="messages" showDetail="true" autoUpdate="true" /> 
+
+                <p:panelGrid  id="grid" class="corDialog2" >
+
+                    <p:row class="corDialog2">
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Tabela Cadastro " for="tab" />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:selectOneMenu id="tab" value="#{equipamentoBean.camposStatus.tabela}" >
+                                <f:selectItem itemValue="8" itemLabel="8 - Status"/>
+                                <p:message for="tab"/>
+
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Descrição" for="desc" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="desc" value="#{equipamentoBean.camposStatus.descricao}" size="55"  required="true" requiredMessage="Descrição do Item Obrigatório" style="width:85%;" >                                
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:commandButton id="btnSalvar" value="Salvar" action="#{equipamentoBean.atualizaCampos()}" disabled="#{equipamentoBean.statusBotao}"  update="grid :form:Status formGeral:Status " icon="fa fa-save" ajax="true"  />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+
+            </h:form>    
+        </p:outputPanel>
+    </p:dialog>
+
+
+    <p:dialog footer=""  widgetVar="cadastrarTipoEquipDialog"  header="Cadastrar Tipo Equipamento "  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" >
+
+        <p:outputPanel id="cadastrarTipoEquipDetal" class="corDialog2" >
+            <h:form id="formTipoEquip">
+                <p:growl id="messages" showDetail="true" autoUpdate="true" /> 
+
+                <p:panelGrid  id="grid" class="corDialog2" >
+
+                    <p:row class="corDialog2">
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Tabela Cadastro " for="tab" />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:selectOneMenu id="tab" value="#{equipamentoBean.camposTipoEquip.tabela}" >
+                                <f:selectItem itemValue="9" itemLabel="9 - TipoEquip"/>
+                                <p:message for="tab"/>
+
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Descrição" for="desc" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="desc" value="#{equipamentoBean.camposTipoEquip.descricao}" size="55"  required="true" requiredMessage="Descrição do Item Obrigatório" style="width:85%;" >                                
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:commandButton id="btnSalvar" value="Salvar" action="#{equipamentoBean.atualizaCampos()}" disabled="#{equipamentoBean.statusBotao}"  update="grid :form:TipoEquip :formGeral:TipoEquip " icon="fa fa-save" ajax="true"  />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+
+            </h:form>    
+        </p:outputPanel>
+    </p:dialog>
+
+    <p:dialog footer=""  widgetVar="cadastrarMarcaDialog"  header="Cadastrar Marca "  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" >
+
+        <p:outputPanel id="cadastrarMarcaDetal" class="corDialog2" >
+            <h:form id="formMarca">
+                <p:growl id="messages" showDetail="true" autoUpdate="true" /> 
+
+                <p:panelGrid  id="grid" class="corDialog2" >
+
+                    <p:row class="corDialog2">
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Tabela Cadastro " for="tab" />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:selectOneMenu id="tab" value="#{equipamentoBean.camposMarca.tabela}" >
+                                <f:selectItem itemValue="13" itemLabel="13 - Marca"/>
+                                <p:message for="tab"/>
+
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Descrição" for="desc" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="desc" value="#{equipamentoBean.camposMarca.descricao}" size="55"  required="true" requiredMessage="Descrição do Item Obrigatório" style="width:85%;" >                                
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:commandButton id="btnSalvar" value="Salvar" action="#{equipamentoBean.atualizaCampos()}" disabled="#{equipamentoBean.statusBotao}"  update="grid :form:Marca :formGeral:Marca " icon="fa fa-save" ajax="true"  />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+
+            </h:form>    
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

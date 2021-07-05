@@ -1,0 +1,185 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <section data-background="#{slideBean.capa}" >
+
+    </section>
+
+    <ui:repeat  value="#{slideBean.items}" var="item" >
+        <section data-background="#{slideBean.fundoSlide}"> 
+            <!--    <section data-background="#000000">-->
+            <div style="float: left;">                                                       
+                <div class="headerText">
+
+                    <script type="text/javascript">
+                        // Load the Visualization API and the corechart package.
+                        google.charts.load('current', {'packages': ['corechart']});
+                        // Set a callback to run when the Google Visualization API is loaded.
+                        google.charts.setOnLoadCallback(drawChart);
+                        // Callback that creates and populates a data table,
+                        // instantiates the pie chart, passes in the data and
+                        // draws it.
+
+                        function drawChart() {
+                            // Create the data table.
+                            var data = new google.visualization.DataTable();
+                            var loadedData = #{item.opcoes.toArray().stream().toList()};
+                            data.addColumn('string', 'Topping');
+                            data.addColumn('number', 'Slices');
+                            var str = "";
+                            var str2 = "";
+                            for (var item in loadedData) {
+                                str = loadedData[item];
+                                if (str === 'Sim') {
+                                    data.addRows([[str, #{slideBean.listaQtdResposta(item.id,'Sim')}]]);
+                                } else if (str === 'Não') {
+                                    data.addRows([[str, #{slideBean.listaQtdResposta(item.id,'Não')}]]);
+                                } else if (str === 'Não Avaliado') {
+                                    data.addRows([[str, #{slideBean.listaQtdResposta(item.id,'Não Avaliado')}]]);
+                                } else {
+                                    data.addRows([[str, #{slideBean.listaQtdResposta(item.id,'Default')}]]);
+                                }
+                            }
+
+                            // Set chart options
+                            var options = {
+                                'title': '#{item.pergunta}',
+                                'alternatingRowStyle': true,
+                                'showRowNumber': true,
+                                'width': 850,
+                                'height': 500};
+                            // Instantiate and draw our chart, passing in some options.
+                            var chart = new google.visualization.PieChart(document.getElementById('chart_div#{item.contador}'));
+                            chart.draw(data, options);
+                        }
+                    </script>
+                    <div class="texto">
+                        <br/>
+                        #{slideBean.qtdTotalResposta(item.id)} Respostas 
+                    </div>
+                    <div style="float: left;" id="chart_div#{item.contador}"></div>                          
+                </div>
+            </div>
+        </section>
+    </ui:repeat>
+
+    <section hidden="true" data-background="#{slideBean.fundoSlide}">
+        <div style="float: left;">
+            <div class="texto">                
+                <div>
+                    #{slideBean.qtdTotalAvaliacoes()}<br/>
+                    #{slideBean.qtdTotalAvaliados()} 
+                </div>
+                <script type="text/javascript">
+                    // Load the Visualization API and the corechart package.
+                    google.charts.load('current', {packages: ['corechart', 'bar']});
+                    // Set a callback to run when the Google Visualization API is loaded.
+                    google.charts.setOnLoadCallback(drawChart);
+                    // Callback that creates and populates a data table,
+                    // instantiates the pie chart, passes in the data and
+                    // draws it.
+
+                    function drawChart() {
+                        // Create the data table.
+                        var str = "";
+                        var str2 = "";
+                        var loadedData = #{slideBean.avaliados};
+                        var loadedData2 = #{slideBean.qtdAvaliacao};
+                        var data = google.visualization.arrayToDataTable([
+                            ['Frentista', 'Quantidade', {role: 'style'}],
+                            [loadedData[0], loadedData2[0], '#4a86e8']]);
+                        for (var item in loadedData) {
+                            str = loadedData[parseInt(item) + parseInt(1)];
+                            str2 = loadedData2[parseInt(item) + parseInt(1)];
+                            data.addRows([[str, str2, '#4a86e8']]);
+                        }
+
+                        var view2 = new google.visualization.DataView(data);
+                        view2.setColumns([0, 1,
+                            {calc: "stringify",
+                                sourceColumn: 1,
+                                type: "string",
+                                role: "annotation"},
+                            2]);
+                        // Set chart options
+                        var options = {
+                            'title': 'Quantidade de Avaliações',
+                            'alternatingRowStyle': true,
+                            'showRowNumber': true,
+                            'width': 1000,
+                            'height': 420,
+                            bar: {groupWidth: '80%'},
+                            legend: {position: 'none'},
+                            hAxis: {minTextSpacing: 130}
+                        };
+                        // Instantiate and draw our chart, passing in some options.
+                        var chart2 = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                        chart2.draw(view2, options);
+                    }
+                </script>
+                <div style="float: left;" id="chart_div"></div> 
+            </div>
+        </div>
+    </section>
+
+    <section data-background="#{slideBean.fundoSlide}">
+        <div class="texto"> 
+            NOTA MÉDIA DE ATENDIMENTO: #{slideBean.notaMediaAtendimentoTotal()}
+        </div>
+        <script type="text/javascript">
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart);
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+
+            function drawChart() {
+                // Create the data table.
+                var str = "";
+                var str2 = "";
+                var ld = #{slideBean.avaliados2};
+                var ld2 = #{slideBean.media};
+                var data = google.visualization.arrayToDataTable([
+                    ['Avaliados', 'Média', {role: 'style'}],
+                    [ld[0], ld2[0], '#4a86e8']]);
+                for (var item in ld) {
+                    str = ld[parseInt(item) + parseInt(1)];
+                    str2 = ld2[parseInt(item) + parseInt(1)];
+                    data.addRows([[str, str2, '#4a86e8']]);
+                    console.log(str);
+                    console.log(str2);
+                }
+
+
+                var view2 = new google.visualization.DataView(data);
+                view2.setColumns([0, 1,
+                    {calc: "stringify",
+                        sourceColumn: 1,
+                        type: "string",
+                        role: "annotation"},
+                    2]);
+                // Set chart options
+                var options = {
+                    'title': 'Média dos Avaliados',
+                    'alternatingRowStyle': true,
+                    'showRowNumber': true,
+                    'width': 1000,
+                    'height': 420,
+                    bar: {groupWidth: '80%'},
+                    legend: {position: 'none'},
+                    hAxis: {minTextSpacing: 150}
+                };
+                // Instantiate and draw our chart, passing in some options.
+                var chart2 = new google.visualization.ColumnChart(document.getElementById('chart_di'));
+                chart2.draw(view2, options);
+            }
+        </script>
+        <div style="float: left;" id="chart_di"  ></div>
+    </section>
+</html>

@@ -1,0 +1,49 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+
+    <!-- dialogCadastrar -->
+    <p:dialog  footer=""  widgetVar="cadastrarDialog"  header="Cadastrar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel  id="cadastrarDetal" class="corDialog" >
+
+            <h:form id="form"  >
+                <div class="ui-fluid">
+                    <p:panelGrid id="grid" columns="4" class="corDialog" style="width: 100%;" >
+
+                        <p:outputLabel class="colorDialog" value="Nome" />
+                        <p:inputText value="#{aniversarianteBean.niver.nome}" />
+
+                        <p:outputLabel class="colorDialog" value="Data" />
+                        <p:inputMask mask="99/99" value="#{aniversarianteBean.niver.dataAniversario}" />
+
+                        <p:outputLabel class="colorDialog" value="Empresa" />
+                        <p:inputText  value="#{aniversarianteBean.niver.empresa}" />
+
+                    </p:panelGrid>
+                </div>
+                <br/>
+
+                <p:commandButton  value="Salvar"  update=":aniversario_form:aniversariantes" ajax="true" class="tamBtn" icon="fa fa-save" action="#{aniversarianteBean.salvar()}" />
+            </h:form>               
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

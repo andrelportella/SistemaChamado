@@ -1,0 +1,213 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- dialogMovimentar -->
+    <p:dialog header="Movimentar" widgetVar="movimentarDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="movimentarDetal"  >
+
+            <h:form id="formMov" >
+                <p:growl id="growl" showDetail="true" sticky="true" /> 
+                <div class="ui-fluid">
+                    <p:panelGrid  id="grid"  style="width: 100%"   >
+                        <p:row>
+
+                            <p:column rowspan="1" colspan="4" >
+
+                                <p:outputLabel  value="Observações: " for="obs" class="colorDialog" />
+                                <p:inputTextarea  id="obs" counter="display" value="#{requerimentoBean.movimentarRequerimento.observacao}"  maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true"  >
+                                    <p:message for="obs"/>
+                                </p:inputTextarea>
+                                <br/>
+                                <h:outputText id="display" class="colorDialog" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <p:outputLabel  for="dtMov" value="Data" class="colorDialog"  />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="dtMov" value="#{requerimentoBean.movimentarRequerimento.dataMovimento}"
+                                            pattern="dd/MM/yyyy" locale="pt_BR" mask="99/99/9999"  required="true" requiredMessage="Informe a Data de Movimentação!" >
+                                    <p:message for="dtMov"/>
+                                    <f:ajax listener="#{requerimentoBean.movimentarRequerimento.dataMovimento}" render="@form" />
+                                </p:calendar>
+                            </p:column>
+                            <p:column rowspan="1">
+                                <p:outputLabel   value="Hora" for="hrAber" class="colorDialog" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="hrAber" value="#{requerimentoBean.movimentarRequerimento.horaMovimento}"
+                                            pattern="HH:mm" timeOnly="true"  required="true" requiredMessage="Informe a hora da Abertura da Movimentação!" style="width:90%;" mask="99:99" >
+                                    <p:message for="hrAber"/>
+                                    <f:ajax listener="#{requerimentoBean.movimentarRequerimento.horaMovimento}" render="@form" />
+                                </p:calendar>                            
+                            </p:column>
+
+
+                        </p:row>
+                        <p:row>
+                            <p:column rowspan="1">
+                                <p:outputLabel   for="sts" value="Status" class="colorDialog" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu  id="sts" value="#{requerimentoBean.movimentarRequerimento.cod_status}" required="true" requiredMessage="Informe um Técnico" filter="true" filterMatchMode="contains" autoWidth="true" >
+                                    <f:selectItems value="#{requerimentoBean.status}" var="sts" itemLabel="#{sts.descricao}" itemValue="#{sts.cod}" />
+                                    <p:message for="sts"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel   for="tec" value="Responsável" class="colorDialog" />
+                            </p:column>
+
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu  id="tec" value="#{requerimentoBean.movimentarTecnico.id}"  required="true" requiredMessage="Informe um Técnico" filter="true"  filterMatchMode="contains" autoWidth="true" >
+                                    <f:selectItems value="#{requerimentoBean.tecnicos}" var="tec" itemLabel="#{tec.nome}" itemValue="#{tec.id}" />
+                                    <p:message for="tec"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel  value=" Transeferir " class="colorDialog" for="transResp" /> 
+                                <p:selectBooleanCheckbox id="transResp" value="#{requerimentoBean.opcaoTecnico}" />
+                            </p:column>
+
+                        </p:row>
+                        <p:row>
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Arquivo"  for="fileUpload" class="colorDialog"  />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:fileUpload 
+                                    id="fileUpload" 
+                                    fileUploadListener="#{requerimentoBean.uploadMov}"
+                                    mode="advanced" 
+                                    label="Escolher" uploadLabel="Enviar"
+                                    cancelLabel="Cancelar" 					
+                                    sizeLimit="10240000" 
+                                    invalidSizeMessage="O tamanho máximo permitido é de 10MB."
+                                    multiple="true" auto="true"                                                
+                                    dragDropSupport="true" update="txtArq"
+
+                                    />
+                                <h:outputText id="txtArq"  class="colorDialog" escape="false" value="#{requerimentoBean.textoArquivoMov}"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel   value="Enviar Email?" class="colorDialog" />
+                            </p:column>
+                            <p:column rowspan="1">
+                                <p:selectBooleanCheckbox id="mailCli" itemLabel="Cliente" value="#{requerimentoBean.movimentarRequerimento.enviaEmailCli}"  />
+                                <p:selectBooleanCheckbox id="mailReq" itemLabel="Requerente" value="#{requerimentoBean.movimentarRequerimento.enviaEmailReq}"  />
+                            </p:column>
+
+
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <p:outputLabel   value="Despesa" class="colorDialog" for="desp"  />
+                            </p:column>
+
+                            <p:column rowspan="1">                           
+                                <p:inputNumber id="desp" value="#{requerimentoBean.movimentarRequerimento.despesa}" >
+                                </p:inputNumber>  
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+                </div>
+                <br/>
+
+                <p:commandButton class="tamBtn"  id="btnSalvar" actionListener="#{requerimentoBean.salvarMovimento()}"  value="Salvar"  icon="fa fa-save" />
+            </h:form>
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('movimentarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+            <br/>
+            <h:form id="movimentos_form" >
+                <br/>
+                <br/>
+                <div class="ui-fluid">
+                    <p:dataTable reflow="true" value="#{requerimentoBean.listaMovimentos}" id="movimentar" var="mov" paginator="true"
+                                 rows="10" rowsPerPageTemplate="10, 15, 20" 
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                                 {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" style="width: 100%; height:50%;" >
+
+                        <f:facet name="header">Movimentações do Requerimento</f:facet>
+
+                        <f:facet name="{Exporters}">
+                            <h:commandLink>
+                                <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                                <p:dataExporter type="xls" target="movimentar" fileName="movimentar"  />
+                            </h:commandLink>
+
+                            <h:commandLink>
+                                <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                                <p:dataExporter type="pdf" target="movimentar" fileName="movimentar"/>
+                            </h:commandLink>
+                        </f:facet>
+
+                        <p:column headerText="Data" filterStyle="max-width: 50px; "
+                                  sortBy="#{mov.dataMovimento}" filterBy="#{mov.dataMovimento}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{mov.dataMovimento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Hora" filterStyle="max-width: 30px; "
+                                  sortBy="#{mov.horaMovimento}" filterBy="#{mov.horaMovimento}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{mov.horaMovimento}">
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>
+                        </p:column>
+
+
+                        <p:column headerText="Responsavel" filterStyle="max-width: 70px; "
+                                  sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains"
+                                  width="13%" >
+                            <h:outputText value="#{mov.tecnico}"/>
+                        </p:column>
+
+                        <p:column headerText="Despesa" filterStyle="max-width: 60px; "
+                                  sortBy="#{mov.despesa}" filterBy="#{mov.despesa}"  filterMatchMode="contains"
+                                  width="12%" >
+                            <h:outputText value="#{mov.despesa}">
+                                <f:convertNumber />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Arquivos"  width="10%" >
+                            <p:commandButton style="height: 40px;" update=":arquivoDetalMov" oncomplete="PF('arquivoDialogMov').show()" value="Download" action="#{requerimentoBean.listarArquivos(mov)}" rendered="#{mov.anexoMovimento}" />
+                        </p:column>
+
+                        <p:column headerText="Observacoes"  filterStyle="max-width: 200px; "  style="white-space:normal !important;"
+                                  sortBy="#{mov.observacao}" filterBy="#{mov.observacao}"  filterMatchMode="contains"
+                                  width="50%" >
+                            <p:inputTextarea readonly="true" style="width:95%" value="#{mov.observacao}" />
+                        </p:column>
+
+                        <f:facet name="footer">
+                            Total de Movimentos: #{requerimentoBean.tamanhoMov}
+                        </f:facet>
+
+                    </p:dataTable>
+                </div>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

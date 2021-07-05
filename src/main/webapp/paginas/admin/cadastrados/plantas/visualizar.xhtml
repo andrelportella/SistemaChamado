@@ -1,0 +1,39 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer="" header="Informações da Planta" widgetVar="camposDialog"   resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="50%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="camposDetal"  class="corDialog" >
+            <p:panelGrid style="width: 100%; text-align:center;"  columns="2" columnClasses="value,value"  >
+
+                <h:outputText value="ID" class="dialog" /> 
+                <h:outputText value="#{plantaBean.plantaSelecionado.id}"/>
+
+                <h:outputText value="Titulo" class="dialog" /> 
+                <h:outputText value="#{plantaBean.plantaSelecionado.titulo}"/>
+
+                <h:outputText value="Descrição" class="dialog" /> 
+                <h:outputText value="#{plantaBean.plantaSelecionado.obs}"/>
+
+                <h:outputText value="Link da Planta" class="dialog" />                 
+                <a target="_blank"  href="#{plantaBean.plantaSelecionado.link}">
+                    Clique Aqui para acessar a Planta.
+                </a>
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+
+
+
+</ui:composition>

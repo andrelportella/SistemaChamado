@@ -1,0 +1,74 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+
+
+
+    <p:dialog footer="" header="Informações do Usuário" widgetVar="userDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="50%" width="50%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="userDetal" >
+            <p:panelGrid style="width: 100%; text-align:center;" columns="2" rendered="#{not empty usuarioBean.usuarios}" columnClasses="value,value"  >
+
+                <h:outputText value="ID" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.id}"/>
+
+                <h:outputText value="Nome" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.nome}"/>
+
+                <h:outputText value="Email" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.email}"/>
+
+                <h:outputText value="Telefone" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.telefone}"/>
+
+                <h:outputText value="Celular" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.celular}"/>
+
+                <h:outputText value="Ramal" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.ramal}"/>
+
+                <h:outputText value="Login" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.login}"/>
+
+                <h:outputText value="Site" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.site}"/>
+
+                <h:outputText value="Setor" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.setor}"/>
+
+                <h:outputText value="Perfil" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.perfil}"/>
+
+                <h:outputText value="Negócio" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.negocio}"/>
+
+                <h:outputText value="Status" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.status ? 'Ativo' : 'Inativo'}" />
+
+                <h:outputText value="Técnico Chamado" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.tecnicoChamado? 'Sim':'Não'}"/>
+
+                <h:outputText value="Técnico Requerimento" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.tecnicoRequerimento ? 'Sim':'Não'}"/>
+
+                <h:outputText value="Técnico Administrativo" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.tecnicoAdministrativo ? 'Sim':'Não'}"/>
+
+                <h:outputText value="Descrição" class="dialog" /> 
+                <p:outputLabel value="#{usuarioBean.usuarioSelecionado.descricao}"/>
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

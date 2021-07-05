@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <ui:define name="corpo"> 
+
+        <title>Cadsatro</title>      
+        <script>
+            function funcao() {
+                alert('Não pode editar o perfil, você não foi cadastrado nesse Negocio!!');
+                window.location.href = "/SistemaChamadoBM/home.xhtml";
+            }
+        </script>
+        <h:form>
+            <div class="ui-fluid">
+                <p:panelGrid id="grid" layout="grid" columns="4" class="corDialog" style="width: 100%" >
+                    <f:facet name="header">
+                        Dados Cadastrados
+                        <br/>
+                    </f:facet>
+                    <p:outputLabel class="colorDialog" value="Nome" for="nome"   />
+                    <p:inputText id="nome" value="#{perfilBean.usuario.nome}" required="true" requiredMessage="Por favor, informe um nome válido" >
+                        <f:validateLength minimum="3" />
+                        <p:message for="nome"/>
+                    </p:inputText>
+
+                    <p:outputLabel class="colorDialog" value="Email " for="EndEmail"/>
+
+                    <p:inputText id="EndEmail" value="#{perfilBean.usuario.email}" required="true" requiredMessage="Por favor, informe um email válido" >
+                        <f:validateLength minimum="10" />
+                        <p:message for="EndEmail"/>
+                        <f:validator validatorId="validarEmail"/>
+                    </p:inputText>          
+
+                    <p:outputLabel class="colorDialog" value="Telefone " for="tel" />
+
+                    <p:inputMask id="tel" value ="#{perfilBean.usuario.telefone}" mask="(99)9999-9999" required="true" requiredMessage="Por favor, informe um telefone" >
+                        <p:message for="tel"/>
+                    </p:inputMask>
+
+                    <p:outputLabel class="colorDialog" value="Celular " for="cel" />
+
+                    <p:inputMask id="cel" value ="#{perfilBean.usuario.celular}" mask="(99)9.9999-9999"    >
+                        <p:message for="cel"/>
+                    </p:inputMask>
+
+                    <p:outputLabel  class="colorDialog" for="senha" value="Senha" />
+
+                    <p:password redisplay="true" id="senha" value ="#{perfilBean.usuario.senha}"  required="true" requiredMessage="Por favor, Informe uma senha"  >
+                        <p:message for="senha"/>
+                    </p:password>
+                    <f:facet name="footer" >
+                        <div align="center" >
+
+                            <br/>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </div>
+            <p:commandButton disabled="#{!perfilBean.desabilitaSalvar}" id="btnSalvar" styleClass="tamBtn" actionListener="#{perfilBean.salvar()}"  icon="fa fa-save" value="Salvar"  />
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
+

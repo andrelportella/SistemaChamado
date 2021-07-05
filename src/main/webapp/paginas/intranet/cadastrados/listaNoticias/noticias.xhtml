@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <ui:define name="corpo"> 
+        <title>Noticias Cadastradas</title>
+        <h:form id="formLista" >
+            <p:dataTable resizableColumns="true" draggableColumns="true" filterDelay="800"  reflow="true" value="#{noticiasBean.noticias}" id="campos" var="campo" paginator="true" widgetVar="camposTable"
+                         rows="10" rowsPerPageTemplate="5,10, 15, 20"  
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters} "
+                         currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                         - Página: {currentPage}/{totalPages}" 
+                         >
+
+                <f:facet name="header">
+                    Noticias Cadastradas                    
+                    <p:commandButton value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" style="float:left;" title="Cadastrar Campos"  />
+                </f:facet> 
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="campos" fileName="noticias"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="campos" fileName="noticias"/>
+                    </h:commandLink>
+                </f:facet>
+                <p:column headerText="Titulo"  exportable="#{camposBean.list[0]}" visible="#{camposBean.list[0]}" 
+                          sortBy="#{campo.titulo}" filterBy="#{campo.titulo}"  filterMatchMode="contains"
+                          width="25%" >
+                    <h:outputText value="#{campo.titulo}"/>
+                </p:column>
+                <p:column headerText="Autor"  exportable="#{camposBean.list[1]}" visible="#{camposBean.list[1]}" 
+                          sortBy="#{campo.autor}" filterBy="#{campo.autor}"  filterMatchMode="contains"
+                          width="20%" >
+                    <h:outputText value="#{campo.autor}"/>
+                </p:column>
+                <p:column headerText="Data"   exportable="#{camposBean.list[2]}" visible="#{camposBean.list[2]}" 
+                          sortBy="#{campo.dataPublicacao}" filterBy="#{campo.dataPublicacao}"  filterMatchMode="contains"
+                          width="12%" >
+                    <h:outputText value="#{campo.dataPublicacao}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Descricao"   exportable="#{camposBean.list[2]}" visible="#{camposBean.list[2]}" 
+                          sortBy="#{campo.descricao}" filterBy="#{campo.descricao}"  filterMatchMode="contains"
+                          width="65%" >
+                    <h:outputText value="#{campo.descricao}" escape="false" />                     
+                </p:column>
+
+                <p:column priority="1" headerText="Menu"  exportable="false" visible="#{camposBean.list[3]}"
+                          width="5%" >    
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+                        <p:menuitem update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar" value="Editar" action="#{noticiasBean.editar(campo)}" />
+                    </p:splitButton>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+    </ui:define>
+
+</ui:composition>
+

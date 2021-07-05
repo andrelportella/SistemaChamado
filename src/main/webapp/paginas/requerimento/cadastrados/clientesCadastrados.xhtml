@@ -1,0 +1,411 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+
+    <ui:define name="corpo">       
+
+
+        <h:form id="ajax">
+            <p:ajaxStatus  onstart="PF('statusDialog').show()" onerror="PF('statusDialog').hide()" oncomplete="PF('statusDialog').hide()" />
+            <p:growl autoUpdate="true" showDetail="true" />
+        </h:form>
+
+        <p:dialog modal="true" widgetVar="statusDialog" header="Carregando" draggable="false" closable="false" resizable="false">
+            <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+        </p:dialog>
+
+        <title>Clientes Cadastrados</title>
+
+        <!-- Lista de Atendimentos Cadastrados -->
+        <h:form id="clientes_form">
+            <p:dataTable  rendered="#{loginBean.acesso.acessaCliente}" reflow="true" value="#{clienteBean.clientes}" id="cliente" var="req" paginator="true" resizableColumns="true" widgetVar="celRequerimento"  
+                          rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{req.id}"  selectionMode="single" selection="#{clienteBean.clienteSelecionado}" 
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                          {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" style="width: 100%;"   >
+
+                <f:facet name="header">
+                    Clientes Cadastrados
+                    <p:commandButton  class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="cliente" trigger="toggler" /> 
+                    <p:commandButton value="Importar / Atualizar Cadastro" action="#{clienteBean.importar()}" title="Importar / Cadastrar Cliente" styleClass="btnCadastrar" rendered="#{clienteBean.renderizador}" actionListener="#{clienteBean.listar()}" />
+                    <p:commandButton value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar Base" styleClass="btnCadastrar"  rendered="#{!clienteBean.renderizador}" />
+                </f:facet>
+
+
+
+                <p:column headerText="Nome" 
+                          sortBy="#{req.nome}" filterBy="#{req.nome}" filterMatchMode="contains"
+                          width="40%">
+
+                    <h:outputText value="#{req.nome}"  />
+                </p:column>
+
+                <p:column headerText="CPF | CNPJ" 
+                          sortBy="#{req.cpf_cnpj}" filterBy="#{req.cpf_cnpj}"  filterMatchMode="contains"
+                          width="15%">
+                    <h:outputText value="#{req.cpf_cnpj}"/>                                           
+                </p:column>
+
+                <p:column headerText="Email" 
+                          sortBy="#{req.email}" filterBy="#{req.email}"  filterMatchMode="contains"
+                          width="20%">
+                    <h:outputText value="#{req.email}"/>                                           
+                </p:column>
+
+                <p:column headerText="Telefone"  filterStyle="max-width: 70px;"
+                          sortBy="#{req.telefone}" filterBy="#{req.telefone}"  filterMatchMode="contains"
+                          width="10%">
+                    <h:outputText value="#{req.telefone}"/>                                           
+                </p:column>
+
+                <p:column headerText="Celular"  filterStyle="max-width: 70px;"
+                          sortBy="#{req.celular}" filterBy="#{req.celular}"  filterMatchMode="contains"
+                          width="10%">
+                    <h:outputText value="#{req.celular}"/>                                           
+                </p:column>               
+
+                <p:column exportable="false"  priority="1" headerText="Menu"
+                          width="5%" >    
+
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+
+                        <p:menuitem value="Visualizar" update=":clienteDetal " oncomplete="PF('clienteDialog').show()" icon="ui-icon-search" title="Visualizar" >
+                            <f:setPropertyActionListener value="#{req}" target="#{clienteBean.clienteSelecionado}" />
+                        </p:menuitem>
+
+                        <p:menuitem value="Editar"  update=":editarDetal " oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar" rendered="true" actionListener="#{clienteBean.editar(req)}" />
+
+                    </p:splitButton>
+
+                </p:column>
+
+                <f:facet name="footer">
+
+                </f:facet>
+
+            </p:dataTable>
+
+        </h:form>
+
+
+
+        <!-- dialogAtendimento -->
+        <p:dialog header="Informações do Cliente" widgetVar="clienteDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+            <p:outputPanel id="clienteDetal">
+                <p:panelGrid style="width: 100%" rendered="#{not empty clienteBean.clientes}" columnClasses="label,value"  >
+
+                    <p:row>                       
+                        <p:column rowspan="1" >
+                            <h:outputText value="Código SGR: " class="dialog" />                             
+                        </p:column>     
+                        <p:column rowspan="1" >
+                            <h:outputText value="#{clienteBean.clienteSelecionado.id}"/>                            
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <h:outputText value="Código STAI: " class="dialog" />                             
+                        </p:column>                            
+                        <p:column rowspan="1" >
+                            <h:outputText value="#{clienteBean.clienteSelecionado.codigoSTAI}"/>                            
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Nome" class="dialog" />
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{clienteBean.clienteSelecionado.nome}">
+
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="CPF" class="dialog" />
+
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{clienteBean.clienteSelecionado.cpf_cnpj}"  >                                                         
+                            </h:outputText>
+
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Telefone" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{clienteBean.clienteSelecionado.telefone}"/>                    
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Celular" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{clienteBean.clienteSelecionado.celular}"/>  
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Email" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{clienteBean.clienteSelecionado.email}"/>                 
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Tipo do Cliente" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{clienteBean.clienteSelecionado.cod_tipo}"/>                 
+                        </p:column>
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Descrição" class="dialog" /> 
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="3" colspan="4" >
+                            <h:outputText value="#{clienteBean.clienteSelecionado.observacao}"/>
+                        </p:column>    
+
+                    </p:row>
+
+                </p:panelGrid>
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogEditar -->
+        <p:dialog  widgetVar="editarDialog" header="Editar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="editarDetal"   >
+                <h:form id="editar">
+                    <div class="ui-fluid">
+
+                        <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" value="Nome " for="nome" />
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:inputText disabled="#{clienteBean.renderizador}" id="nome" value="#{clienteBean.editaCliente.nome}"  required="true" requiredMessage="Digite um nome"  >
+                                        <p:message for="nome"/>
+                                    </p:inputText>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" for="cpf" value="CPF | CNPJ" />
+                                </p:column>
+                                <p:column rowspan="1">                                
+                                    <p:inputText  disabled="true" id="cpf" value="#{clienteBean.editaCliente.cpf_cnpj}"  required="true" requiredMessage="Digite um CPF ou CNPJ"  >
+                                        <p:message for="cpf"/>
+                                    </p:inputText>
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog"  value="Telefone" for="tel" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputMask  disabled="#{clienteBean.renderizador}" id="tel" value ="#{clienteBean.editaCliente.telefone}" mask="(99)9999-9999"  size="55"  required="true" requiredMessage="Por favor, informe um telefone" >
+                                        <p:message for="tel"/>
+                                    </p:inputMask> 
+
+                                </p:column>
+
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" value="Celular " for="cel"/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputMask   disabled="#{clienteBean.renderizador}" id="cel" value ="#{clienteBean.editaCliente.celular}" mask="(99)9.9999-9999"  size="55" >
+                                        <p:message for="cel"/>
+                                    </p:inputMask>
+                                </p:column>
+                            </p:row >
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" for="EndEmail" value="Email "/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputText   disabled="#{clienteBean.renderizador}" id="EndEmail" value="#{clienteBean.editaCliente.email}" size="55"  required="true" requiredMessage="Por favor, informe um email válido" >
+                                        <f:validateLength minimum="10" />
+                                        <p:message for="EndEmail"/>
+                                        <f:validator validatorId="validarEmail"/>
+                                    </p:inputText>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" for="tipo" value="Tipo de Cliente "/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputText  disabled="#{clienteBean.renderizador}" id="tipo" value="#{clienteBean.editaCliente.cod_tipo}" size="55"   required="true" requiredMessage="Por favor, informe o tipo de Cliente" >                                   
+                                        <p:message for="tipo"/>                                    
+                                    </p:inputText>
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="4" colspan="4">
+                                    <p:outputLabel class=" colorDialog" value="Observação " for="obs" />
+                                    <p:inputTextarea id="obs" counter="display" value="#{clienteBean.editaCliente.observacao}"   maxlength="255" counterTemplate="{0} Caracteres restantes." >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText id="display" />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+                    <p:commandButton update=":clientes_form:cliente" ajax="true" value="Editar" action="#{clienteBean.editarCliente()}" icon="fa fa-edit" class="tamBtn" />
+                </h:form>
+
+                <h:form>
+                    <p:commandButton id="btnClose" style="float: right; bottom: 14px; background-color: #f03369;"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+                </h:form>
+
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogCadastrar -->
+        <p:dialog  widgetVar="cadastrarDialog" header="Cadastrar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="cadastrarDetal"   >
+                <h:form id="form">
+                    <div class="ui-fluid">
+
+                        <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog"  value="Nome " for="nome" />
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:inputText  id="nome" value="#{clienteBean.cliente.nome}"  required="true" requiredMessage="Digite um nome"  >
+                                        <p:message for="nome"/>
+                                    </p:inputText>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" for="cpf" value="CPF | CNPJ" />
+                                </p:column>
+                                <p:column rowspan="1">                                
+                                    <p:inputText  id="cpf" value="#{clienteBean.cliente.cpf_cnpj}"  required="true" requiredMessage="Digite um CPF ou CNPJ"  >
+                                        <p:message for="cpf"/>
+                                    </p:inputText>
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" value="Telefone" for="tel" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputMask  id="tel" value ="#{clienteBean.cliente.telefone}" mask="(99)9999-9999"  size="55"  required="true" requiredMessage="Por favor, informe um telefone" >
+                                        <p:message for="tel"/>
+                                    </p:inputMask> 
+
+                                </p:column>
+
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" value="Celular " for="cel"/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputMask  id="cel" value ="#{clienteBean.cliente.celular}" mask="(99)9.9999-9999"  size="55" >
+                                        <p:message for="cel"/>
+                                    </p:inputMask>
+                                </p:column>
+                            </p:row >
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" for="EndEmail" value="Email "/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputText  id="EndEmail" value="#{clienteBean.cliente.email}" size="55"  required="true" requiredMessage="Por favor, informe um email válido" >
+                                        <f:validateLength minimum="10" />
+                                        <p:message for="EndEmail"/>
+                                        <f:validator validatorId="validarEmail"/>
+                                    </p:inputText>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" for="tipo" value="Tipo de Cliente "/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputText id="tipo" value="#{clienteBean.cliente.cod_tipo}" size="55"   required="true" requiredMessage="Por favor, informe o tipo de Cliente" >                                   
+                                        <p:message for="tipo"/>                                    
+                                    </p:inputText>
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="4" colspan="4">
+                                    <p:outputLabel class=" colorDialog" value="Observação " for="obs" />
+                                    <p:inputTextarea id="obs" counter="display" value="#{clienteBean.cliente.observacao}"   maxlength="255" counterTemplate="{0} Caracteres restantes." >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText id="display" />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                    </div>
+
+                    <br/>
+                    <p:commandButton update=":clientes_form:cliente" class="tamBtn" ajax="true" value="Salvar" action="#{clienteBean.salvar()}" icon="fa fa-save" />
+
+
+
+                </h:form>
+                <h:form>
+                    <p:commandButton id="btnClose" style="float: right; bottom: 14px; background-color: #f03369;"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

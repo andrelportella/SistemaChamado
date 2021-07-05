@@ -1,0 +1,335 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="corpo">       
+
+
+        <title>Informações do Ticket</title>
+
+        <!-- Lista de Atendimentos Cadastrados -->
+        <h:form id="ajax">
+            <p:ajaxStatus  onstart="PF('statusDialog').show()" onerror="PF('statusDialog').hide()" oncomplete="PF('statusDialog').hide()" />
+        </h:form>
+
+        <p:dialog modal="true" widgetVar="statusDialog" header="Carregando" draggable="false" closable="false" resizable="false" >
+            <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+        </p:dialog>
+
+        <h:form id="usuarios_form_movimentar" enctype="multipart/form-data">
+            <p:dataTable reflow="true" value="#{informacaoBean.listaMovimentos}"  emptyMessage="Não há registros!" id="movimentacao" var="mov" paginator="true"   
+                         rows="10" rowsPerPageTemplate="5, 10, 15, 20,50,100" 
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"  >
+
+                <f:facet name="header">Histórico do Ticket
+                    <p:commandButton id="toggler" type="button" value="Colunas"  style="float:right;"  class="horizontalmenu" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="movimentacao" trigger="toggler" />                     
+                    <p:commandButton update=":atendimentoDetal" oncomplete="PF('atendimentoDialog').show()" value="Visualizar Tela Principal" title="Visualizar Tela Principal" style="float:left; margin-left:10px;"  icon="ui-icon-search" />
+                </f:facet>
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="movimentacao" fileName="movimentacao"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="movimentacao" fileName="movimentacao"  />
+                    </h:commandLink>
+                </f:facet>
+                <p:column headerText="Ticket" width="8%" filterStyle="max-width: 60px;"
+                          sortBy="#{mov.id_atendimento.id}" filterBy="#{mov.id_atendimento.id}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.id_atendimento.id}">
+
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Data" width="12%" 
+                          sortBy="#{mov.dataMovimento}" filterBy="#{mov.dataMovimento}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.dataMovimento}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Hora" width="10%" 
+                          sortBy="#{mov.horaMovimento}" filterBy="#{mov.horaMovimento}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.horaMovimento}">
+                        <f:convertDateTime pattern="HH:mm"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Tecnico" width="11%"  
+                          sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.tecnico}"/>
+                </p:column>
+
+                <p:column headerText="Email"  width="9%" sortBy="#{mov.passouEmail}" exportable="false" >
+                    <h:outputText value="#{mov.passouEmail ? ' Sim' : 'Não'}"/>
+                </p:column>
+
+                <p:column headerText="Arquivos"  width="14%" exportable="false" >
+                    <p:commandButton style="height: 40px;" update=":arquivoDetalMov" oncomplete="PF('arquivoDialogMov').show()" value="Download" action="#{informacaoBean.listarArquivos(mov)}" rendered="#{mov.anexoMovimento}" />
+                </p:column>
+
+                <p:column rendered="#{informacaoBean.exportaPNB}" visible="false" exportable="true" headerText="Codigo B2C" width="20%" 
+                          sortBy="#{mov.codB2c}" filterBy="#{mov.codB2c}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.codB2c}"/>
+                </p:column>
+
+                <p:column headerText="Produto" width="20%" 
+                          sortBy="#{mov.produto}" filterBy="#{mov.produto}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.produto}"/>
+                </p:column>
+
+                <p:column headerText="Qtd" width="9%" 
+                          sortBy="#{mov.qtdProduto}" filterBy="#{mov.qtdProduto}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.qtdProduto}"/>
+                </p:column>
+
+                <p:column rendered="#{informacaoBean.exportaPNB}" visible="false" exportable="true" headerText="Valor Produto" width="20%" 
+                          sortBy="#{mov.valorProduto}" filterBy="#{mov.valorProduto}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.valorProduto}"/>
+                </p:column>
+
+                <p:column headerText="Observação"  width="30%" 
+                          sortBy="#{mov.observacao}" filterBy="#{mov.observacao}"  filterMatchMode="contains"
+                          >
+                    <p:inputTextarea readonly="true" style="width:95%" value="#{mov.observacao}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>     
+
+        <p:dialog header="Informações do Ticket" widgetVar="atendimentoDialog" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="350" width="80%" closeOnEscape="true" draggable="true" >
+            <p:outputPanel id="atendimentoDetal">
+                <h:form >
+                    <p:panelGrid rendered="#{not empty informacaoBean.atendimentoSelecionado}" columnClasses="label,value"  style="width: 100%" >
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Data de Abertura" class="dialog" />                             
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.dataAbertura}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Hora de Abertura" class="dialog" />
+
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.horaAbertura}"  >
+                                    <f:convertDateTime pattern="HH:mm"/>                            
+
+                                </h:outputText>
+
+                            </p:column>
+
+                        </p:row>  
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Equipamento" class="dialog" />                             
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.equipamento}"/>                    
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Categoria" class="dialog" /> 
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.categoria}"/>  
+                            </p:column>
+
+                        </p:row>  
+
+                        <p:row>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Status Atendimento" class="dialog" />                       
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.statusAtendimento ? ' Aberto' : 'Finalizado'}"/>                 
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Especie Movimentação" class="dialog" /> 
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.tipoAtendimento}"/>                                        
+                            </p:column>
+
+                        </p:row> 
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Técnico" class="dialog" />                  
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.tecnico}"/>
+
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Solicitante" class="dialog" /> 
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.solicitante}"/>  
+                            </p:column>                        
+                        </p:row> 
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Data de Fechamento" class="dialog" />             
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.dataFechamento}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Hora de Fechamento" class="dialog" /> 
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.horaFechamento}">
+                                    <f:convertDateTime pattern="HH:mm"/>
+                                </h:outputText>                    
+                            </p:column>
+                        </p:row>                   
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Passou Email?" class="dialog" />                       
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.passouEmail ? ' Sim' : 'Não'}"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Valor " class="dialog" />                       
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.valor}" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="1">
+                                <h:outputText value="Produto" class="dialog" />                       
+                            </p:column>
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.produto}"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="Quantidade Produto " class="dialog" />                       
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <h:outputText value="#{informacaoBean.atendimentoSelecionado.qtdProduto}" />
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row>                      
+                            <p:column rowspan="1" colspan="1">
+                                <h:outputText value="Arquivos" class="dialog" />
+                            </p:column>
+
+                            <p:column rowspan="1" colspan="1" >                              
+                                <p:commandButton style="height: 30px;" update=":arquivoDetal" oncomplete="PF('arquivoDialog').show()" value="Download" rendered="#{informacaoBean.atendimentoSelecionado.anexoMovimento}" />
+                            </p:column>
+
+                            <p:column rowspan="1" colspan="1">
+                                <h:outputText value="Classificação" class="dialog" />
+                            </p:column>
+
+                            <p:column rowspan="1" colspan="1" >                              
+                                <p:rating readonly="true" value="#{informacaoBean.atendimentoSelecionado.rating}" />
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row>
+                            <p:column rowspan="1" colspan="4" style="text-align: center;">
+                                <h:outputText value="Observação" class="dialog" /> 
+                            </p:column>                        
+                        </p:row> 
+
+                        <p:row>
+                            <p:column rowspan="3" colspan="4" >
+                                <p:inputTextarea style="width: 98%" readonly="true"  value="#{informacaoBean.atendimentoSelecionado.obs}"/>
+                            </p:column>    
+
+                        </p:row>
+
+                    </p:panelGrid>
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+        <p:dialog footer=""   widgetVar="arquivoDialog" header="Arquivos" resizable="true" class="corDialog"  maximizable="true" minimizable="true" fitViewport="true"  height="200" width="40%" closeOnEscape="true" draggable="true" >
+            <p:outputPanel id="arquivoDetal" >
+                <h:form>
+                    <p:dataTable value="#{informacaoBean.atendimentoSelecionado.arquivo}" var="file"
+                                 id="dataTable">
+
+                        <p:column width="200" headerText="Download">
+                            <p:commandButton value="Baixar" ajax="false"
+                                             actionListener="#{informacaoBean.download(file)}"
+                                             icon="ui-icon-arrowthick-1-s">
+                                <p:fileDownload value="#{informacaoBean.downloadFile}" />
+                            </p:commandButton>
+                        </p:column>
+
+
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{file.name}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+        <p:dialog footer=""   widgetVar="arquivoDialogMov" header="Arquivos" resizable="true" class="corDialog"  maximizable="true" minimizable="true" fitViewport="true"  height="200" width="40%" closeOnEscape="true" draggable="true" >
+            <p:outputPanel id="arquivoDetalMov" >
+                <h:form id="form_arquivo">
+                    <p:dataTable value="#{informacaoBean.atendimentoSelecionadoMov.arquivo}" var="file"
+                                 id="dataTable">
+
+                        <p:column width="200" headerText="Download">
+                            <p:commandButton value="Baixar" ajax="false"
+                                             actionListener="#{informacaoBean.download(file)}"
+                                             icon="ui-icon-arrowthick-1-s">
+                                <p:fileDownload value="#{informacaoBean.downloadFile}" />
+                            </p:commandButton>
+                        </p:column>
+
+
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{file.name}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>

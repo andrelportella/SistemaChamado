@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <!-- Dica para dar manuten��o ao c�digo, clique nos icones (+, -) para abrir e fechar as tags, pois est� p�gina
+    � enorme e se for navegar nela para ver as fun��es especificas, voc� vai perder muito tempo. todas as tags est�o
+    comentadas com suas respectivas fun��es.
+    -->
+
+    <ui:define name="corpo">
+        <title>Eventos</title>
+        <h:form >    
+
+            <style type="text/css">
+                .padrao{background: #00a157 !important; border-color: #000000!important; }
+                .urgente {background: #0276aa !important; border-color: #000000!important; }                 
+                .cancelado {background: #D32F2F !important; border-color: #000000!important; } 
+
+                .tipoGuia  tr td:nth-of-type(1){
+                    color : green;
+                }
+                .tipoGuia  tr td:nth-of-type(2){
+                    color : blue;
+                }
+                .tipoGuia  tr td:nth-of-type(3){
+                    color : red;
+                }
+            </style>
+
+            <div align="center">
+                <p:schedule  style="width: 95%;  " widgetVar="meuCalendario" value="#{eventoBean.eventModel}" id="schEvento" timeZone="America/Campo_Grande" >
+                    <p:ajax event="eventSelect" listener="#{eventoBean.quandoSelecionado}" update="formSche:eventoDetalhe" oncomplete="PF('caixaDialog').show();"/>
+                    <p:ajax event="dateSelect" listener="#{eventoBean.quandoNovo}" update="formSche:eventoDetalhe" oncomplete="PF('caixaDialog').show();"/>
+                    <p:ajax event="eventMove" listener="#{eventoBean.quandoMovido}" update="schEvento" />
+                    <p:ajax event="eventResize" listener="#{eventoBean.quandoRedimencionado}" update="schEvento" />
+                </p:schedule>
+            </div>
+        </h:form>  
+        <ui:include src="cadastrar.xhtml" />
+
+    </ui:define>    
+</ui:composition>

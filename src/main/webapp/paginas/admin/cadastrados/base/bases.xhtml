@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <!-- Dica para dar manuten��o ao c�digo, clique nos icones (+, -) para abrir e fechar as tags, pois est� p�gina
+    � enorme e se for navegar nela para ver as fun��es especificas, voc� vai perder muito tempo. todas as tags est�o
+    comentadas com suas respectivas fun��es.
+    -->
+
+    <ui:define name="corpo">       
+        <title>Base de Conhecimento</title>
+        <!-- Lista de Atendimentos Cadastrados -->
+        <h:form id="base_form">
+            <p:dataTable   draggableColumns="true" filterDelay="800" rendered="#{loginBean.acesso.acessaBaseConhecimento}" reflow="true" value="#{baseConhecimentoBean.bases}" id="base" var="req" paginator="true" resizableColumns="true" widgetVar="celRequerimento"  
+                           rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{req.id}"  selectionMode="single" selection="#{baseConhecimentoBean.baseSelecionado}" 
+                           paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                           {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" 
+                           currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                           - Página: {currentPage}/{totalPages}" >
+
+                <f:facet name="header">
+                    Base de Conhecimento
+                    <p:commandButton class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="base" trigger="toggler" >
+
+                    </p:columnToggler> 
+                    <p:commandButton value="Cadastrar" update=":cadastrarDetal"   action="#{baseConhecimentoBean.anexaArquivo()}" oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar Base" styleClass="btnCadastrar" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="base" fileName="bases" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="base" fileName="bases" />
+                    </h:commandLink>
+                </f:facet>
+
+                <p:column headerText="Código" priority="8"   exportable="#{baseConhecimentoBean.list[0]}" visible="#{baseConhecimentoBean.list[0]}" 
+                          sortBy="#{req.id}" filterBy="#{req.id}"  filterMatchMode="contains"
+                          width="7%" >
+                    <h:outputText value="#{req.id}"/>                                           
+                </p:column>
+
+
+                <p:column headerText="Data Revisao"  exportable="#{baseConhecimentoBean.list[1]}" visible="#{baseConhecimentoBean.list[1]}" 
+                          sortBy="#{req.dataRevisao}" filterBy="#{req.dataRevisao}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{req.dataRevisao}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Responsavel"    exportable="#{baseConhecimentoBean.list[2]}" visible="#{baseConhecimentoBean.list[2]}" 
+                          sortBy="#{req.responsavel}" filterBy="#{req.responsavel}"  filterMatchMode="contains"  id="tecPesquisa" 
+                          width="10%" >
+                    <h:outputText value="#{req.responsavel}"/>                                           
+                </p:column>
+
+                <p:column headerText="Categoria"    exportable="#{baseConhecimentoBean.list[3]}" visible="#{baseConhecimentoBean.list[3]}" 
+                          sortBy="#{req.categoria}" filterBy="#{req.categoria}"  filterMatchMode="contains"  
+                          width="15%" >
+                    <h:outputText value="#{req.categoria}"/>                                           
+                </p:column>
+
+
+                <p:column headerText="Resumo"  priority="8"  exportable="#{baseConhecimentoBean.list[4]}" visible="#{baseConhecimentoBean.list[4]}" 
+                          sortBy="#{req.resumo}" filterBy="#{req.resumo}" filterMatchMode="contains"
+                          width="35%" >                    
+                    <h:outputText value="#{req.resumo}"/>      
+                </p:column>
+                
+                <p:column headerText="Setor"  priority="8"  exportable="#{baseConhecimentoBean.list[5]}" visible="#{baseConhecimentoBean.list[5]}" 
+                          sortBy="#{req.setor}" filterBy="#{req.setor}" filterMatchMode="contains"
+                          width="18%" >                    
+                    <h:outputText value="#{req.setor}"/>      
+                </p:column>
+
+                <p:column exportable="false"  priority="1" headerText="Menu"
+                          width="5%" >    
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+                        <p:menuitem disabled="#{req.edita}" action="#{baseConhecimentoBean.editar(req)}" value="Editar" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar" />
+                        <p:menuitem disabled="#{req.edita}" action="#{baseConhecimentoBean.deletar(req)}" value="Excluir" update="base total"  icon="fa fa-times-circle" title="Excluir" >
+                            <p:confirm header="Confirmação"   class="dialog" message="Você tem certeza que deseja excluir? " icon="ui-icon-alert" />
+                        </p:menuitem>
+                    </p:splitButton>
+                </p:column>
+                <f:facet name="footer">
+                    <p:outputLabel id="total" value="Total de Registros: #{baseConhecimentoBean.qtdRegistro}"/>
+                </f:facet>      
+
+                <p:ajax update=":baseDetal" event="rowDblselect"  oncomplete="PF('baseDialog').show()" >
+                    <f:setPropertyActionListener value="#{req}" target="#{baseConhecimentoBean.baseSelecionado}" /> 
+                </p:ajax>
+
+            </p:dataTable>          
+        </h:form>  
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+        <!-- cadastrarCatDialog -->
+        <ui:include src="cadastrarCategoria.xhtml"/>
+
+        <!-- dialogAtendimento -->
+        <ui:include src="visualizar.xhtml"/>
+
+        <!-- arquivoDialog -->
+        <ui:include src="arquivo.xhtml"/>
+
+    </ui:define>
+
+</ui:composition>

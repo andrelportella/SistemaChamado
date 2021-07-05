@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" >
+
+
+    <div class="row">        
+
+        <div class="col-lg-6 col-xs-12">
+            <ui:include src="noticias.xhtml" />
+
+        </div>
+
+        <div class="col-lg-6 col-xs-12">
+            <ui:include src="listaRamais/ramais.xhtml"/>
+
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">        
+
+        <div class="col-lg-6 col-xs-12">
+            <ui:include src="base/baseConhecimento.xhtml" /> 
+        </div>
+
+        <div class="col-lg-6 col-xs-12">
+            <ui:include src="listaAniversariantes/aniversariantes.xhtml" /> 
+        </div>
+    </div>
+</ui:composition>

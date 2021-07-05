@@ -1,0 +1,46 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer="" header="Informações do Fornecedor" widgetVar="fornDialog"   resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="fornDetal"  class="corDialog" >
+            <p:panelGrid style="width: 100%; text-align:center;"  columns="2" rendered="#{not empty fornecedorBean.fornecedores}" columnClasses="value,value"  >
+
+                <h:outputText value="ID" class="dialog" /> 
+                <h:outputText value="#{fornecedorBean.fornecedorSelecionado.id}"/>
+
+                <h:outputText value="Nome" class="dialog" /> 
+                <h:outputText value="#{fornecedorBean.fornecedorSelecionado.nome}"/>
+
+                <h:outputText value="CNPJ" class="dialog" /> 
+                <h:outputText value="#{fornecedorBean.fornecedorSelecionado.cnpj}"/>
+
+                <h:outputText value="Razão Social" class="dialog" /> 
+                <h:outputText value="#{fornecedorBean.fornecedorSelecionado.razaoSocial}"/>
+
+                <h:outputText value="Email" class="dialog" /> 
+                <h:outputText value="#{fornecedorBean.fornecedorSelecionado.email}"/>
+
+                <h:outputText value="Telefone" class="dialog" /> 
+                <h:outputText value="#{fornecedorBean.fornecedorSelecionado.telefone}"/>
+
+                <h:outputText value="Endereço" class="dialog" /> 
+                <h:outputText value="#{fornecedorBean.fornecedorSelecionado.endereco}"/>
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+
+
+
+</ui:composition>

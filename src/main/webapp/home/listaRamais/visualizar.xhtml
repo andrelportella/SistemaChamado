@@ -1,0 +1,48 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+    <!-- dialogAtendimento -->
+    <p:dialog footer="" modal="false"  widgetVar="ramalDialog"   header="Informações"   resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="50%" width="50%" closeOnEscape="true" draggable="true" >
+        <p:outputPanel id="ramalDetal">
+            <h:form >
+                <p:panelGrid style="width: 100%; text-align:center;" columns="2"  columnClasses="value,value"  >
+                    <h:outputText value="Nome" class="dialog" />
+
+                    <h:outputText value="#{ramaisBean.ramalSelecionado.nome}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+
+                    <h:outputText value="Email" class="dialog" />
+
+                    <h:outputText value="#{ramaisBean.ramalSelecionado.email}"  />                                                                                   
+
+                    <h:outputText value="Telefone" class="dialog" />    
+                    
+                    <h:outputText value="#{ramaisBean.ramalSelecionado.site}"/>                    
+
+                    <h:outputText value="Celular" class="dialog" /> 
+
+                    <h:outputText value="#{ramaisBean.ramalSelecionado.celular}"/>  
+
+                    <h:outputText value="Site" class="dialog" />    
+
+                    <h:outputText value="#{ramaisBean.ramalSelecionado.empresa}"/>                    
+
+                    <h:outputText value="Setor" class="dialog" /> 
+
+                    <h:outputText value="#{ramaisBean.ramalSelecionado.setor}"/>  
+
+                </p:panelGrid>
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

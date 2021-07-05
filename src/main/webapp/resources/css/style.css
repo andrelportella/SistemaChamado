@@ -1,0 +1,28 @@
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;;  
+   
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;  
+    
+}
+
+.ui-widget, .ui-widget .ui-widget{
+    font-size: 100% !important; 
+   
+}
+
+.ui-layout-center .ui-layout-unit-content{
+/* background-image: url('#{request.contextPath}/resources/imagens/xx.jpg');
+background-repeat: no-repeat;
+background-attachment:scroll; */
+
+}
+.ui-layout-south {
+ 
+}
+.ui-layout-south .ui-layout-unit-content{
+    
+}       

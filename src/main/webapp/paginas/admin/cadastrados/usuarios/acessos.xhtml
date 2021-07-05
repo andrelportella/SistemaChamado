@@ -1,0 +1,63 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""  widgetVar="recursoDialog"  header="Inserir / Alterar Recursos"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="500" width="30%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="recursoDetal" class="corDialog" >
+            <h:form id="form_recursos">
+                <div class="ui-fluid">
+                    <p:panelGrid columns="2" id="grid" class="corDialog" style="width: 100%" >
+                        <ui:repeat value="#{usuarioBean.acessoRecursos}" var="item">
+
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel for="value" class="colorDialog" value="#{item.descricao}" />
+                                    <p:selectOneRadio  required="true" requiredMessage="Por favor selecione o acesso" class="corDialog" style="width: 100%" id="value" value="#{usuarioBean.resposta[item.cont]}" >
+                                        <f:selectItem  class="corDialog" itemLabel="Sim" itemValue="true" />
+                                        <f:selectItem  class="corDialog" itemLabel="Não" itemValue="false" />                                                        
+                                    </p:selectOneRadio>
+                                </p:column>                                                      
+                            </p:row>  
+
+                            <p:row class="corDialog" >
+                                <p:column rowspan="4">
+                                    <p:outputLabel  class="colorDialog" value="Observações" />
+
+                                    <p:inputTextarea id="obs" counter="display" value="#{usuarioBean.respostaObs[item.cont]}"  maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true" required="false"  >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText  class="colorDialog"  id="display" />
+                                </p:column>                                
+                            </p:row>
+
+                            <br/>
+                            <br/>
+                        </ui:repeat>
+                    </p:panelGrid>
+                </div>
+              
+                <p:commandButton id="btnSalvar" styleClass="tamBtn" actionListener="#{usuarioBean.salvarResposta()}" icon="fa fa-save" value="Salvar"  />
+            </h:form>
+
+            
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('recursoDialog').hide()" value="Fechar"  />
+            </h:form>
+
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

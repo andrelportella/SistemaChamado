@@ -1,0 +1,511 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="corpo"> 
+
+
+        <title>Equipamentos Cadastrados</title>  
+
+        <p:tabView  id="formTab" dynamic="true" cache="true" effect="fold" rendered="#{loginBean.acesso.acessaEquipamentos}">           
+
+            <p:tab title="1 - Equipamentos de Informática" rendered="#{equipamentoBean.parametros.cadInfor and loginBean.acesso.acessaEquipInfor }" >
+                <h:form id="infor">
+                    <p:dataTable filterDelay="800"  resizableColumns="true" draggableColumns="true" reflow="true" value="#{equipamentoBean.equipamentosInfor}" id="equipamentos" var="equip" paginator="true" 
+                                 rows="10" rowsPerPageTemplate="5,10, 15, 20 ,50 ,100"  rowKey="#{equip.id}"  selectionMode="single" selection="#{equipamentoBean.selecEquipInfor}" 
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                                 {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" 
+                                 currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                                 - Página: {currentPage}/{totalPages}" style="width: 100%;"
+                                 >
+                        <f:facet name="header">
+                            1 - Equipamentos de Informática
+                            <p:commandButton  class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right; width: 110px;  " icon="ui-icon-calculator" />
+                            <p:columnToggler datasource="equipamentos" trigger="toggler" >
+                                <p:ajax event="toggle" listener="#{equipamentoBean.onToggle}" />
+                            </p:columnToggler>
+                            <p:commandButton  icon="fa fa-plus" value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" action="#{equipamentoBean.anexaArquivoInfor()}"  title="Cadastrar Equipamento" styleClass="btnCadastrar" />
+                        </f:facet> 
+                        <f:facet name="{Exporters}">
+                            <h:commandLink>
+                                <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                                <p:dataExporter type="xls" target="equipamentos" fileName="equipamentos"  />
+                            </h:commandLink>
+
+                            <h:commandLink>
+                                <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                                <p:dataExporter type="pdf" target="equipamentos" fileName="equipamentos"/>
+                            </h:commandLink>
+                        </f:facet>
+                        <p:column headerText="Código "  exportable="#{equipamentoBean.list[0]}" visible="#{equipamentoBean.list[0]}"  
+                                  sortBy="#{equip.nome}" filterBy="#{equip.nome}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="Descrição " exportable="#{equipamentoBean.list[1]}" visible="#{equipamentoBean.list[1]}"  
+                                  sortBy="#{equip.descricao}" filterBy="#{equip.descricao}"  filterMatchMode="contains"
+                                  width="47%" >
+                            <h:outputText value="#{equip.descricao}"/>
+                        </p:column>
+
+
+                        <p:column headerText="Usuário" exportable="#{equipamentoBean.list[2]}" visible="#{equipamentoBean.list[2]}"  
+                                  sortBy="#{equip.usuario}" filterBy="#{equip.usuario}"  filterMatchMode="contains"
+                                  width="15%">
+                            <h:outputText value="#{equip.usuario}"/>
+                        </p:column>
+
+                        <p:column headerText="Setor" exportable="#{equipamentoBean.list[3]}" visible="#{equipamentoBean.list[3]}"
+                                  sortBy="#{equip.setor}" filterBy="#{equip.setor}"  filterMatchMode="contains"
+                                  width="15%" >
+                            <h:outputText value="#{equip.setor}"/>
+                        </p:column>
+
+                        <p:column headerText="Status"   exportable="#{equipamentoBean.list[4]}" visible="#{equipamentoBean.list[4]}"
+                                  sortBy="#{equip.status}" filterBy="#{equip.status}"  filterMatchMode="exact"
+                                  width="8%" >
+                            <h:outputText value="#{equip.status}"/>
+                        </p:column>
+
+                        <p:column headerText="Site"   exportable="#{equipamentoBean.list[5]}" visible="#{equipamentoBean.list[5]}"
+                                  sortBy="#{equip.site}" filterBy="#{equip.site}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.site}"/>
+                        </p:column>
+
+                        <p:column headerText="IP"   exportable="#{equipamentoBean.list[6]}" visible="#{equipamentoBean.list[6]}"
+                                  sortBy="#{equip.ip}" filterBy="#{equip.ip}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.ip}"/>
+                        </p:column>
+
+                        <p:column headerText="Peso"   exportable="#{equipamentoBean.list[7]}" visible="#{equipamentoBean.list[7]}"
+                                  sortBy="#{equip.peso}" filterBy="#{equip.peso}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.peso}"/>
+                        </p:column>
+
+                        <p:column headerText="Tag / Licença" exportable="#{equipamentoBean.list[8]}" visible="#{equipamentoBean.list[8]}"
+                                  sortBy="#{equip.tagLicenca}" filterBy="#{equip.tagLicenca}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.tagLicenca}"/>
+                        </p:column>
+
+                        <p:column headerText="Capacidade"  exportable="#{equipamentoBean.list[9]}" visible="#{equipamentoBean.list[9]}"
+                                  sortBy="#{equip.capacidade}" filterBy="#{equip.capacidade}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.capacidade}"/>
+                        </p:column>
+
+                        <p:column headerText="Tamanho"   exportable="#{equipamentoBean.list[10]}" visible="#{equipamentoBean.list[10]}"
+                                  sortBy="#{equip.tamanho}" filterBy="#{equip.tamanho}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.tamanho}"/>
+                        </p:column>
+
+                        <p:column headerText="Modelo"  exportable="#{equipamentoBean.list[11]}" visible="#{equipamentoBean.list[11]}"
+                                  sortBy="#{equip.modelo}" filterBy="#{equip.modelo}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.modelo}"/>
+                        </p:column>
+
+                        <p:column headerText="Numero Serie" exportable="#{equipamentoBean.list[12]}" visible="#{equipamentoBean.list[12]}"
+                                  sortBy="#{equip.numSerie}" filterBy="#{equip.numSerie}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.numSerie}"/>
+                        </p:column>
+
+                        <p:column headerText="Data da Compra"   exportable="#{equipamentoBean.list[13]}" visible="#{equipamentoBean.list[13]}"
+                                  sortBy="#{equip.dtCompra}" filterBy="#{equip.dtCompra}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.dtCompra}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Tipo Equipamento"   exportable="#{equipamentoBean.list[14]}" visible="#{equipamentoBean.list[14]}"
+                                  sortBy="#{equip.tipoMaq}" filterBy="#{equip.tipoMaq}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.tipoMaq}"/>
+                        </p:column>
+
+                        <p:column headerText="Tamanho HD"  exportable="#{equipamentoBean.list[15]}" visible="#{equipamentoBean.list[15]}"
+                                  sortBy="#{equip.HD}" filterBy="#{equip.HD}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.HD}"/>
+                        </p:column>
+
+                        <p:column headerText="Sistema Operacional"  exportable="#{equipamentoBean.list[16]}" visible="#{equipamentoBean.list[16]}"
+                                  sortBy="#{equip.sistemaOperacional}" filterBy="#{equip.sistemaOperacional}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.sistemaOperacional}"/>
+                        </p:column>
+
+                        <p:column headerText="Memoria"  exportable="#{equipamentoBean.list[17]}" visible="#{equipamentoBean.list[17]}"
+                                  sortBy="#{equip.memoria}" filterBy="#{equip.memoria}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.memoria}"/>
+                        </p:column>
+
+                        <p:column headerText="Placa mae"  exportable="#{equipamentoBean.list[18]}" visible="#{equipamentoBean.list[18]}"
+                                  sortBy="#{equip.placaMae}" filterBy="#{equip.placaMae}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.placaMae}"/>
+                        </p:column>
+
+                        <p:column headerText="Processador"  exportable="#{equipamentoBean.list[19]}" visible="#{equipamentoBean.list[19]}"
+                                  sortBy="#{equip.processador}" filterBy="#{equip.processador}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.processador}"/>
+                        </p:column>
+
+                        <p:column headerText="Marca"  exportable="#{equipamentoBean.list[20]}" visible="#{equipamentoBean.list[20]}"
+                                  sortBy="#{equip.marca}" filterBy="#{equip.marca}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.marca}"/>
+                        </p:column>
+
+                        <p:column headerText="Fornecedor"  exportable="#{equipamentoBean.list[21]}" visible="#{equipamentoBean.list[21]}"
+                                  sortBy="#{equip.fornecedor}" filterBy="#{equip.fornecedor}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.fornecedor}"/>
+                        </p:column>
+
+                        <p:column headerText="Valor"  exportable="#{equipamentoBean.list[22]}" visible="#{equipamentoBean.list[22]}"
+                                  sortBy="#{equip.valor}" filterBy="#{equip.valor}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.valor}"/>
+                        </p:column>
+
+                        <p:column headerText="Observacao"  exportable="#{equipamentoBean.list[23]}" visible="#{equipamentoBean.list[23]}"
+                                  sortBy="#{equip.observacao}" filterBy="#{equip.observacao}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.observacao}"/>
+                        </p:column>
+
+                        <p:column headerText="ID"  exportable="#{equipamentoBean.list[24]}" visible="#{equipamentoBean.list[24]}"
+                                  sortBy="#{equip.id}" filterBy="#{equip.id}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Empresa da NF"  exportable="#{equipamentoBean.list[25]}" visible="#{equipamentoBean.list[25]}"
+                                  sortBy="#{equip.empresa}" filterBy="#{equip.empresa}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.empresa}"/>
+                        </p:column>
+
+                        <p:column headerText="Arquivo"  exportable="#{equipamentoBean.list[26]}" visible="#{equipamentoBean.list[26]}"
+                                  sortBy="#{equip.anexoMovimento}" filterBy="#{equip.anexoMovimento ? 'Sim':'Não'}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.anexoMovimento ? 'Sim':' Não'}"/>
+                        </p:column>
+
+
+                        <p:column headerText="N° Nota Fiscal"  exportable="#{equipamentoBean.list[27]}" visible="#{equipamentoBean.list[27]}"
+                                  sortBy="#{equip.nfSoftware}" filterBy="#{equip.nfSoftware}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.nfSoftware}"/>
+                        </p:column>
+
+
+
+                        <p:column exportable="false"  priority="1" headerText="Menu" 
+                                  width="5%" >                            
+                            <p:splitButton value=" " title="Opções" style="height: 15px; width: 5px" >                               
+                                <p:menuitem value="Editar" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar" 
+                                            action="#{equipamentoBean.editarInfor(equip)}"  >
+                                </p:menuitem> 
+                                <p:menuitem value="Softwares" update=":softwareDetal" oncomplete="PF('softwareDialog').show()" icon="fa fa-windows" title="Softwares" 
+                                            actionListener="#{equipamentoBean.insereSoftwares(equip)}"   >
+                                </p:menuitem> 
+                            </p:splitButton>
+                        </p:column>
+
+                        <p:ajax update=":equipDetalInfor" event="rowDblselect"  oncomplete="PF('equiDialogInfor').show()" >
+                            <f:setPropertyActionListener value="#{equip}" target="#{equipamentoBean.selecEquipInfor}" /> 
+                        </p:ajax>
+
+                    </p:dataTable>
+
+                </h:form>
+
+            </p:tab>
+
+            <p:tab title="#{loginBean.nome_equipamentos}" rendered="#{equipamentoBean.parametros.cadGeral and loginBean.acesso.acessaEquipGeral }" >     
+                <h:form id="geral">
+                    <p:dataTable filterDelay="800"  resizableColumns="true" draggableColumns="true"  reflow="true" value="#{equipamentoBean.equipamentosGeral}" id="equipamentos" var="equip" paginator="true" widgetVar="equipTable"
+                                 rows="10" rowsPerPageTemplate="5,10, 15, 20, 50, 100"  rowKey="#{equip.id}"  selectionMode="single" selection="#{equipamentoBean.selecEquipGeral}" 
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                                 {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                                 - Página: {currentPage}/{totalPages}"
+
+                                 >
+                        <f:facet name="header">
+                            #{loginBean.nome_equipamentos}
+                            <p:commandButton  class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right; width: 110px;  " icon="ui-icon-calculator" />
+                            <p:columnToggler datasource="equipamentos" trigger="toggler" >                                
+                                <p:ajax event="toggle" listener="#{equipamentoBean.onToggleGeral}" />
+                            </p:columnToggler>
+                            <p:commandButton  icon="fa fa-plus" value="Cadastrar" update=":cadastrarDetalGeral" action="#{equipamentoBean.anexaArquivoGeral()}"   oncomplete="PF('cadastrarDialogGeral').show()" title="Cadastrar Equipamento" styleClass="btnCadastrar" />
+                        </f:facet> 
+                        <f:facet name="{Exporters}">
+                            <h:commandLink>
+                                <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                                <p:dataExporter type="xls" target="equipamentos" fileName="equipamentos"  />
+                            </h:commandLink>
+
+                            <h:commandLink>
+                                <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                                <p:dataExporter type="pdf" target="equipamentos" fileName="equipamentos"/>
+                            </h:commandLink>
+                        </f:facet>
+
+                        <p:column headerText="Código "   exportable="#{equipamentoBean.listGeral[0]}" visible="#{equipamentoBean.listGeral[0]}"  
+                                  sortBy="#{equip.nome}" filterBy="#{equip.nome}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="Descrição " exportable="#{equipamentoBean.listGeral[1]}" visible="#{equipamentoBean.listGeral[1]}"  
+                                  sortBy="#{equip.descricao}" filterBy="#{equip.descricao}"  filterMatchMode="contains"
+                                  width="44%" >
+                            <h:outputText value="#{equip.descricao}"/>
+                        </p:column>
+
+
+                        <p:column headerText="Usuário" exportable="#{equipamentoBean.listGeral[2]}" visible="#{equipamentoBean.listGeral[2]}"  
+                                  sortBy="#{equip.usuario}" filterBy="#{equip.usuario}"  filterMatchMode="contains"
+                                  width="15%">
+                            <h:outputText value="#{equip.usuario}"/>
+                        </p:column>
+
+                        <p:column headerText="Setor " exportable="#{equipamentoBean.listGeral[3]}" visible="#{equipamentoBean.listGeral[3]}"
+                                  sortBy="#{equip.setor}" filterBy="#{equip.setor}"  filterMatchMode="contains"
+                                  width="15%" >
+                            <h:outputText value="#{equip.setor}"/>
+                        </p:column>
+
+                        <p:column headerText="Status"  exportable="#{equipamentoBean.listGeral[4]}" visible="#{equipamentoBean.listGeral[4]}"
+                                  sortBy="#{equip.status}" filterBy="#{equip.status}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.status}"/>
+                        </p:column>
+
+                        <p:column headerText="Site"  exportable="#{equipamentoBean.listGeral[5]}" visible="#{equipamentoBean.listGeral[5]}"
+                                  sortBy="#{equip.site}" filterBy="#{equip.site}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.site}"/>
+                        </p:column>
+
+                        <p:column headerText="Peso"  exportable="#{equipamentoBean.listGeral[6]}" visible="#{equipamentoBean.listGeral[6]}"
+                                  sortBy="#{equip.peso}" filterBy="#{equip.peso}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.peso}"/>
+                        </p:column>
+
+                        <p:column headerText="Capacidade"  exportable="#{equipamentoBean.listGeral[7]}" visible="#{equipamentoBean.listGeral[7]}"
+                                  sortBy="#{equip.capacidade}" filterBy="#{equip.capacidade}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.capacidade}"/>
+                        </p:column>
+
+                        <p:column headerText="Tamanho"  exportable="#{equipamentoBean.listGeral[8]}" visible="#{equipamentoBean.listGeral[8]}"
+                                  sortBy="#{equip.tamanho}" filterBy="#{equip.tamanho}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.tamanho}"/>
+                        </p:column>
+
+                        <p:column headerText="Modelo"  exportable="#{equipamentoBean.listGeral[9]}" visible="#{equipamentoBean.listGeral[9]}"
+                                  sortBy="#{equip.modelo}" filterBy="#{equip.modelo}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.modelo}"/>
+                        </p:column>
+
+                        <p:column headerText="Numero Serie"  exportable="#{equipamentoBean.listGeral[10]}" visible="#{equipamentoBean.listGeral[10]}"
+                                  sortBy="#{equip.numSerie}" filterBy="#{equip.numSerie}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.numSerie}"/>
+                        </p:column>
+
+                        <p:column headerText="Data da Compra"  exportable="#{equipamentoBean.listGeral[11]}" visible="#{equipamentoBean.listGeral[11]}"
+                                  sortBy="#{equip.dtCompra}" filterBy="#{equip.dtCompra}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.dtCompra}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Tipo Equipamento"  exportable="#{equipamentoBean.listGeral[12]}" visible="#{equipamentoBean.listGeral[12]}"
+                                  sortBy="#{equip.tipoMaq}" filterBy="#{equip.tipoMaq}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.tipoMaq}"/>
+                        </p:column>
+
+                        <p:column headerText="Marca"  exportable="#{equipamentoBean.listGeral[13]}" visible="#{equipamentoBean.listGeral[13]}"
+                                  sortBy="#{equip.marca}" filterBy="#{equip.marca}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.marca}"/>
+                        </p:column>
+
+                        <p:column headerText="Fornecedor"  exportable="#{equipamentoBean.listGeral[14]}" visible="#{equipamentoBean.listGeral[14]}"
+                                  sortBy="#{equip.fornecedor}" filterBy="#{equip.fornecedor}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.fornecedor}"/>
+                        </p:column>
+
+                        <p:column headerText="Valor"  exportable="#{equipamentoBean.listGeral[15]}" visible="#{equipamentoBean.listGeral[15]}"
+                                  sortBy="#{equip.valor}" filterBy="#{equip.valor}"  filterMatchMode="contains"
+                                  width="8%" >
+                            <h:outputText value="#{equip.valor}"/>
+                        </p:column>
+
+                        <p:column headerText="Observacao"  exportable="#{equipamentoBean.listGeral[16]}" visible="#{equipamentoBean.listGeral[16]}"
+                                  sortBy="#{equip.observacao}" filterBy="#{equip.observacao}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.observacao}"/>
+                        </p:column>
+
+                        <p:column headerText="ID"  exportable="#{equipamentoBean.listGeral[17]}" visible="#{equipamentoBean.listGeral[17]}"
+                                  sortBy="#{equip.id}" filterBy="#{equip.id}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Empresa"  exportable="#{equipamentoBean.listGeral[18]}" visible="#{equipamentoBean.listGeral[18]}"
+                                  sortBy="#{equip.empresa}" filterBy="#{equip.empresa}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.empresa}"/>
+                        </p:column>
+
+                        <p:column headerText="Arquivo"  exportable="#{equipamentoBean.listGeral[19]}" visible="#{equipamentoBean.listGeral[19]}"
+                                  sortBy="#{equip.anexoMovimento}" filterBy="#{equip.anexoMovimento ? 'Sim':'Não'}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.anexoMovimento ? 'Sim':' Não'}"/>
+                        </p:column>
+
+                        <p:column headerText="Matricula Cartorio"  exportable="#{equipamentoBean.listGeral[20]}" visible="#{equipamentoBean.listGeral[20]}"
+                                  sortBy="#{equip.matriculaCartorio}" filterBy="#{equip.matriculaCartorio}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.matriculaCartorio}"/>
+                        </p:column>
+
+                        <p:column headerText="RENAVAM"  exportable="#{equipamentoBean.listGeral[21]}" visible="#{equipamentoBean.listGeral[21]}"
+                                  sortBy="#{equip.renavam}" filterBy="#{equip.renavam}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.renavam}"/>
+                        </p:column>
+
+                        <p:column headerText="Incra"  exportable="#{equipamentoBean.listGeral[22]}" visible="#{equipamentoBean.listGeral[22]}"
+                                  sortBy="#{equip.incra}" filterBy="#{equip.incra}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.incra}"/>
+                        </p:column>
+
+                        <p:column headerText="Valor Incra"  exportable="#{equipamentoBean.listGeral[23]}" visible="#{equipamentoBean.listGeral[23]}"
+                                  sortBy="#{equip.valorIncra}" filterBy="#{equip.valorIncra}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.valorIncra}"/>
+                        </p:column>
+
+                        <p:column headerText="IPTU"  exportable="#{equipamentoBean.listGeral[24]}" visible="#{equipamentoBean.listGeral[24]}"
+                                  sortBy="#{equip.iptu}" filterBy="#{equip.iptu}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.iptu}"/>
+                        </p:column>          
+
+                        <p:column headerText="Valor IPTU"  exportable="#{equipamentoBean.listGeral[25]}" visible="#{equipamentoBean.listGeral[25]}"
+                                  sortBy="#{equip.valorIptu}" filterBy="#{equip.valorIptu}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.valorIptu}"/>
+                        </p:column>
+
+                        <p:column headerText="ITR"  exportable="#{equipamentoBean.listGeral[26]}" visible="#{equipamentoBean.listGeral[26]}"
+                                  sortBy="#{equip.itr}" filterBy="#{equip.itr}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.itr}"/>
+                        </p:column>
+
+                        <p:column headerText="Valor ITR"  exportable="#{equipamentoBean.listGeral[27]}" visible="#{equipamentoBean.listGeral[27]}"
+                                  sortBy="#{equip.valorItr}" filterBy="#{equip.valorItr}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.valorItr}"/>
+                        </p:column>
+
+                        <p:column headerText="Seguro"  exportable="#{equipamentoBean.listGeral[28]}" visible="#{equipamentoBean.listGeral[28]}"
+                                  sortBy="#{equip.seguro}" filterBy="#{equip.seguro}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.seguro}"/>
+                        </p:column>
+
+                        <p:column headerText="Valor Seguro"  exportable="#{equipamentoBean.listGeral[29]}" visible="#{equipamentoBean.listGeral[29]}"
+                                  sortBy="#{equip.valorSeguro}" filterBy="#{equip.valorSeguro}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.valorSeguro}"/>
+                        </p:column>
+
+                        <p:column headerText="Restricao"  exportable="#{equipamentoBean.listGeral[30]}" visible="#{equipamentoBean.listGeral[30]}"
+                                  sortBy="#{equip.restricao}" filterBy="#{equip.restricao  ? 'Sim':' Não'}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.restricao ? 'Sim':' Não'}"/>
+                        </p:column>
+
+                        <p:column headerText="Observacao da Restricao"  exportable="#{equipamentoBean.listGeral[31]}" visible="#{equipamentoBean.listGeral[31]}"
+                                  sortBy="#{equip.resctricaoObs}" filterBy="#{equip.resctricaoObs}"  filterMatchMode="contains"
+                                  width="10%" >
+                            <h:outputText value="#{equip.resctricaoObs}"/>
+                        </p:column>
+
+
+                        <p:column exportable="false"  priority="1" headerText="Menu"
+                                  width="5%" >    
+                            <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+                                <p:menuitem  value="Editar" update=":editarDetalGeral" oncomplete="PF('editarDialogGeral').show()" icon="fa fa-edit" title="Editar" 
+                                             action="#{equipamentoBean.editarGeral(equip)}" />
+                            </p:splitButton>
+                        </p:column>
+
+                        <p:ajax update=":equipDetal" event="rowDblselect"  oncomplete="PF('equiDialog').show()" >
+                            <f:setPropertyActionListener value="#{equip}" target="#{equipamentoBean.selecEquipGeral}" /> 
+                        </p:ajax>
+
+                    </p:dataTable>                                      
+                </h:form>
+
+            </p:tab>
+
+        </p:tabView>
+
+
+        <!-- dialogCadastrar -->
+
+        <ui:include src="cadastrarInfor.xhtml"/>
+        <ui:include src="cadastrarGeral.xhtml"/>        
+
+        <!-- dialogEditar -->
+        <ui:include src="editarInfor.xhtml"/>
+        <ui:include src="editarGeral.xhtml"/>
+
+        <!-- dialogSubCadastros -->
+        <ui:include src="subCadastros.xhtml"/>
+
+        <!-- dialogAtendimento -->
+        <ui:include src="visualizarGeral.xhtml"/>
+        <ui:include src="visualizarInfor.xhtml"/>
+
+        <!-- arquivoDialog -->
+        <ui:include src="arquivo.xhtml"/>
+
+        <!-- softwareDialog -->
+        <ui:include src="softwares.xhtml"/>
+
+    </ui:define>
+
+</ui:composition>
+

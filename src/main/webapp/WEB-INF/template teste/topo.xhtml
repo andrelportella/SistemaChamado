@@ -1,0 +1,107 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+
+
+
+    <!-- Main Header -->
+    <header class="main-header">
+
+        <!-- Logo -->
+        <a href="/SistemaChamadoBM/home.xhtml" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>S</b>GC</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>SISGC - </b> #{loginBean.negocioLogado()}</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- Messages: style can be found in dropdown.less-->
+                    <li class="dropdown messages-menu">
+                        <!-- Menu toggle button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="label label-success">4</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">Você tem 1 mensagem</li>
+                            <li>
+                                <!-- inner menu: contains the messages -->
+                                <ul class="menu">
+                                    <li><!-- start message -->
+                                        <a href="#">
+                                            <div class="pull-left image">
+                                                <img src="#{request.contextPath}/resources/imagens/avatar04.png" class="img-circle" alt="User Image" />
+                                            </div>
+                                            <!-- Message title and timestamp -->
+                                            <h4>
+                                                Sistema Chamado
+                                                <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                            </h4>
+                                            <!-- The message -->
+                                            <p>Foi aberto um chamado para você!</p>
+                                        </a>
+                                    </li><!-- end message -->
+                                </ul><!-- /.menu -->
+                            </li>
+                            <li class="footer"><a href="#">Veja todas as mensagens</a></li>
+                        </ul>
+                    </li><!-- /.messages-menu -->                  
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- The user image in the navbar-->
+                            <div class="pull-left image">
+                                <h:graphicImage library="imagens" name="avatar04.png" class="user-image" alt="User Image"/>
+                            </div>
+                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                            <span class="hidden-xs"> #{loginBean.usuarioLogado()}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- The user image in the menu -->
+                            <li class="user-header image">
+                                <div class="image">
+                                    <h:graphicImage library="imagens" name="avatar04.png" class="img-circle" alt="User Image"/>                                
+                                </div>
+                                <p>
+                                    #{loginBean.usuarioLogado()}
+                                </p>
+                            </li>                         
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="/SistemaChamadoBM/paginas/intranet/cadastrados/perfilUsuario/perfil.xhtml"  class="btn btn-success btn-flat">Perfil</a>
+                                </div>
+                                <div class="pull-right">
+                                    <p:commandButton  value="Sair"  icon="fa fa-close" class="BtnTopoMenu" action="#{loginBean.doLogout()}" />
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+
+
+
+
+</ui:composition>

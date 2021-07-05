@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+
+    <ui:define name="corpo">              
+        <title>Solicitantes Cadastrados</title>
+        <h:form id="usuarios_form">           
+            <p:dataTable   rendered="#{loginBean.acesso.acessaUsuario}" tableStyle="table-layout:auto" draggableColumns="true" resizableColumns="true" filterDelay="800" value="#{usuarioBean.usuarios}" id="usuarios" var="user" paginator="true"
+                           reflow="true" rowKey="#{user.id}" selectionMode="single" selection="#{usuarioBean.usuarioSelecionado}"
+                           rows="10" rowsPerPageTemplate="10, 15, 20" widgetVar="celUsuarios" scrollable="true"
+                           paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                           {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" 
+                           currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                           - Página: {currentPage}/{totalPages}" style="width: 100%;" >
+
+                <f:facet name="header">
+                    Solicitantes Cadastrados
+                    <p:commandButton  class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="usuarios" trigger="toggler" >                        
+                        <p:ajax event="toggle" listener="#{usuarioBean.onToggle}" />
+                    </p:columnToggler> 
+                    <p:commandButton  icon="fa fa-plus" value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()"  title="Cadastrar Usuário" styleClass="btnCadastrar" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="usuarios" fileName="usuarios"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="usuarios" fileName="usuarios"/>
+                    </h:commandLink>
+                </f:facet>
+                <p:column headerText="ID" filterStyle="max-width: 60px;"
+                          exportable="#{usuarioBean.list[0]}" visible="#{usuarioBean.list[0]}"
+                          sortBy="#{user.id}" filterBy="#{user.id}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{user.id}"/>
+                </p:column>
+                <p:column headerText="Nome" 
+                          exportable="#{usuarioBean.list[1]}" visible="#{usuarioBean.list[1]}"
+                          sortBy="#{user.nome}" filterBy="#{user.nome}"  filterMatchMode="contains"
+                          width="25%" >
+                    <h:outputText value="#{user.nome}"/>
+                </p:column>
+
+                <p:column headerText="Site" sortBy="#{user.site}" filterStyle="max-width: 80px;"
+                          exportable="#{usuarioBean.list[2]}" visible="#{usuarioBean.list[2]}"
+                          filterBy="#{user.site}"  filterMatchMode="contains"
+                          width="10%" >                        
+                    <h:outputText value="#{user.site}"/>                                                         
+                </p:column>
+
+                <p:column headerText="Setor" sortBy="#{user.setor}" 
+                          exportable="#{usuarioBean.list[3]}" visible="#{usuarioBean.list[3]}"
+                          filterBy="#{user.setor}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{user.setor}"/>
+                </p:column>
+
+                <p:column headerText="Status" filterStyle="max-width: 60px;"
+                          exportable="#{usuarioBean.list[4]}" visible="#{usuarioBean.list[4]}"
+                          sortBy="#{user.status}" filterBy="#{user.status ? 'Ativo':'Inativo'}"  filterMatchMode="contains"
+                          width="8%" >
+                    <h:outputText value="#{user.status ? 'Ativo':'Inativo'}"/>
+                </p:column>
+
+
+                <p:column headerText="Email"
+                          exportable="#{usuarioBean.list[5]}" visible="#{usuarioBean.list[5]}"
+                          sortBy="#{user.email}" filterBy="#{user.email}"  filterMatchMode="contains"
+                          width="20%" >
+                    <h:outputText value="#{user.email}"/>
+                </p:column>
+
+                <p:column headerText="Telefone" filterStyle="max-width: 80px;"
+                          exportable="#{usuarioBean.list[6]}" visible="#{usuarioBean.list[6]}"
+                          sortBy="#{user.telefone}" filterBy="#{user.telefone}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{user.telefone}"/>
+                </p:column>
+
+                <p:column headerText="Celular"
+                          exportable="#{usuarioBean.list[7]}" visible="#{usuarioBean.list[7]}"
+                          sortBy="#{user.celular}" filterBy="#{user.celular}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{user.celular}"/>
+                </p:column>
+
+                <p:column headerText="Login"
+                          exportable="#{usuarioBean.list[8]}" visible="#{usuarioBean.list[8]}"
+                          sortBy="#{user.login}" filterBy="#{user.login}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{user.login}"/>
+                </p:column>
+
+                <p:column headerText="Perfil"
+                          exportable="#{usuarioBean.list[9]}" visible="#{usuarioBean.list[9]}"
+                          sortBy="#{user.perfil}" filterBy="#{user.perfil}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{user.perfil}"/>
+                </p:column>
+
+                <p:column headerText="Negocio"
+                          exportable="#{usuarioBean.list[10]}" visible="#{usuarioBean.list[10]}"
+                          sortBy="#{user.negocio}" filterBy="#{user.negocio}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{user.negocio}"/>
+                </p:column>
+
+                <p:column headerText="Tecnico Chamado"
+                          exportable="#{usuarioBean.list[11]}" visible="#{usuarioBean.list[11]}"
+                          sortBy="#{user.tecnicoChamado}" filterBy="#{user.tecnicoChamado ? 'Sim':' Nao'}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{user.tecnicoChamado ? 'Sim':' Nao'}"/>
+                </p:column>
+
+                <p:column headerText="Tecnico Requerimento"
+                          exportable="#{usuarioBean.list[12]}" visible="#{usuarioBean.list[12]}"
+                          sortBy="#{user.tecnicoRequerimento}" filterBy="#{user.tecnicoRequerimento ? 'Sim':' Nao'}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{user.tecnicoRequerimento ? 'Sim':' Nao' }"/>
+                </p:column>
+
+                <p:column headerText="Ramal" exportable="#{usuarioBean.list[13]}" visible="#{usuarioBean.list[13]}"
+                          sortBy="#{user.ramal}" filterBy="#{user.ramal}"  filterMatchMode="contains" width="15%" >
+                    <h:outputText value="#{user.ramal}"/>
+                </p:column>
+
+                <p:column headerText="Descrição" exportable="#{usuarioBean.list[14]}" visible="#{usuarioBean.list[14]}"
+                          sortBy="#{user.descricao}" filterBy="#{user.descricao}"  filterMatchMode="contains" width="30%" >
+                    <h:outputText value="#{user.descricao}"/>
+                </p:column>
+
+
+                <p:column exportable="false"  priority="1" headerText="Menu"
+                          width="5%" >
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+                        <p:menuitem  value="Editar"  update=":editarDetal " oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar"
+                                     action="#{usuarioBean.editarUsuario(user)}" >
+                            <f:ajax  render=":editar:grid" />
+                        </p:menuitem>
+
+                        <p:menuitem  value="Negocios"  update=":negocioDetal" oncomplete="PF('negocioDialog').show()" icon="fa fa-building" title="Negocios"
+                                     action="#{usuarioBean.inserirNegocios(user)}" >                            
+                        </p:menuitem>
+
+                        <p:menuitem  value="Recursos"  update=":recursoDetal" oncomplete="PF('recursoDialog').show()" icon="fa fa-unlock" title="Recursos"
+                                     action="#{usuarioBean.acessos(user)}" >                            
+                        </p:menuitem>
+
+                    </p:splitButton>
+                </p:column>
+
+
+                <p:ajax update=":userDetal" event="rowDblselect"  oncomplete="PF('userDialog').show()" >
+                    <f:setPropertyActionListener value="#{user}" target="#{usuarioBean.usuarioSelecionado}" /> 
+                </p:ajax>
+
+            </p:dataTable>
+
+        </h:form>
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+        <!-- dialogAtendimento -->
+        <ui:include src="visualizar.xhtml"/>
+
+        <!-- dialogNegocio -->
+        <ui:include src="negocios.xhtml"/>
+
+        <!-- dialogNegocio -->
+        <ui:include src="acessos.xhtml"/>
+
+
+    </ui:define>
+
+</ui:composition>

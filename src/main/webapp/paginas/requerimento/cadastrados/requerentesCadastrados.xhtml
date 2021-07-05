@@ -1,0 +1,396 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+
+    <ui:define name="corpo">       
+
+
+        <title>Requerentes Cadastrados</title>
+        <h:form id="ajax">
+            <p:ajaxStatus  onstart="PF('statusDialog').show()" onerror="PF('statusDialog').hide()" oncomplete="PF('statusDialog').hide()" />
+            <p:growl autoUpdate="true" showDetail="true" />
+        </h:form>
+
+        <p:dialog modal="true" widgetVar="statusDialog" header="Carregando" draggable="false" closable="false" resizable="false">
+            <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+        </p:dialog>
+
+        <!-- Lista de Atendimentos Cadastrados -->
+        <h:form id="usuarios_form">
+            <p:dataTable  rendered="#{loginBean.acesso.acessaRequerente}" reflow="true" value="#{requerenteBean.requerentes}" id="requerente" var="req" paginator="true" resizableColumns="true" widgetVar="celRequerimento"  
+                          rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{req.id}"  selectionMode="single" selection="#{requerenteBean.requerenteSelecionado}" 
+                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                          {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" style="width: 100%;"   >
+
+                <f:facet name="header">
+                    Requerentes
+                    <p:commandButton class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="requerente" trigger="toggler" /> 
+                    <p:commandButton value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar Requerente" styleClass="btnCadastrar" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="requerente" fileName="requerentes"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="requerente" fileName="requerentes"/>
+                    </h:commandLink>
+                </f:facet>
+
+                <p:column headerText="Nome" 
+                          sortBy="#{req.nome}" filterBy="#{req.nome}" filterMatchMode="contains"
+                          width="50%" >
+
+                    <h:outputText value="#{req.nome}"  />
+                </p:column>
+
+                <p:column headerText="CPF" filterStyle="max-width: 70px;"
+                          sortBy="#{req.cpf}" filterBy="#{req.cpf}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{req.cpf}"/>                                           
+                </p:column>
+
+                <p:column headerText="Email" 
+                          sortBy="#{req.email}" filterBy="#{req.email}"  filterMatchMode="contains"
+                          width="20%" >
+                    <h:outputText value="#{req.email}"/>                                           
+                </p:column>
+
+                <p:column headerText="Telefone" filterStyle="max-width: 70px;"
+                          sortBy="#{req.telefone}" filterBy="#{req.telefone}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{req.telefone}"/>                                           
+                </p:column>
+
+                <p:column headerText="Celular" filterStyle="max-width: 70px;"
+                          sortBy="#{req.celular}" filterBy="#{req.celular}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{req.celular}"/>                                           
+                </p:column>         
+
+                <p:column exportable="false"  priority="1" headerText="Menu"
+                          width="5%" >
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+
+                        <p:menuitem value="Visualizar" update=":requerenteDetal" oncomplete="PF('requerenteDialog').show()" icon="ui-icon-search" title="Visualizar" rendered="true" >
+                            <f:setPropertyActionListener value="#{req}" target="#{requerenteBean.requerenteSelecionado}" />
+                        </p:menuitem>
+
+                        <p:menuitem value="Editar"  update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar" 
+                                    actionListener="#{requerenteBean.editar(req)}"   />                                
+
+                    </p:splitButton>
+                </p:column> 
+
+
+                <f:facet name="footer">
+
+                </f:facet>
+            </p:dataTable>
+
+        </h:form>
+
+
+
+        <!-- dialogAtendimento -->
+        <p:dialog header="Informações do Requerente" widgetVar="requerenteDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+            <p:outputPanel id="requerenteDetal">
+                <p:panelGrid style="width: 100%" rendered="#{not empty requerenteBean.requerentes}" columnClasses="label,value"  >
+
+                    <p:row>                       
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Código: " class="dialog" /> 
+                            <h:outputText value="#{requerenteBean.requerenteSelecionado.id}"/>
+                        </p:column>                            
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Nome" class="dialog" />
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerenteBean.requerenteSelecionado.nome}">
+
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="CPF" class="dialog" />
+
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerenteBean.requerenteSelecionado.cpf}"  >
+                                <f:convertDateTime pattern="HH:mm"/>                            
+                            </h:outputText>
+
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Telefone" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerenteBean.requerenteSelecionado.telefone}"/>                    
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="Celular" class="dialog" /> 
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerenteBean.requerenteSelecionado.celular}"/>  
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>
+                        <p:column rowspan="1">
+                            <h:outputText value="Email" class="dialog" />                       
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{requerenteBean.requerenteSelecionado.email}"/>                 
+                        </p:column>
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="1" colspan="4" style="text-align: center;">
+                            <h:outputText value="Descrição" class="dialog" /> 
+                        </p:column>                        
+                    </p:row> 
+
+                    <p:row>
+                        <p:column rowspan="3" colspan="4" >
+                            <h:outputText value="#{requerenteBean.requerenteSelecionado.observacao}"/>
+                        </p:column>    
+
+                    </p:row>
+
+                </p:panelGrid>
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogEditar -->
+        <p:dialog  widgetVar="editarDialog" header="Editar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="editarDetal"   >
+
+                <h:form id="editar">
+
+                    <p:growl id="messages" showDetail="true" /> 
+                    <div class="ui-fluid">
+
+                        <p:panelGrid  style="width: 100%" id="grid" class="corDialog" >
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" value="Nome " for="nome" />
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:inputText id="nome" value="#{requerenteBean.editaRequerente.nome}"  required="true" requiredMessage="Digite um nome" >
+                                        <p:message for="nome"/>
+                                    </p:inputText>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" for="cpf" value="CPF" />
+                                </p:column>
+                                <p:column rowspan="1">                                
+                                    <p:inputMask mask="999.999.999-99" id="cpf" value="#{requerenteBean.editaRequerente.cpf}"  required="true"  requiredMessage="Digite um CPF"  >
+                                        <p:message for="cpf"/>
+                                        <p:ajax update=":editar:messages btnSalvar " event="change"
+                                                listener="#{requerenteBean.status()}" />
+                                    </p:inputMask>
+
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" value="Telefone" for="tel" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputMask id="tel" value ="#{requerenteBean.editaRequerente.telefone}" mask="(99)9999-9999" size="55"  required="false" requiredMessage="Por favor, informe um telefone" >
+                                        <p:message for="tel"/>
+                                    </p:inputMask> 
+
+                                </p:column>
+
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" value="Celular " for="cel"/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputMask id="cel" value ="#{requerenteBean.editaRequerente.celular}" mask="(99)9.9999-9999"  size="55" >
+                                        <p:message for="cel"/>
+                                    </p:inputMask>
+                                </p:column>
+                            </p:row >
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" for="EndEmail" value="Email "/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputText id="EndEmail" value="#{requerenteBean.editaRequerente.email}" size="55" required="true" requiredMessage="Por favor, informe um email válido" >
+                                        <f:validateLength minimum="10" />
+                                        <p:message for="EndEmail"/>
+                                        <f:validator validatorId="validarEmail"/>
+                                        <p:ajax update=":editar:messages btnSalvar " event="change"
+                                                listener="#{requerenteBean.status()}" />
+                                    </p:inputText>
+                                </p:column>
+                            </p:row>
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="4" colspan="4">
+                                    <p:outputLabel class="colorDialog" value="Observação: " for="obs" />
+                                    <p:inputTextarea id="obs" counter="display" value="#{requerenteBean.editaRequerente.observacao}"  maxlength="255" counterTemplate="{0} Caracteres restantes." >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText id="display" class="colorDialog" />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+                    <p:commandButton id="btnSalvar" class="tamBtn"  update=":usuarios_form:requerente" ajax="true" value="Editar" action="#{requerenteBean.editarRequerente()}" icon="fa fa-edit" >
+
+
+                    </p:commandButton>     
+                </h:form>
+                
+                <h:form>
+                    <p:commandButton id="btnClose" style="float: right; bottom: 14px; background-color: #f03369;"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+                </h:form>
+
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogCadastrar -->
+        <p:dialog  widgetVar="cadastrarDialog"  header="Cadastrar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="cadastrarDetal" class="corDialog" >
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true" /> 
+                    <div class="ui-fluid">
+                        <p:panelGrid  style="width: 100%" id="grid" class="corDialog" >
+
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" value="Nome " for="nome" />
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:inputText id="nome" value="#{requerenteBean.requerente.nome}"  required="true" requiredMessage="Digite um nome" >
+                                        <p:message for="nome"/>
+                                    </p:inputText>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" for="cpf" value="CPF" />
+
+                                </p:column>
+                                <p:column rowspan="1">                       
+
+                                    <p:inputMask  mask="999.999.999-99" id="cpf" value="#{requerenteBean.requerente.cpf}"  required="true" requiredMessage="Digite um CPF" >
+                                        <p:ajax update="btnSalvar " event="change" 
+                                                listener="#{requerenteBean.status()}" />
+                                        <p:message for="cpf"/>
+                                    </p:inputMask>
+
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row class="corDialog" >
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" value="Telefone" for="tel" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputMask id="tel" value ="#{requerenteBean.requerente.telefone}" mask="(99)9999-9999"  size="55" required="false" requiredMessage="Por favor, informe um telefone" >
+                                        <p:message for="tel"/>
+                                    </p:inputMask> 
+
+                                </p:column>
+
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" value="Celular " for="cel"/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputMask id="cel" value ="#{requerenteBean.requerente.celular}" mask="(99)9.9999-9999" size="55" >
+                                        <p:message for="cel"/>
+                                    </p:inputMask>
+                                </p:column>
+                            </p:row >
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class="colorDialog" for="EndEmail" value="Email "/>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:inputText id="EndEmail" value="#{requerenteBean.requerente.email}" size="55"  required="true" requiredMessage="Por favor, informe um email válido" >
+                                        <f:validateLength minimum="10" />
+                                        <p:message for="EndEmail"/>
+                                        <f:validator validatorId="validarEmail"/>
+                                        <p:ajax update="btnSalvar " event="change" listener="#{requerenteBean.status()}" />
+                                    </p:inputText>
+                                </p:column>
+                            </p:row>
+
+                            <p:row class="corDialog" >
+
+                                <p:column rowspan="4" colspan="4">
+                                    <p:outputLabel class="colorDialog" value="Observação: " for="obs" />
+                                    <p:inputTextarea id="obs" counter="display" value="#{requerenteBean.requerente.observacao}"  maxlength="255" counterTemplate="{0} Caracteres restantes." >
+                                        <p:message for="obs"/>
+                                    </p:inputTextarea>
+                                    <br/>
+                                    <h:outputText id="display"  class="colorDialog" />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+
+                    <p:commandButton class="tamBtn" id="btnSalvar"  value="Salvar" disabled="#{requerenteBean.statusBotao}" action="#{requerenteBean.salvar()}"  update=":usuarios_form:requerente" ajax="true" icon="fa fa-save" />
+                </h:form>
+                
+                <h:form>
+                    <p:commandButton id="btnClose" style="float: right; bottom: 14px; background-color: #f03369;"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+
+    </ui:define>
+
+</ui:composition>

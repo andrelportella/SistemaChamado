@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" >
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="#{request.contextPath}/resources/imagens/avatar04.png" class="img-circle" alt="User Image" />
+                </div>
+                <div class="pull-left info">
+                    <p>#{loginBean.usuarioLogado()}</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>      
+
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu" >
+                <li class="header"> <h6><p:outputLabel value="Menu Principal"/> </h6></li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-home"></i> <span>Inicio</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="/SistemaChamadoBM/home.xhtml"> <i class="fa fa-home" ></i>Página Inicial</a></li>
+                        <li><a href="/SistemaChamadoBM/paginas/intranet/cadastrados/listaAniversariantes/aniversariantes.xhtml"><i class="fa fa-birthday-cake" ></i>Aniversáriantes do Mês</a></li>
+                        <li><a href="/SistemaChamadoBM/paginas/intranet/cadastrados/listaRamais/ramais.xhtml"><i class="fa fa-phone" ></i>Ramais / Email</a></li>
+                        <li><a href="/SistemaChamadoBM/paginas/intranet/cadastrados/listaNoticias/noticias.xhtml"><i class="fa fa-newspaper-o" ></i>Noticias</a></li>
+                    </ul>
+                </li>
+
+                <h:column rendered="#{loginBean.acesso.acessaPainelADM}">
+                    <li class="treeview" >
+                        <a href="#">
+                            <i class="fa fa-cogs"></i> <span>Painel ADM</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <h:column rendered="#{loginBean.acesso.acessaUsuario}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/usuarios/usuarios.xhtml"><i class="fa fa-user-plus" ></i>Usuários</a></li>
+                            </h:column>
+                            <h:column rendered="#{loginBean.acesso.acessaPerfil}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/perfis/perfis.xhtml"><i class="fa fa-male" ></i>Perfis</a></li>
+                            </h:column>
+                            <h:column rendered="#{loginBean.acesso.acessaNagios}">
+                                <li><a href="/SistemaChamadoBM/paginas/frames/nagios.xhtml"><i class="fa fa-server" ></i>Nagios</a></li>
+                            </h:column>
+                            <h:column rendered="#{loginBean.acesso.acessaParametros}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/parametros/parametros.xhtml"><i class="fa fa-cog" ></i>Parametros</a></li>
+                            </h:column>
+                        </ul>
+                    </li>                
+                </h:column>
+
+                <h:column rendered="#{loginBean.acesso.acessaMenuCadastro}">
+                    <li class="treeview" >
+                        <a href="#">
+                            <i class="fa fa-pencil-square-o"></i> <span>Cadastros</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <h:column rendered="#{loginBean.acesso.acessaBaseConhecimento}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/base/bases.xhtml"><i class="fa fa-book" ></i>Base de Conhecimento</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaCampos}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/campos/campos.xhtml"><i class="fa fa-database" ></i>Campos</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaEquipamentos}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/equipamentos/equipamentos.xhtml"><i class="fa fa-desktop" ></i>Equipamentos</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaFornecedores}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/fornecedores/fornecedores.xhtml"><i class="fa fa-users" ></i>Fornecedores</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaItens}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/produtos/produtos.xhtml"><i class="fa fa-cubes" ></i>Produtos</a></li>
+                            </h:column>
+                        </ul>
+                    </li>                
+                </h:column>
+
+                <h:column rendered="#{loginBean.acesso.acessaMenuChamado}">
+                    <li class="treeview" >
+                        <a href="#">
+                            <i class="fa fa-tasks"></i> <span>Tarefas</span>                         
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <h:column rendered="#{loginBean.acesso.acessaChamadosAgendados}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/tarefasAgendadas/tarefasAgendadas.xhtml"><i class="fa fa-list-alt" ></i>Agendadas</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaChamadosAdm}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/tarefasAdministrativas/tarefasAdministrativas.xhtml"><i class="fa fa-file-archive-o" ></i>Administrativas</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaChamados}">
+                                <li><a href="/SistemaChamadoBM/paginas/admin/cadastrados/tarefas/tarefas.xhtml"><i class="fa fa-wrench" ></i>Geral</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaDashChamado}">
+                                <li><a href="/SistemaChamadoBM/paginas/dashboards/chamado/dashboard.xhtml"><i class="fa fa-line-chart" ></i>Dashboard</a></li>
+                            </h:column>
+
+                        </ul>
+                    </li>                
+                </h:column>
+
+                <h:column rendered="#{loginBean.acesso.acessaMenuRequerimento}">
+                    <li class="treeview" >
+                        <a href="#">                            
+                            <i class="fa fa-paste"></i> 
+                            <span>Requerimentos</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <h:column rendered="#{loginBean.acesso.acessaRequerimentos}">
+                                <li><a href="/SistemaChamadoBM/paginas/requerimento/cadastrados/requerimentosCadastrados.xhtml"><i class="fa fa-fa-paste" ></i>Requerimentos</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaDashRequerimento}">
+                                <li><a href="/SistemaChamadoBM/paginas/dashboards/requerimento/principal.xhtml"><i class="fa fa-line-chart" ></i>Dashboard</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaAlertas}">
+                                <li><a href="/SistemaChamadoBM/paginas/requerimento/cadastrados/alertas.xhtml"><i class="fa fa-bell" ></i>Alertas</a></li>
+                            </h:column>
+
+                            <h:column rendered="#{loginBean.acesso.acessaCliente}">
+                                <li><a href="/SistemaChamadoBM/paginas/requerimento/cadastrados/clientesCadastrados.xhtml"><i class="fa fa-male" ></i>Clientes</a></li>
+                            </h:column>
+                            <h:column rendered="#{loginBean.acesso.acessaEmbarcacao}">
+                                <li><a href="/SistemaChamadoBM/paginas/requerimento/cadastrados/embarcacoes_lojasCadastrados.xhtml"><i class="fa fa-ship" ></i>#{loginBean.lojas}</a></li>
+                            </h:column>
+                            <h:column rendered="#{loginBean.acesso.acessaLocal}">
+                                <li><a href="/SistemaChamadoBM/paginas/requerimento/cadastrados/locaisCadastrados.xhtml"><i class="fa fa-location-arrow" ></i>Locais</a></li>
+                            </h:column>
+                            <h:column rendered="#{loginBean.acesso.acessaRequerente}">
+                                <li><a href="/SistemaChamadoBM/paginas/requerimento/cadastrados/requerentesCadastrados.xhtml"><i class="fa fa-line-user" ></i>Requerentes</a></li>
+                            </h:column>
+
+                        </ul>
+                    </li>                
+                </h:column>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Sidebar Menu -->
+
+
+
+
+
+</ui:composition>

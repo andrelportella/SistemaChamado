@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <ui:define name="corpo"> 
+
+
+        <title>Ramais</title>
+        <h:form id="ramais_form" >
+            <p:dataTable   filterDelay="800" draggableColumns="true"  reflow="true" value="#{ramaisBean.ramais}" id="ramais" var="ramal" paginator="true" resizableColumns="true" widgetVar="celRamal" 
+                           rows="10" rowsPerPageTemplate="10, 15, 20" rowKey="#{ramal.nome}"  selectionMode="single" selection="#{ramaisBean.ramalSelecionado}" 
+                           paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                           {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" 
+                           currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                                 - Página: {currentPage}/{totalPages}" style="width: 100%;" >
+
+                <f:facet name="header">
+                    Ramais
+                    <p:commandButton id="toggler" type="button" value="Colunas"  style="float:right;"  icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="ramais" trigger="toggler" >
+                        <p:ajax event="toggle" listener="#{ramaisBean.onToggle}" />
+                    </p:columnToggler>
+                    <p:commandButton  rendered="#{ramaisBean.rend}" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" value="Cadastrar" title="Cadastrar Ramal" styleClass="btnCadastrar" icon="fa fa-plus" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="ramais" fileName="ramais"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="ramais" fileName="ramais"/>
+                    </h:commandLink>
+                </f:facet>
+                <p:column headerText="Nome" 
+                          sortBy="#{ramal.nome}" filterBy="#{ramal.nome}" filterMatchMode="contains"
+                          width="25%" >
+                    <h:outputText value="#{ramal.nome}"/>
+                </p:column>
+
+                <p:column headerText="Email" 
+                          sortBy="#{ramal.email}" filterBy="#{ramal.email}" filterMatchMode="contains"
+                          width="25%" >
+                    <h:outputText value="#{ramal.email}"/>
+                </p:column>
+
+                <p:column headerText="Telefone" 
+                          sortBy="#{ramal.telefone}" filterBy="#{ramal.telefone}"  filterMatchMode="contains"
+                          width="10%" >
+                    <h:outputText value="#{ramal.telefone}"/>
+                </p:column>
+
+                <p:column headerText="Celular" 
+                          sortBy="#{ramal.celular}" filterBy="#{ramal.celular}"  filterMatchMode="contains"
+                          width="11%" >
+                    <h:outputText value="#{ramal.celular}"/>
+                </p:column>
+
+                <p:column headerText="Site"
+                          sortBy="#{ramal.empresa}" filterBy="#{ramal.empresa}"  filterMatchMode="contains"
+                          width="14%" >
+                    <h:outputText value="#{ramal.empresa}"/>
+                </p:column>
+                <p:column headerText="Setor"
+                          sortBy="#{ramal.setor}" filterBy="#{ramal.setor}"  filterMatchMode="contains"
+                          width="15%" >
+                    <h:outputText value="#{ramal.setor}"/>
+                </p:column>
+
+            </p:dataTable>            
+        </h:form>
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+    </ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,171 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <!-- dialogEditar -->
+    <p:dialog id="editarDetal" footer=""  widgetVar="editarDialog" header="Editar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="420" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel>
+            <h:form id="editar">                    
+                <div class="ui-fluid">
+                    <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+
+                        <p:row class="corDialog">
+                            <p:column rowspan="1"  >
+                                <p:outputLabel for="nome "  class="colorDialog" value="Nome " />
+                            </p:column>
+
+                            <p:column rowspan="1" >
+                                <p:inputText id="nome" value="#{softwareBean.editaSoftware.nome}"  required="true" requiredMessage="Digite um nome"  >
+                                    <p:message for="nome"/>
+                                    <f:validateLength maximum="255" />
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </p:column>
+
+
+
+                            <p:column rowspan="1">                                                                
+                                <p:outputLabel class="colorDialog" value="Tipo de Licença" for="tipoLic" />                                
+                            </p:column>
+                            <p:column rowspan="1">
+                                <p:selectOneMenu id="tipoLic" value="#{softwareBean.editaSoftware.cod_tipoLicenca}" autoWidth="true" required="true" requiredMessage="Informe o tipo de Licença" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue=" " itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{softwareBean.tipoLicenca}" var="lic" itemLabel="#{lic.descricao}" itemValue="#{lic.cod}" />
+                                    <p:message for="tipoLic"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+
+                        <p:row  class="corDialog" >
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Chave"  class="colorDialog" for="chave" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:inputText id="chave" value="#{softwareBean.editaSoftware.chave}"  required="false"   >
+                                    <p:message for="chave"/>
+                                    <f:validateLength maximum="255" />
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Data de Aquisição"  class="colorDialog" for="date" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="date"  pattern="dd/MM/yyyy" locale="pt_BR" mask="99/99/9999"  value="#{softwareBean.editaSoftware.dataAquisicao}" required="false" >
+                                    <p:message for="date"/>                                    
+                                </p:calendar>
+                            </p:column>
+                        </p:row>
+
+                        <p:row  class="corDialog" >
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Empresa"  class="colorDialog" for="emp" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu id="emp" value="#{softwareBean.editaSoftware.cod_empresa}" autoWidth="true" required="true" requiredMessage="Informe uma empresa" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemValue=" " itemLabel="::Selecione::"/>
+                                    <f:selectItems value="#{softwareBean.empresa}" var="empre" itemLabel="#{empre.descricao}" itemValue="#{empre.cod}" />
+                                    <p:message for="emp"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel value="N° Nota Fiscal"  class="colorDialog" for="numNF" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:inputText id="numNF"  value="#{softwareBean.editaSoftware.numNota}" required="false" >
+                                    <p:message for="numNF"/>                                    
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row  class="corDialog" >
+                            
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Validade"  class="colorDialog" for="val" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:calendar id="val"  pattern="dd/MM/yyyy" locale="pt_BR" mask="99/99/9999"  value="#{softwareBean.editaSoftware.validade}" required="false" >
+                                    <p:message for="val"/>                                    
+                                </p:calendar>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Arquivo"  class="colorDialog" for="fileUpload" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:fileUpload id="fileUpload" 
+                                              fileUploadListener="#{softwareBean.editUpload}"
+                                              mode="advanced" 
+                                              label="Escolher" uploadLabel="Enviar"
+                                              cancelLabel="Cancelar" 					
+                                              sizeLimit="10240000" 
+                                              invalidSizeMessage="O tamanho máximo permitido é de 10MB."
+                                              multiple="true" auto="true"                                                
+                                              dragDropSupport="true"  update="txtArq"
+                                              />
+                                <p:commandButton icon="fa fa-close" styleClass="tamBtnApagar" style="width: 50%; bottom:65px;  " update=":arquivoDetalEdit" oncomplete="PF('arquivoDialogEdit').show()" value="Apagar Arquivo" rendered="#{softwareBean.editaSoftware.anexoMovimento}" />
+                                <h:outputText id="txtArq"  class="colorDialog" escape="false" value="#{softwareBean.textoArquivo}"/>
+                            </p:column>
+
+                        </p:row>
+                        <p:row  class="corDialog" >
+                            <p:column rowspan="1">
+                                <p:outputLabel value="Status"  class="colorDialog" for="sa" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectBooleanButton   style="width: 50%" required="true" disabled="false" requiredMessage="Informe o Status do Atendimento" id="sa" onLabel="Ativo" offLabel="Inativo" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{softwareBean.editaSoftware.status}" >
+                                    <p:message for="sa"/>
+                                </p:selectBooleanButton>
+                            </p:column>
+
+
+                        </p:row>
+
+                        <p:row class="corDialog" >
+
+                            <p:column rowspan="4" colspan="4">
+                                <p:outputLabel class="colorDialog" value="Observação: " for="obs" />
+                                <p:inputTextarea id="obs" counter="display" value="#{softwareBean.editaSoftware.descricao}" maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true"  >
+                                    <p:message for="obs"/>
+                                </p:inputTextarea>
+                                <br/>
+                                <h:outputText class="colorDialog" id="display" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+                </div>
+
+                <br/>      
+
+                <p:commandButton  update=":software_form:software "  id="btnSalvar"  icon="fa fa-edit" action="#{softwareBean.editarSoftware()}"  value="Editar"  class="tamBtn" />
+            </h:form>
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

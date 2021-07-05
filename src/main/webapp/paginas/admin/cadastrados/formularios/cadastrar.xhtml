@@ -1,0 +1,66 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+    <p:dialog  footer="" widgetVar="cadastrarDialog"  header="Cadastrar"   resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="cadastrarDetal" class="corDialog"  >
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true" /> 
+                <p:panelGrid  columns="4"  columnClasses="label,value" id="grid" class="corDialog" style="width: 100%" >
+
+                    <p:outputLabel for="titulo" value="Titulo" class="colorDialog" /> 
+                    <p:inputText style="width: 90%" id="titulo" required="true" requiredMessage="Por favor, Informe um titulo!" value="#{formularioBean.formulario.titulo}">
+                        <p:messages for="titulo"/>
+                    </p:inputText>
+
+                    <p:outputLabel for="obs" value="Descrição" class="colorDialog" /> 
+                    <p:inputText style="width: 90%" id="obs" value="#{formularioBean.formulario.obs}">
+                        <p:messages for="obs"/>
+                    </p:inputText>
+
+
+                    <p:outputLabel for="cor" value="Cor do Formulário" class="colorDialog" /> 
+                    <p:colorPicker  id="cor" value="#{formularioBean.formulario.corFundo}" />
+
+                    <p:outputLabel class="colorDialog" for="booleanBtnET" value="Envia Email?" />                       
+                    <p:selectBooleanButton required="true" requiredMessage="Campo Obrigatório" value="#{formularioBean.formulario.enviaEmail}" id="booleanBtnET" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close">
+                        <p:ajax update="group1 group2" event="change" />
+                    </p:selectBooleanButton>
+                    
+                   
+                    <h:panelGroup id="group1" >
+                        <h:outputLabel rendered="#{formularioBean.formulario.enviaEmail}" for="acomp"  class="colorDialog" value="Acompanhar "/>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup id="group2" >
+                        <p:selectCheckboxMenu rendered="#{formularioBean.formulario.enviaEmail}" style="width: 90%" converter="javax.faces.Long" panelStyle="width:250px" multiple="true" label="Acompanhantes" id="acomp" value="#{formularioBean.formulario.listaAcompanhante}"  required="false" requiredMessage="Informe um Técnico" filter="true" filterMatchMode="contains" >
+                            <f:selectItems value="#{formularioBean.usuarios}" var="tec" itemLabel="#{tec.nome}" itemValue="#{tec.id}"  />
+                            <p:message for="acomp" />
+                        </p:selectCheckboxMenu>                    
+                    </h:panelGroup>
+                    
+                </p:panelGrid>
+
+                <br/>
+                <p:commandButton id="btnSalvar" value="Salvar" action="#{formularioBean.salvar()}" update="grid :formLista:campos" icon="fa fa-save"  ajax="true" class="tamBtn" />
+
+            </h:form>    
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

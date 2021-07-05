@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="corpo">
+        <title>Softwares Cadastrados</title>      
+        <h:form id="software_form">
+            <p:dataTable   draggableColumns="true" filterDelay="800" rendered="#{loginBean.acesso.acessaSoftware}" reflow="true" value="#{softwareBean.softwares}" id="software" var="req" paginator="true" resizableColumns="true" widgetVar="celSoftware"  
+                           rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{req.id}"  selectionMode="single" selection="#{softwareBean.softwareSelecionado}" 
+                           paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                           {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" 
+                           currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                           - Página: {currentPage}/{totalPages}" >
+
+                <f:facet name="header">
+                    Softwares
+                    <p:commandButton class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="software" trigger="toggler" >
+                        <p:ajax event="toggle" listener="#{softwareBean.onToggle}" />
+                    </p:columnToggler> 
+                    <p:commandButton action="#{softwareBean.anexaArquivo()}" value="Cadastrar" update=":cadastrarDetal"  oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar" styleClass="btnCadastrar" />
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="software" fileName="bases" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="software" fileName="bases" />
+                    </h:commandLink>
+                </f:facet>
+
+                <p:column headerText="ID" priority="8"   exportable="#{softwareBean.list[0]}" visible="#{softwareBean.list[0]}" 
+                          sortBy="#{req.id}" filterBy="#{req.id}"  filterMatchMode="contains"
+                          width="5%" >
+                    <h:outputText value="#{req.id}"/>                                           
+                </p:column>
+
+                <p:column headerText="Nome"  priority="8" exportable="#{softwareBean.list[1]}" visible="#{softwareBean.list[1]}" 
+                          sortBy="#{req.nome}" filterBy="#{req.nome}" filterMatchMode="contains"
+                          width="15%" >                    
+                    <h:outputText value="#{req.nome}"/>      
+                </p:column>
+
+                <p:column headerText="Data Aquisicao"  exportable="#{softwareBean.list[2]}" visible="#{softwareBean.list[2]}" 
+                          sortBy="#{req.dataAquisicao}" filterBy="#{req.dataAquisicao}"  filterMatchMode="contains"
+                          width="8%" >
+                    <h:outputText value="#{req.dataAquisicao}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Validade"   exportable="#{softwareBean.list[3]}" visible="#{softwareBean.list[3]}" 
+                          sortBy="#{req.validade}" filterBy="#{req.validade}"  filterMatchMode="contains"  id="tecPesquisa" 
+                          width="8%" >
+                    <h:outputText value="#{req.validade}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>                                           
+                </p:column>
+
+                <p:column headerText="Empresa"  exportable="#{softwareBean.list[4]}" visible="#{softwareBean.list[4]}" 
+                          sortBy="#{req.empresa}" filterBy="#{req.empresa}"  filterMatchMode="contains"  
+                          width="10%" >
+                    <h:outputText value="#{req.empresa}"/>                                           
+                </p:column>
+
+
+                <p:column headerText="Tipo Licenca"  priority="8" exportable="#{softwareBean.list[5]}" visible="#{softwareBean.list[5]}" 
+                          sortBy="#{req.tipoLicenca}" filterBy="#{req.tipoLicenca}" filterMatchMode="contains"
+                          width="10%" >                    
+                    <h:outputText value="#{req.tipoLicenca}"/>      
+                </p:column>
+
+                <p:column headerText="Descricao"  priority="8" exportable="#{softwareBean.list[6]}" visible="#{softwareBean.list[6]}" 
+                          sortBy="#{req.descricao}" filterBy="#{req.descricao}" filterMatchMode="contains"
+                          width="20%" >                    
+                    <h:outputText value="#{req.descricao}"/>      
+                </p:column>
+
+                <p:column headerText="N° NF"  priority="8" exportable="#{softwareBean.list[7]}" visible="#{softwareBean.list[7]}" 
+                          sortBy="#{req.numNota}" filterBy="#{req.numNota}" filterMatchMode="contains"
+                          width="10%" >                    
+                    <h:outputText value="#{req.numNota}"/>      
+                </p:column>
+
+                <p:column headerText="Chave"  priority="8" exportable="#{softwareBean.list[8]}" visible="#{softwareBean.list[8]}" 
+                          sortBy="#{req.chave}" filterBy="#{req.chave}" filterMatchMode="contains"
+                          width="10%" >                    
+                    <h:outputText value="#{req.chave}"/>      
+                </p:column>
+
+                <p:column headerText="Equipamento"  priority="9" exportable="#{softwareBean.list[9]}" visible="#{softwareBean.list[9]}" 
+                          sortBy="#{req.nomeEquipamento}" filterBy="#{req.nomeEquipamento}" filterMatchMode="contains"
+                          width="25%" >                    
+                    <h:outputText value="#{req.nomeEquipamento}"/>      
+                </p:column>
+
+                <p:column exportable="false" visible="#{softwareBean.list[10]}"  priority="1" headerText="Menu"
+                          width="5%" >    
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >                    
+                        <p:menuitem action="#{softwareBean.editar(req)}" value="Editar" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar" />
+                        <p:menuitem action="#{softwareBean.duplicar(req)}" value="Duplica Registro" update="software" icon="fa fa-copy" title="Duplicar" >
+                            <p:confirm header="Confirmação"   class="dialog" message="Você tem certeza que deseja duplicar o Software? " icon="ui-icon-alert" />
+                        </p:menuitem>
+                        <p:menuitem action="#{softwareBean.listaEquipamento(req.id)}" value="Equipamento Vinculado"  oncomplete="PF('equiDialogInfor').show()" update=":equipamentoDetal" icon="fa fa-desktop" title="Visualizar" />
+                    </p:splitButton>
+                </p:column>                              
+
+            </p:dataTable>          
+        </h:form>  
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+        <!-- arquivoDialog arquivoDialogEdit -->
+        <ui:include src="arquivo.xhtml"/>
+
+        <!-- equiDialogInfor -->
+        <ui:include src="equipamento.xhtml"/>
+    </ui:define>       
+
+</ui:composition>

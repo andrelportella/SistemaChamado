@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+              >
+    
+    <p:dialog  widgetVar="cadastrarNatDialog"  header="Cadastrar Natureza "  position="center" resizable="false" class="corDialog2"   maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" >
+
+        <p:outputPanel id="cadastrarNatDetal" class="corDialog2" >
+            <h:form id="formNat">
+                <p:growl id="messages" showDetail="true" /> 
+
+                <p:panelGrid  id="grid" class="corDialog2" >
+
+                    <p:row class="corDialog2">
+                        <p:column rowspan="1">
+                            <p:outputLabel class="colorDialog"  value="Tabela Cadastro " for="tab" />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:selectOneMenu id="tab" value="#{requerimentoBean.cadNatureza.tabela}" style="width:50%;" >
+                                <f:selectItem itemValue="18" itemLabel="18 - Natureza"/>
+                                <p:message for="tab"/>
+
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel class="colorDialog"  value="Descrição da Natureza: " for="desc" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="desc" value="#{requerimentoBean.cadNatureza.descricao}" size="55"  required="true" requiredMessage="Descrição do Item Obrigatório" style="width:85%;" >
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:commandButton id="btnSalvar" value="Salvar" action="#{requerimentoBean.atualizaCampos()}" disabled="#{camposBean.statusBotao}"  update="grid messages :form:nat  :form_editar:nat " icon="fa fa-save" ajax="true" onclick="PrimeFaces.monitorDownload(start, stop);" />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+
+            </h:form>    
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

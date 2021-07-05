@@ -1,0 +1,206 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+    <p:dialog footer=""  widgetVar="editarDialog" header="Editar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="editarDetal"   >
+            <h:form id="editar">
+                <div class="ui-fluid">
+                      <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+                        <p:row class="corDialog">
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Nome" for="nome"   />
+                            </p:column>                            
+
+                            <p:column rowspan="1" >
+                                <p:inputText id="nome" value="#{usuarioBean.editaUsuario.nome}" size="55" required="true" requiredMessage="Por favor, informe um nome válido" >
+                                    <f:validateLength minimum="3" />
+                                    <p:message for="nome"/>
+                                </p:inputText>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Email " for="EndEmail"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:inputText id="EndEmail" value="#{usuarioBean.editaUsuario.email}" size="55"   required="true" requiredMessage="Por favor, informe um email válido" >
+                                    <f:validateLength minimum="10" />
+                                    <p:message for="EndEmail"/>
+                                    <f:validator validatorId="validarEmail"/>
+                                </p:inputText>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row class="corDialog">
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Telefone " for="tel" />
+                            </p:column>                            
+
+                            <p:column rowspan="1" >
+                                <p:inputMask id="tel" value ="#{usuarioBean.editaUsuario.telefone}" mask="(99)9999-9999" size="55"  required="true" requiredMessage="Por favor, informe um telefone" >
+                                    <p:message for="tel"/>
+                                </p:inputMask>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Celular " for="cel" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:inputMask id="cel" value ="#{usuarioBean.editaUsuario.celular}" mask="(99)9.9999-9999"  size="55"  >
+                                    <p:message for="cel"/>
+                                </p:inputMask>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row class="corDialog">
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Login" for="login" />
+                            </p:column>                            
+
+                            <p:column rowspan="1" >
+                                <p:inputText id="login" value ="#{usuarioBean.editaUsuario.login}" size="55" disabled="true" required="true" requiredMessage="Por favor, informe um login válido" >
+                                    <p:message for="login"/>
+                                </p:inputText>
+                            </p:column>
+
+                             <p:column rowspan="1" >                                
+                                <p:outputLabel class="colorDialog" value="Ramal " for="ramal" />
+                            </p:column>
+
+                            <p:column rowspan="1">                                
+                                <p:inputMask id="ramal" value ="#{usuarioBean.editaUsuario.ramal}" mask="9999" size="55"   required="false" requiredMessage="Por favor, informe um ramal" >
+                                    <p:message for="ramal"/>
+                                </p:inputMask>
+                            </p:column>  
+
+                        </p:row>
+
+                        <p:row class="corDialog">
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Site  " for="site" />
+                            </p:column>                            
+
+                            <p:column rowspan="1" >
+                                <p:selectOneMenu id="site" value="#{usuarioBean.editaUsuario.cod_site}" autoWidth="true" required="true" >
+                                    <f:selectItems value="#{usuarioBean.site}" var="site" itemLabel="#{site.descricao}" itemValue="#{site.cod}" />
+                                    <p:message for="site"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Setor  " for="setor"/>
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" id="setor" value="#{usuarioBean.editaUsuario.cod_setor}" autoWidth="true" required="true" >
+                                    <f:selectItems value="#{usuarioBean.setor}" var="setor" itemLabel="#{setor.descricao}" itemValue="#{setor.cod}" />
+                                    <p:message for="setor"/>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row class="corDialog">
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Perfil " for="perfil" />
+                            </p:column>                            
+
+                            <p:column rowspan="1" >
+                                <p:selectOneMenu id="perfil" value="#{usuarioBean.editaUsuario.cod_perfil}" autoWidth="true" required="true" requiredMessage="Informe um Perfil" filter="true" filterMatchMode="contains" >
+                                    <f:selectItems value="#{usuarioBean.perfis}" var="perfil" itemLabel="#{perfil.tipoPerfil}" itemValue="#{perfil.id}" />
+                                    <p:message for="perfil" />
+                                </p:selectOneMenu> 
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" for="booleanBtn" value="Status " />
+                            </p:column>                            
+
+                            <p:column rowspan="1" >
+                                <p:selectBooleanButton id="booleanBtn" onLabel="Ativo" offLabel="Inativo" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{usuarioBean.editaUsuario.status}" required="true" style="width: 50%" >
+                                    <p:message for="booleanBtn"/>
+                                </p:selectBooleanButton>
+
+                            </p:column>
+                        </p:row>
+
+                        <p:row class="corDialog">
+
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Técnico Requerimento" for="tecReq" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectBooleanCheckbox  id="tecReq"  value="#{usuarioBean.editaUsuario.tecnicoRequerimento}" /> 
+                            </p:column>
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Técnico Chamado" for="tecChamado" />
+                            </p:column>                            
+
+                            <p:column rowspan="1" >
+                                <p:selectBooleanCheckbox  id="tecChamado"  value="#{usuarioBean.editaUsuario.tecnicoChamado}" />
+                            </p:column>
+                        </p:row>
+                        <p:row class="corDialog">
+                            <p:column rowspan="1">
+                                <p:outputLabel class="colorDialog" value="Técnico Administrativo" for="tecAdm" />
+                            </p:column>
+
+                            <p:column rowspan="1">
+                                <p:selectBooleanCheckbox  id="tecAdm"  value="#{usuarioBean.editaUsuario.tecnicoAdministrativo}" />
+                            </p:column>
+
+                                                    
+                        </p:row>
+
+                        <p:row class="corDialog" >
+                            <p:column rowspan="4" colspan="4">
+                                <p:outputLabel  class="colorDialog" value="Observação: " for="obs"  />
+                                <p:inputTextarea id="obs" counter="display" value="#{usuarioBean.editaUsuario.descricao}"  maxlength="255" counterTemplate="{0} Caracteres restantes." autoResize="true" required="false" requiredMessage="Por favor, insira uma observação com no mínimo 3 caracteres." minQueryLength="0" >
+                                    <p:message for="obs"/>
+                                </p:inputTextarea>
+                                <br/>
+                                <h:outputText  class="colorDialog"  id="display" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+                </div>
+                <br/>
+
+                <p:commandButton value="Editar" action="#{usuarioBean.editar}" icon="fa fa-edit" update=":usuarios_form:usuarios" ajax="true" class="tamBtn" />
+
+
+            </h:form>
+
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

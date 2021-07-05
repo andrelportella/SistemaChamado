@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                > 
+
+    <p:dialog footer=""  modal="false" widgetVar="niverDialog"  header="Aniversariantes" resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="450" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="niverDetal"  >
+            <h:form id="aniversario_form_dialog" >                                
+                <p:dataTable    filterDelay="800" draggableColumns="true"  reflow="true" value="#{aniversarianteBean.todosAniversariantes}" id="aniversariantes" var="niver" paginator="true" resizableColumns="true" widgetVar="celNiver" 
+                                rows="100" rowsPerPageTemplate="10, 15, 20" rowKey="#{niver.nome}"  selectionMode="single" selection="#{aniversarianteBean.niverSelecionado}" 
+                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                                {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}">
+                    <f:facet name="header">
+
+                        <p:commandButton id="toggler" type="button" value="Colunas"  style="float:right;"  icon="ui-icon-calculator"   />
+                        <p:columnToggler datasource="aniversariantes" trigger="toggler" >
+                            <p:ajax event="toggle" listener="#{aniversarianteBean.onToggle}" />
+                        </p:columnToggler>                    
+                    </f:facet> 
+
+                    <f:facet name="{Exporters}">
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                            <p:dataExporter type="xls" target="aniversariantes" fileName="aniversariantes"  />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                            <p:dataExporter type="pdf" target="aniversariantes" fileName="aniversariantes"/>
+                        </h:commandLink>
+                    </f:facet>
+
+                    <p:column headerText="Nome" 
+                              sortBy="#{niver.nome}" filterBy="#{niver.nome}" filterMatchMode="contains"
+                              width="40%" >
+                        <h:outputText value="#{niver.nome}"/>
+                    </p:column>
+                    <p:column headerText="Data" 
+                              sortBy="#{niver.dataAniversario}" filterBy="#{niver.dataAniversario}"  filterMatchMode="contains"
+                              width="20%">
+                        <h:outputText value="#{niver.dataAniversario}"/>
+                    </p:column>
+                    <p:column headerText="Empresa"
+                              sortBy="#{niver.empresa}" filterBy="#{niver.empresa}"  filterMatchMode="contains"
+                              width="30%" >
+                        <h:outputText value="#{niver.empresa}"/>
+                    </p:column>
+
+                </p:dataTable>            
+
+            </h:form>
+        </p:outputPanel>
+    </p:dialog>
+</ui:composition>

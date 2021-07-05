@@ -1,0 +1,48 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+
+    <h:form>  
+
+
+        <p:menubar autoDisplay="false" >
+
+
+            <p:submenu label="Home" icon="fa fa-home"  >
+                <p:menuitem value="Página Inicial"  outcome="/home" icon="fa fa-home"  />
+                <p:menuitem value="Aniversariantes do Mês"   outcome="/paginas/intranet/cadastrados/listaAniversario" icon="fa fa-birthday-cake" />
+                <p:menuitem value="Ramais / Email"  outcome="/paginas/intranet/cadastrados/listaRamais" icon="fa fa-phone" />
+                <p:menuitem value="Noticias"  outcome="/paginas/intranet/cadastrados/listaNoticias" icon="fa fa-newspaper-o" /> 
+            </p:submenu>
+
+            <p:submenu label="Cadastros" icon="ui-icon-pencil"  >
+                <p:menuitem value="Campos" icon="fa fa-database" outcome="/paginas/admin/cadastrados/camposCadastrados"  />
+                <p:menuitem value="Equipamentos" icon="fa fa-desktop" outcome="/paginas/admin/cadastrados/equipamentosCadastrados"  />
+                <p:menuitem value="Fornecedores" icon="fa fa-users" outcome="/paginas/admin/cadastrados/fornecedoresCadastrados" />
+                <p:menuitem value="Item" icon="fa fa-keyboard-o" outcome="/paginas/admin/cadastrados/itensCadastrados" />
+                <p:menuitem value="Técnicos" icon="fa fa-user-secret" outcome="/paginas/admin/cadastrados/tecnicosCadastrados" />
+                <p:menuitem value="Usuários" icon="fa fa-user-plus"  outcome="/paginas/admin/cadastrados/usuariosCadastrados" />
+            </p:submenu>
+
+            <p:submenu label="Chamados">
+                <p:menuitem value="Chamado" icon="fa fa-wrench" outcome="/paginas/admin/cadastrados/atendimentosCadastrados" />                
+            </p:submenu>
+
+            <p:submenu label="Requerimentos" rendered="false"  >
+                <p:menuitem value="Requerimentos" icon="fa fa-bullhorn" outcome="/paginas/requerimento/cadastrados/requerimentosCadastrados" />
+                <p:menuitem value="Clientes" icon="fa fa-male" outcome="/paginas/requerimento/cadastrados/clientesCadastrados" />
+                <p:menuitem value="Embarcação | Loja " icon="fa fa-ship" outcome="/paginas/requerimento/cadastrados/embarcacoes_lojasCadastrados"  />
+                <p:menuitem value="Local" icon="fa fa-location-arrow" outcome="/paginas/requerimento/cadastrados/locaisCadastrados" />
+                <p:menuitem value="Requerentes" icon="fa fa-user" outcome="/paginas/requerimento/cadastrados/requerentesCadastrados" />                
+                <p:menuitem value="Alertas" icon="fa fa-bell" outcome="/paginas/requerimento/cadastrados/alertas" />
+            </p:submenu>           
+        </p:menubar>
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<ehcache>
+    <diskStore path="java.io.tmpdir"/>
+    <defaultCache
+        maxElementsInMemory="100"
+        eternal="false"
+        timeToIdleSeconds="60"
+        timeToLiveSeconds="120"
+        overflowToDisk="false"
+    />
+    <!--
+    <cache name="embasa.copa.model.MotivoUrgencia"
+           maxElementsInMemory="20"
+           eternal="false"
+           timeToIdleSeconds="30"
+           timeToLiveSeconds="60"
+           overflowToDisk="false"
+    />
+    -->  
+</ehcache>

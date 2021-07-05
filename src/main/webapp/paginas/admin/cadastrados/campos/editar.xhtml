@@ -1,0 +1,49 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:pm="http://primefaces.org/mobile">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+
+    <p:dialog  footer="" widgetVar="editarDialog" header="Editar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+        <p:outputPanel id="editarDetal"   >
+
+            <h:form id="editar" >
+
+                <p:panelGrid  id="grid"  style="width: 100%;"  class="corDialog"  >
+                    <p:row>
+                        <p:column rowspan="1">
+                            <p:outputLabel value="Descrição: "  class="colorDialog" for="desc" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText class="tamInput" id="desc"  style="width: 100%;" value="#{camposBean.editaCampos.descricao}" size="55" required="true" requiredMessage="Descrição do Item Obrigatório" >
+                                <p:message for="desc"/>
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+
+                <br/>
+
+                <p:commandButton value="Editar" action="#{camposBean.editarCampos()}" update="grid :formLista:campos"  icon="fa fa-edit" ajax="true" class="tamBtn" />
+
+            </h:form>
+            <h:form>
+                <p:commandButton id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+            </h:form>
+
+        </p:outputPanel>
+    </p:dialog>
+
+
+</ui:composition>

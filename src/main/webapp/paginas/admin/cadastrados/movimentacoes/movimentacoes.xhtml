@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="corpo">
+
+        <title>Movimentações Diárias</title>
+        <h:form id="movimentacao_form">
+            <p:dataTable filterDelay="800" reflow="true" rendered="#{loginBean.acesso.acessaMovimentacao}" value="#{movimentacaoBean.movimentacoes}"  emptyMessage="Não há registros!" id="movimentacao" var="mov" paginator="true"   
+                         rows="10" rowsPerPageTemplate="5, 10, 15, 20,50,100"  rowKey="#{mov.id}" selectionMode="single" selection="#{movimentacaoBean.atendimentoSelecionado}" 
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"  >                        
+                <f:facet name="header">
+                    Movimentações do Dia
+                </f:facet>
+
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="movimentacao" fileName="movimentacao"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="movimentacao" fileName="movimentacao"  />
+                    </h:commandLink>
+                </f:facet>   
+                <p:column headerText="Ticket" width="6%" 
+                          sortBy="#{mov.id_atendimento.id}" filterBy="#{mov.id_atendimento.id}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.id_atendimento.id}"/>
+                </p:column>
+
+                <p:column headerText="Especie" width="15%" 
+                          sortBy="#{mov.tipoAtendimento}" filterBy="#{mov.tipoAtendimento}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.tipoAtendimento}"/>
+                </p:column>
+
+                <p:column headerText="Data" width="7%" 
+                          sortBy="#{mov.dataMovimento}" filterBy="#{mov.dataMovimento}"  filterMatchMode="contains"                          
+                          >
+
+                    <h:outputText value="#{mov.dataMovimento}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column headerText="Solicitante" width="10%" 
+                          sortBy="#{mov.id_atendimento.solicitante}" filterBy="#{mov.id_atendimento.solicitante}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.id_atendimento.solicitante}"/>
+                </p:column>
+
+                <p:column headerText="Técnico" width="10%" 
+                          sortBy="#{mov.tecnico}" filterBy="#{mov.tecnico}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.tecnico}"/>
+                </p:column>
+
+                <p:column headerText="Categoria" width="15%" 
+                          sortBy="#{mov.id_atendimento.categoria}" filterBy="#{mov.id_atendimento.categoria}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.id_atendimento.categoria}"/>
+                </p:column>
+                
+                <p:column headerText="Produto" width="10%" 
+                          sortBy="#{mov.produto}" filterBy="#{mov.produto}"  filterMatchMode="contains"
+                          >
+                    <h:outputText value="#{mov.produto}"/>
+                </p:column>
+
+                <p:column headerText="Observação"  width="25%" 
+                          sortBy="#{mov.observacao}" filterBy="#{mov.observacao}"  filterMatchMode="contains"
+                          >
+                    <p:inputTextarea readonly="true" style="width:95%" value="#{mov.observacao}" />
+                </p:column>
+
+                <p:column headerText="Menu"  width="5%" exportable="false" >                                                    
+                    <p:splitButton value=" "  title="Opções"  style="height: 15px; width: 5px;" >
+                        <p:menuitem value="Visualizar" update=":movimentacao_form:atendimentoDetal" oncomplete="PF('atendimentoDialog').show()" icon="ui-icon-search" title="Visualizar" rendered="true" action="#{movimentacaoBean.visualizaAtendimento(mov)}" />
+                        <p:menuitem update=":movimentacao_form:arquivoDetalHis" oncomplete="PF('arquivoDialogHis').show()"  icon="fa fa-download" value="Download" action="#{movimentacaoBean.listarArquivos(mov)}" rendered="#{mov.anexoMovimento}"  />                        
+                    </p:splitButton>
+                </p:column>
+
+
+                <p:ajax update=":movimentacao_form:movimentosDetal" event="rowDblselect"  oncomplete="PF('movimentosDialog').show()" 
+                        listener="#{movimentacaoBean.listaMovimentosSelecionado(movimentacaoBean.atendimentoSelecionado)}" 
+                        />
+            </p:dataTable>
+
+            <!-- arquivoDialog -->
+            <ui:include src="arquivo.xhtml"/>    
+
+            <!-- dialogHistorico -->
+            <ui:include src="historico.xhtml"/>
+
+            <!-- dialogAtendimento -->
+            <ui:include src="visualizar.xhtml"/>
+
+        </h:form>
+    </ui:define>       
+
+</ui:composition>

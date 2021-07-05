@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                >
+
+    <p:dialog styleClass="corDialog2" widgetVar="cadastrarReqDialog"  header="Cadastrar Requerente"  position="center" resizable="true" maximizable="false" minimizable="true"  closeOnEscape="true" draggable="false" class="corDialog2"  >
+
+        <p:outputPanel id="cadastrarReqDetal" class="corDialog2" >
+            <h:form id="formReq"  >
+                <p:growl id="messages" showDetail="true" /> 
+                <p:panelGrid  id="grid" class="corDialog2" >
+
+                    <p:row class="corDialog2">
+                        <p:column rowspan="1">
+                            <p:outputLabel class="colorDialog"  value="Nome " for="nome" />
+                        </p:column>
+
+                        <p:column rowspan="1" >
+                            <p:inputText id="nome" value="#{requerimentoBean.cadRequerente.nome}"  required="true" style="width:85%;" requiredMessage="Digite um nome" >
+                                <p:message for="nome"/>
+                            </p:inputText>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:outputLabel class="colorDialog"  for="cpf" value="CPF" />
+
+                        </p:column>
+                        <p:column rowspan="1">                       
+
+                            <p:inputMask  mask="999.999.999-99" id="cpf" value="#{requerimentoBean.cadRequerente.cpf}"  required="true" style="width:85%;" requiredMessage="Digite um CPF" >
+                                <p:ajax update="btnSalvar " event="change" 
+                                        listener="#{requerimentoBean.status()}" />
+                                <p:message for="cpf"/>
+                            </p:inputMask>
+
+                        </p:column>
+
+                    </p:row>
+
+                    <p:row class="corDialog2" >
+                        <p:column rowspan="1">
+                            <p:outputLabel class="colorDialog"  value="Telefone" for="tel" />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputMask id="tel" value ="#{requerimentoBean.cadRequerente.telefone}" mask="(99)9999-9999"  size="55"  style="width:85%;" required="false" requiredMessage="Por favor, informe um telefone" >
+                                <p:message for="tel"/>
+                            </p:inputMask> 
+
+                        </p:column>
+
+
+                        <p:column rowspan="1">
+                            <p:outputLabel class="colorDialog"  value="Celular " for="cel"/>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputMask id="cel" value ="#{requerimentoBean.cadRequerente.celular}" mask="(99)9.9999-9999" size="55" style="width:85%;" >
+                                <p:message for="cel"/>
+                            </p:inputMask>
+                        </p:column>
+                    </p:row >
+
+                    <p:row class="corDialog2" >
+
+                        <p:column rowspan="1">
+                            <p:outputLabel class="colorDialog"  for="EndEmail" value="Email "/>
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <p:inputText id="EndEmail" value="#{requerimentoBean.cadRequerente.email}" size="55" style="width:85%;"  required="true" requiredMessage="Por favor, informe um email válido" >
+                                <f:validateLength minimum="10" />
+                                <p:message for="EndEmail"/>
+                                <f:validator validatorId="validarEmail"/>
+                                <p:ajax update="btnSalvar " event="change"
+                                        listener="#{requerimentoBean.status()}" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row class="corDialog2" >
+
+                        <p:column rowspan="4" colspan="4">
+                            <p:outputLabel class="colorDialog"  value="Observação: " for="obs" />
+                            <p:inputTextarea id="obs" counter="display" value="#{requerimentoBean.cadRequerente.observacao}"  style="width:95%;" maxlength="255" counterTemplate="{0} Caracteres restantes." >
+                                <p:message for="obs"/>
+                            </p:inputTextarea>
+                            <br/>
+                            <h:outputText id="display" />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+                <br/>
+
+
+                <br/>
+                <p:commandButton ajax="true"  action="#{requerimentoBean.atualizaCampos()}" update="grid :form:reque  :form_editar:nat " id="btnSalvar" value="Salvar" disabled="#{requerimentoBean.statusBotao}" />
+
+
+
+            </h:form>    
+        </p:outputPanel>
+    </p:dialog>    
+</ui:composition>

@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <ui:define name="corpo" > 
+
+        <title>Perfis Cadastrados</title>  
+
+        <h:form id="perfis_form">
+
+            <p:dataTable rendered="#{loginBean.acesso.acessaPerfil}" reflow="true" value="#{controleAcessoBean.perfis}" id="perfis" var="campo" paginator="true" widgetVar="perfisTable"
+                         rows="10" rowsPerPageTemplate="5,10, 15, 20,50,100"  
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" 
+                         currentPageReportTemplate="{startRecord} a {endRecord} total {totalRecords}
+                                                            - Página: {currentPage}/{totalPages}" style="width: 100%;" >
+
+                <f:facet name="header">
+                    Perfis Cadastrados
+                    <p:commandButton  class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="perfis" trigger="toggler" /> 
+                    <p:commandButton value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar Perfil" styleClass="btnCadastrar" />
+                </f:facet> 
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_xls.png" width="24" style="margin-top:10px;"/>
+                        <p:dataExporter type="xls" target="perfis" fileName="perfis"  />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="imagens" name="exportar_pdf.png" width="24" style="margin-top:10px;" />
+                        <p:dataExporter type="pdf" target="perfis" fileName="perfis"/>
+                    </h:commandLink>
+                </f:facet>
+                <p:column headerText="Código"  
+                          sortBy="#{campo.id}" filterBy="#{campo.id}"  filterMatchMode="contains"
+                          width="5%" >
+                    <h:outputText value="#{campo.id}"/>
+                </p:column>
+
+
+                <p:column headerText="Nome Perfil"
+                          sortBy="#{campo.tipoPerfil}" filterBy="#{campo.tipoPerfil}"  filterMatchMode="contains"
+                          width="20%" >
+                    <h:outputText value="#{campo.tipoPerfil}"/>
+                </p:column>
+
+                <p:column headerText="Painel ADM"
+                          sortBy="#{campo.acessaPainelADM}" filterBy="#{campo.acessaPainelADM}"  filterMatchMode="contains"
+                          width="5%" >
+                    <h:outputText value="#{campo.acessaPainelADM? 'Sim' : 'Não'}"/>
+                </p:column>
+
+                <p:column headerText="Cadastro"
+                          sortBy="#{campo.acessaMenuCadastro}" filterBy="#{campo.acessaMenuCadastro}"  filterMatchMode="contains"
+                          width="5%" >
+                    <h:outputText value="#{campo.acessaMenuCadastro? 'Sim' : 'Não'}"/>
+                </p:column>
+
+                <p:column headerText="Chamado" 
+                          sortBy="#{campo.acessaMenuChamado}" filterBy="#{campo.acessaMenuChamado}"  filterMatchMode="contains"
+                          width="5%" >
+                    <h:outputText value="#{campo.acessaMenuChamado? 'Sim' : 'Não'}"/>
+                </p:column>
+
+                <p:column headerText="Requerimento" 
+                          sortBy="#{campo.acessaMenuRequerimento}" filterBy="#{campo.acessaMenuRequerimento}"  filterMatchMode="contains"
+                          width="6%" >
+                    <h:outputText value="#{campo.acessaMenuRequerimento? 'Sim' : 'Não'}"/>
+                </p:column>
+
+                <p:column exportable="false"  priority="1" headerText="Menu"
+                          width="2%" >    
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+
+                        <p:menuitem value="Editar" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar"
+                                    action="#{controleAcessoBean.editar(campo)}" />
+                    </p:splitButton>
+                </p:column>
+
+            </p:dataTable>
+
+        </h:form>     
+
+        <!-- dialogCadastrar -->
+        <ui:include src="cadastrar.xhtml"/>
+
+        <!-- dialogEditar -->
+        <ui:include src="editar.xhtml"/>
+
+    </ui:define>
+
+</ui:composition>
+

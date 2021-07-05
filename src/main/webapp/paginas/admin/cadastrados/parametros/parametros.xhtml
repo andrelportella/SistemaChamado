@@ -1,0 +1,236 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+
+
+    <ui:define name="corpo" >
+        <title>Parametros</title>
+        <h:form id="form" >
+
+            <div class="ui-fluid">
+                <p:tabView rendered="#{loginBean.acesso.acessaParametros}" id="tabView" dynamic="true" style="background-color:#87CEFA;" cache="true" effect="fold" >
+
+                    <p:tab title="Chamado" >
+                        <p:panelGrid  id="grid" layout="grid"  columns="4" class="corDialog" style="width: 100%" >
+                            <p:outputLabel class="colorDialog" value="Servidor Host" />
+                            <p:inputText value="#{parametrosBean.parametro.hostNameChamado}" />
+
+                            <p:outputLabel class="colorDialog" value="Porta SMTP" />
+                            <p:inputNumber decimalPlaces="0" decimalSeparator="," value="#{parametrosBean.parametro.smtpPortChamado}" />
+
+                            <p:outputLabel class="colorDialog" value="Login E-mail" />
+                            <p:inputText value="#{parametrosBean.parametro.loginEmailChamado}" />
+
+                            <p:outputLabel class="colorDialog" value="Senha E-mail" />
+                            <p:inputText value="#{parametrosBean.parametro.senhaEmailChamado}" />
+
+                            <p:outputLabel class="colorDialog" value="Tipo de Codificação E-mail" />
+                            <p:inputText value="#{parametrosBean.parametro.codificacaoEmailChamado}" />
+
+                            <p:outputLabel class="colorDialog" value="URL Logomarca E-mail" />
+                            <p:inputText value="#{parametrosBean.parametro.urlLogoEmail}" />
+
+                            <p:outputLabel class="colorDialog" value="Nome do Sistema E-mail" />
+                            <p:inputText value="#{parametrosBean.parametro.nomePrincipalEmailChamado}" />
+
+                            <p:outputLabel class="colorDialog" value="Código Suprimento Compra" />                            
+                            <p:selectOneMenu  id="tipo1" value="#{parametrosBean.parametro.codSuprimentoCompra}" required="false" requiredMessage="Informe o tipo" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                <f:selectItems value="#{parametrosBean.tipoAtendimento}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}"/>
+                                <p:message for="tipo1"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel class="colorDialog" value="Código Suprimento Troca" />
+                            <p:selectOneMenu  id="tipo2" value="#{parametrosBean.parametro.codSuprimentoTroca}" required="false" requiredMessage="Informe o tipo" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                <f:selectItems value="#{parametrosBean.tipoAtendimento}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}"/>
+                                <p:message for="tipo2"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel class="colorDialog" value="Código Preventiva" />
+                            <p:selectOneMenu  id="tipo3" value="#{parametrosBean.parametro.codPreventiva}" required="false" requiredMessage="Informe o tipo" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                <f:selectItems value="#{parametrosBean.tipoAtendimento}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}"/>
+                                <p:message for="tipo3"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel class="colorDialog" value="Código Troca Local / Usuário" />
+                            <p:selectOneMenu  id="tipo4" value="#{parametrosBean.parametro.codTrocaLocal}" required="false" requiredMessage="Informe o tipo" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                <f:selectItems value="#{parametrosBean.tipoAtendimento}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}"/>
+                                <p:message for="tipo4"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel class="colorDialog" value="Código Atividade ADM" />
+                            <p:selectOneMenu  id="tipo5" value="#{parametrosBean.parametro.codAtividadeAdm}" required="false" requiredMessage="Informe o tipo" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                <f:selectItems value="#{parametrosBean.tipoAtendimento}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}"/>
+                                <p:message for="tipo5"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel class="colorDialog" value="Código Perda / Roubo / Vencimento" />
+                            <p:selectOneMenu  id="tipo6" value="#{parametrosBean.parametro.codPerdaRouboVencimento}" required="false" requiredMessage="Informe o tipo" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                <f:selectItems value="#{parametrosBean.tipoAtendimento}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}"/>
+                                <p:message for="tipo6"/>
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel class="colorDialog" value="Código Atividades Juridicas" />
+                            <p:selectOneMenu  id="tipo8" value="#{parametrosBean.parametro.codJuridico}" required="false" requiredMessage="Informe o tipo" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                <f:selectItems value="#{parametrosBean.tipoAtendimento}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.cod}"/>
+                                <p:message for="tipo8"/>
+                            </p:selectOneMenu>
+                       
+                            <p:outputLabel class="colorDialog" value="Código Tabela Recurso Solicitante / Usuário" />
+                            <p:selectOneMenu  id="tipo7" value="#{parametrosBean.parametro.codRecursoSolic}" required="false" requiredMessage="Informe o tipo" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="0" itemLabel="::Selecione::"/>
+                                <f:selectItems value="#{parametrosBean.tabelas}" var="tipo" itemLabel="#{tipo.cod} - #{tipo.descricao}" itemValue="#{tipo.cod}"/>
+                                <p:message for="tipo7"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel class="colorDialog" value="Quantidade de dias de Chamado Agendado" />
+                            <p:inputNumber decimalPlaces="0" decimalSeparator="," value="#{parametrosBean.parametro.qtdDiasAgendamento}" />
+
+                            <p:outputLabel class="colorDialog" value="Quantidade de dias de Chamado Atrasado" />
+                            <p:inputNumber decimalPlaces="0" decimalSeparator="," value="#{parametrosBean.parametro.qtdDiasChamadoAtrasado}" />
+
+                            <p:outputLabel class="colorDialog" value="Quantidade de registro para DELETAR Chamado" />
+                            <p:inputNumber decimalPlaces="0" decimalSeparator="," value="#{parametrosBean.parametro.qtdRegistroApagaChamado}" />
+
+                            <p:outputLabel class="colorDialog" value="Nome Assunto Email Chamado 'FROM' " />
+                            <p:inputText  value="#{parametrosBean.parametro.assuntoEmailChamado}" />
+
+                            <p:outputLabel class="colorDialog" value="Padrão Email Tarefa" />
+
+                            <p:selectBooleanButton required="true" 
+                                                   requiredMessage="Informe o Status do Campo Geral" id="sa4" onLabel="Marcado"
+                                                   offLabel="Desmarcado" onIcon="ui-icon-check" offIcon="ui-icon-close"
+                                                   value="#{parametrosBean.parametro.padraoEmailTarefa}" style="width: 50%" >
+                                <p:message for="sa4"/>
+                            </p:selectBooleanButton>
+
+                            <p:outputLabel class="colorDialog" value="Padrão Email Tarefa Administrativa" />
+
+                            <p:selectBooleanButton required="true" 
+                                                   requiredMessage="Informe o Status do Campo Geral" id="sa3" onLabel="Marcado"
+                                                   offLabel="Desmarcado" onIcon="ui-icon-check" offIcon="ui-icon-close"
+                                                   value="#{parametrosBean.parametro.padraoEmailAdm}" style="width: 50%" >
+                                <p:message for="sa3"/>
+                            </p:selectBooleanButton>
+
+                            <p:outputLabel class="colorDialog" value="Padrão Email Tarefa Agendada" />
+
+                            <p:selectBooleanButton required="true" 
+                                                   requiredMessage="Informe o Status do Campo Geral" id="sa5" onLabel="Marcado"
+                                                   offLabel="Desmarcado" onIcon="ui-icon-check" offIcon="ui-icon-close"
+                                                   value="#{parametrosBean.parametro.padraoEmailAgendamento}" style="width: 50%" >
+                                <p:message for="sa5"/>
+                            </p:selectBooleanButton>
+
+                        </p:panelGrid>
+
+                    </p:tab>
+                    <p:tab title="Requerimento" >
+                        <p:panelGrid  id="grid2" layout="grid" columns="4"   class="corDialog" style="width: 100%" >
+                            <p:outputLabel class="colorDialog" value="Servidor Host" />
+                            <p:inputText value="#{parametrosBean.parametro.hostNameRequerimento}" />
+
+                            <p:outputLabel class="colorDialog" value="Porta SMTP" />
+                            <p:inputNumber decimalPlaces="0" decimalSeparator="0" value="#{parametrosBean.parametro.smtpPortRequerimento}" />
+
+                            <p:outputLabel class="colorDialog" value="Login E-mail" />
+                            <p:inputText value="#{parametrosBean.parametro.loginEmailRequerimento}" />
+
+                            <p:outputLabel class="colorDialog" value="Senha E-mail" />
+                            <p:inputText value="#{parametrosBean.parametro.senhaEmailRequerimento}" /> 
+
+                            <p:outputLabel class="colorDialog" value="Tipo de Codificação E-mail" />
+                            <p:inputText value="#{parametrosBean.parametro.codificacaoEmailRequerimento}" />
+
+                            <p:outputLabel class="colorDialog" value="Nome do Sistema E-mail" />
+                            <p:inputText value="#{parametrosBean.parametro.nomePrincipalEmailRequerimento}" />
+
+                            <p:outputLabel class="colorDialog" value="Código Supervisor" />                            
+                            <p:selectOneMenu  id="usuario" value="#{parametrosBean.parametro.codSupervisorRequerimento}" required="true" requiredMessage="Informe o Usuário" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                <f:selectItems value="#{parametrosBean.usuarios}" var="tipo" itemLabel="#{tipo.nome}" itemValue="#{tipo.id}"/>
+                                <p:message for="usuario"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel class="colorDialog" value="Nome Assunto Email Requerimento 'FROM' " />
+                            <p:inputText  value="#{parametrosBean.parametro.assuntoEmailRequerimento}" />
+
+                        </p:panelGrid>
+
+                    </p:tab>                   
+
+                    <p:tab title="Equipamento" >
+                        <p:panelGrid  id="grid5" layout="grid" columns="4" class="corDialog" style="width: 100%" >
+                            <p:outputLabel class="colorDialog" value="Cadastrar Informática" />
+                            <p:selectBooleanButton required="true" 
+                                                   requiredMessage="Informe o Status do Campo Informática" id="sa" onLabel="Sim"
+                                                   offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close"
+                                                   value="#{parametrosBean.parametro.cadInfor}" style="width: 50%" >
+                                <p:message for="sa"/>
+                            </p:selectBooleanButton>
+
+                            <p:outputLabel class="colorDialog" value="Cadastrar Geral" />
+                            <p:selectBooleanButton required="true" 
+                                                   requiredMessage="Informe o Status do Campo Geral" id="sa2" onLabel="Sim"
+                                                   offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close"
+                                                   value="#{parametrosBean.parametro.cadGeral}" style="width: 50%" >
+                                <p:message for="sa2"/>
+                            </p:selectBooleanButton>
+                        </p:panelGrid>
+
+                    </p:tab>
+                    <p:tab title="Arquivo" >
+                        <p:panelGrid  id="grid6" layout="grid" columns="4" class="corDialog" style="width: 100%" >
+
+                            <p:outputLabel class="colorDialog" value="Diretorio dos Arquivos" />
+                            <p:inputText value="#{parametrosBean.parametro.diretorioArquivo}" />
+
+                            <p:outputLabel class="colorDialog" value="Pasta Base de Conhecimento" />
+                            <p:inputText value="#{parametrosBean.parametro.pastaBC}" />
+
+                            <p:outputLabel class="colorDialog" value="Pasta Chamado" />
+                            <p:inputText value="#{parametrosBean.parametro.pastaChamado}" />
+
+                            <p:outputLabel class="colorDialog" value="Pasta Equipamento" />
+                            <p:inputText value="#{parametrosBean.parametro.pastaEquipamento}" />
+
+                            <p:outputLabel class="colorDialog" value="Pasta Noticia" />
+                            <p:inputText value="#{parametrosBean.parametro.pastaNoticia}" />
+
+                            <p:outputLabel class="colorDialog" value="Pasta Software" />
+                            <p:inputText value="#{parametrosBean.parametro.pastaSoftware}" />
+
+                        </p:panelGrid>
+
+                    </p:tab>
+                    <p:tab title="Sistema" >
+                        <p:panelGrid  id="grid3" layout="grid" columns="4"   class="corDialog" style="width: 100%" >
+                            <p:outputLabel class="colorDialog" value="Email Para Erros do Sistema" />
+                            <p:inputText value="#{parametrosBean.parametro.emailProgramador}" />
+                        </p:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </div>
+            <br/>           
+            <p:commandButton id="btnSalvar" styleClass="tamBtn" actionListener="#{parametrosBean.salvar()}"  icon="fa fa-save" value="Salvar"  />
+        </h:form> 
+
+
+    </ui:define>       
+
+
+
+
+
+</ui:composition>

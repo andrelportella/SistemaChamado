@@ -1,0 +1,238 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <!-- Dica para dar manutenção ao código, clique nos icones (+, -) para abrir e fechar as tags, pois está página
+    é enorme e se for navegar nela para ver as funções especificas, você vai perder muito tempo. todas as tags estão
+    comentadas com suas respectivas funções.
+    -->
+
+
+    <ui:define name="corpo">       
+
+        <h:form id="ajax">
+            <p:ajaxStatus  onstart="PF('statusDialog').show()" onerror="PF('statusDialog').hide()" oncomplete="PF('statusDialog').hide()" />
+            <p:growl autoUpdate="true" showDetail="true" />
+        </h:form>
+
+        <p:dialog modal="true" widgetVar="statusDialog" header="Carregando" draggable="false" closable="false" resizable="false">
+            <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+        </p:dialog>
+
+        <title>#{loginBean.lojas}</title>
+
+        <!-- Lista de Atendimentos Cadastrados -->
+        <h:form id="lojas_form">
+            <p:growl id="growl" showDetail="true" sticky="true" /> 
+            <p:dataTable   rendered="#{loginBean.acesso.acessaEmbarcacao}" reflow="true" value="#{embarcaoLojaBean.embarcacaoLojas}" id="lojas" var="req" paginator="true" resizableColumns="true" widgetVar="celRequerimento"  
+                           rows="10" rowsPerPageTemplate="10, 15, 20,50,100"  rowKey="#{req.id}"  selectionMode="single" selection="#{embarcaoLojaBean.embarcacaoLojaSelecionado}" 
+                           paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                           {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" style="width: 100%;"    >
+
+                <f:facet name="header">
+                    #{loginBean.lojas}
+                    <p:commandButton  class="horizontalmenu" id="toggler" type="button" value="Colunas"  style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="lojas" trigger="toggler" /> 
+                    <p:commandButton value="Importar / Atualizar Cadastro" action="#{embarcaoLojaBean.importar()}" update="lojas" actionListener="#{embarcaoLojaBean.listar()}" rendered="#{embarcaoLojaBean.renderizador}" title="Importar / Cadastrar Cliente" styleClass="btnCadastrar" />
+                    <p:commandButton value="Cadastrar" update=":cadastrarDetal" oncomplete="PF('cadastrarDialog').show()" icon="fa fa-plus" title="Cadastrar Base" styleClass="btnCadastrar"  rendered="#{!embarcaoLojaBean.renderizador}" />
+                </f:facet>
+
+
+                <p:column headerText="Código SGR"  filterStyle="max-width: 40px;"
+                          sortBy="#{req.id}" filterBy="#{req.id}" filterMatchMode="contains"
+                          width="7.5%" >
+
+                    <h:outputText value="#{req.id}"  />
+                </p:column>
+
+                <p:column headerText="#{loginBean.nome_Lojas}" filterStyle="max-width: 70px;"
+                          sortBy="#{req.nomeVagaLoja}" filterBy="#{req.nomeVagaLoja}"  filterMatchMode="contains"
+                          width="17.5%" >
+                    <h:outputText value="#{req.nomeVagaLoja}"/>                                           
+                </p:column>
+
+                <p:column headerText="Embarcação" rendered="#{embarcaoLojaBean.renderizador}"
+                          sortBy="#{req.nomeBarco}" filterBy="#{req.nomeBarco}"  filterMatchMode="contains"
+                          width="20%" >
+                    <h:outputText value="#{req.nomeBarco}"/>                                           
+                </p:column>
+
+                <p:column headerText="Cliente" 
+                          sortBy="#{req.cliente}" filterBy="#{req.cliente}"  filterMatchMode="contains"
+                          width="50%">
+                    <h:outputText value="#{req.cliente}"/>                                           
+                </p:column>
+
+                <p:column exportable="false"  priority="1" headerText="Menu"
+                          width="5%" >
+                    <p:splitButton value=" " title="Opções"  style="height: 15px; width: 5px" >
+                        <p:menuitem value="Visualizar" update=":embarcacaoLojaDetal" oncomplete="PF('embarcacaoLojaDialog').show()" icon="ui-icon-search" title="Visualizar" rendered="true" >
+                            <f:setPropertyActionListener value="#{req}" target="#{embarcaoLojaBean.embarcacaoLojaSelecionado}" />
+                        </p:menuitem>
+                        <p:menuitem value="Editar"  disabled="#{embarcaoLojaBean.renderizador}" update=":editarDetal" oncomplete="PF('editarDialog').show()" icon="fa fa-edit" title="Editar" rendered="true" 
+                                    actionListener="#{embarcaoLojaBean.editar(req)}"   />
+
+                    </p:splitButton>
+                </p:column> 
+
+                <f:facet name="footer">
+
+                </f:facet>
+            </p:dataTable>
+
+        </h:form>
+
+
+
+        <!-- dialogAtendimento -->
+        <p:dialog header="Informações" widgetVar="embarcacaoLojaDialog"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+            <p:outputPanel id="embarcacaoLojaDetal">
+                <p:panelGrid style="width: 100%" rendered="#{not empty embarcaoLojaBean.embarcacaoLojas}" columnClasses="label,value"  >
+
+                    <p:row>
+
+                        <p:column rowspan="1" >
+                            <h:outputText value="Cliente" class="dialog" />
+                        </p:column>
+                        <p:column rowspan="1" colspan="3" >
+                            <h:outputText value="#{embarcaoLojaBean.embarcacaoLojaSelecionado.cliente}">
+
+                            </h:outputText>
+                        </p:column>
+
+                    </p:row>         
+
+                    <p:row>                       
+                        <p:column rowspan="1"  >
+                            <h:outputText value="Código SGR " class="dialog" /> 
+                        </p:column>  
+
+                        <p:column rowspan="1"  >
+                            <h:outputText value="#{embarcaoLojaBean.embarcacaoLojaSelecionado.id}"/>
+                        </p:column>  
+
+
+
+                    </p:row>  
+
+                    <p:row>
+
+                        <p:column rendered="#{embarcaoLojaBean.renderizador}" rowspan="1">
+                            <h:outputText value="Embarcação" class="dialog" />
+                        </p:column>
+
+                        <p:column rendered="#{embarcaoLojaBean.renderizador}" rowspan="1">
+                            <h:outputText  value="#{embarcaoLojaBean.embarcacaoLojaSelecionado.nomeBarco}"  />
+                        </p:column>
+
+                        <p:column rowspan="1">
+                            <h:outputText value="#{loginBean.nome_Lojas}" class="dialog" />                             
+                        </p:column>
+                        <p:column rowspan="1">
+                            <h:outputText value="#{embarcaoLojaBean.embarcacaoLojaSelecionado.nomeVagaLoja}"/>                    
+                        </p:column>
+                    </p:row>  
+
+
+
+                </p:panelGrid>
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogCadastrar -->
+        <p:dialog  widgetVar="cadastrarDialog"   header="Cadastrar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="cadastrarDetal"   >
+                <h:form id="form">
+                    <div class="ui-fluid">
+                        <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" value="#{loginBean.lojas}" for="nome" />
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:inputText id="nome" value="#{embarcaoLojaBean.embarcacaoLoja.nomeVagaLoja}"  required="true"  requiredMessage="Digite um nome"  >
+                                        <p:message for="nome"/>
+                                    </p:inputText>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" value="Cliente" for="cli" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:selectOneMenu  id="cli" value="#{embarcaoLojaBean.embarcacaoLoja.codigoSTAI}" autoWidth="true" required="true" requiredMessage="Informe o Cliente" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                        <f:selectItems value="#{embarcaoLojaBean.clientes}" var="cli" itemLabel="#{cli.nome}" itemValue="#{cli.id}" />
+                                        <p:message for="cli"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+                    <p:commandButton  class="tamBtn"  update=":lojas_form:lojas" ajax="true" value="Salvar" action="#{embarcaoLojaBean.salvar()}" icon="fa fa-save" />
+
+                </h:form>
+                <h:form>
+                    <p:commandButton id="btnClose" style="float: right; bottom: 14px; background-color: #f03369;"  icon="fa fa-close" onclick="PF('cadastrarDialog').hide()" value="Cancelar"  />
+                </h:form>
+
+            </p:outputPanel>
+        </p:dialog>
+
+        <!-- dialogEditar -->
+        <p:dialog  widgetVar="editarDialog" header="Editar"  resizable="true" class="corDialog"   maximizable="true" minimizable="true" fitViewport="true"  height="80%" width="80%" closeOnEscape="true" draggable="true" >
+
+            <p:outputPanel id="editarDetal"   >
+                <h:form id="editar">
+                    <div class="ui-fluid">
+                        <p:panelGrid  id="grid" class="corDialog" style="width: 100%" >
+
+                            <p:row class="corDialog">
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" value="#{loginBean.lojas}" for="nome" />
+                                </p:column>
+
+                                <p:column rowspan="1" >
+                                    <p:inputText id="nome" value="#{embarcaoLojaBean.editaEmbarcacaoLoja.nomeVagaLoja}"  required="true"  requiredMessage="Digite um nome"  >
+                                        <p:message for="nome"/>
+                                    </p:inputText>
+                                </p:column>
+
+                                <p:column rowspan="1">
+                                    <p:outputLabel class=" colorDialog" value="Cliente" for="cli" />
+                                </p:column>
+
+                                <p:column rowspan="1">
+
+                                    <p:selectOneMenu id="cli" value="#{embarcaoLojaBean.editaEmbarcacaoLoja.codigoSTAI}" autoWidth="true" required="true" requiredMessage="Informe o Cliente" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemValue="#{null}" itemLabel="::Selecione::"/>
+                                        <f:selectItems value="#{embarcaoLojaBean.clientes}" var="cli" itemLabel="#{cli.nome}" itemValue="#{cli.id}" />
+                                        <p:message for="cli"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>                      
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+
+                    <p:commandButton class="tamBtn"  update=":lojas_form:lojas" ajax="true" value="Editar" action="#{embarcaoLojaBean.editarEmbarcacao_Loja()}" icon="fa fa-edit" />
+
+                </h:form>
+
+                <h:form>
+                    <p:commandButton id="btnClose" style="float: right; bottom: 14px; background-color: #f03369;"  icon="fa fa-close" onclick="PF('editarDialog').hide()" value="Cancelar"  />
+                </h:form>
+
+            </p:outputPanel>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

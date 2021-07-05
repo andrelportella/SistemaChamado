@@ -1,0 +1,64 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" 
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+
+    <p:dialog footer="" class="corDialog" widgetVar="caixaDialog" header="Evento" resizable="false" showEffect="clip" width="400" height="385">
+        <h:form id="formSche">
+            <p:outputPanel class="corDialog" id="eventoDetalhe">
+                <div class="ui-fluid ">
+                    <p:growl id="messages" showDetail="true" />
+
+                    <p:panelGrid layout="grid" class="corDialog"  columns="2"  columnClasses="ui-grid-col-4, ui-grid-col-8">
+
+                        <p:outputLabel for="titulo" class="colorDialog"  value="Titulo:" />
+                        <p:inputText id="titulo" value="#{eventoBean.evento.titulo}" required="true" requiredMessage="Por favor, insira um titulo!" >
+                            <p:message for="titulo"/>
+                            <f:validateLength minimum="5" />
+                            <f:validateLength maximum="60" />                        
+                        </p:inputText>
+
+                        <p:outputLabel for="dtInicio" class="colorDialog"  value="Inicio:" />
+                        <p:calendar id="dtInicio" value="#{eventoBean.evento.inicio}" required="true" requiredMessage="Por favor, insira a Data de Inicio" pattern="dd/MM/yyyy HH:mm" >
+                            <p:message for="dtInicio"/>
+                        </p:calendar>
+
+                        <p:outputLabel for="dtFim" class="colorDialog"  value="Fim:" />
+                        <p:calendar id="dtFim" value="#{eventoBean.evento.fim}" required="true" requiredMessage="Por favor, insira a Data de fim"  pattern="dd/MM/yyyy HH:mm">
+                            <p:message for="dtFim"/>
+                        </p:calendar>
+
+                        <p:outputLabel for="acomp" class="colorDialog"  value="Participantes" />
+                        <p:selectCheckboxMenu  converter="javax.faces.Long" panelStyle="width:250px" multiple="true" label="Acompanhantes" id="acomp" value="#{eventoBean.evento.listaAcompanhante}"  required="false" requiredMessage="Informe um Técnico" filter="true" filterMatchMode="contains" >
+                            <f:selectItems value="#{eventoBean.acompanhar}" var="tec" itemLabel="#{tec.nome}" itemValue="#{tec.id}"  />
+                            <p:message for="acomp" />
+                        </p:selectCheckboxMenu>
+
+                        <p:outputLabel for="status" class="colorDialog"  value="Status " />
+                        <h:selectOneRadio  id="status" styleClass="tipoGuia" value="#{eventoBean.evento.tipoEvento}"  >                                                
+                            <f:selectItems value="#{eventoBean.tiposEventos}" var="evento" itemValue="#{evento.css}" itemLabel="#{evento.descricao}" />                        
+                        </h:selectOneRadio>
+
+                        <p:outputLabel for="obs" class="colorDialog"  value="Descrição" />
+                        <p:inputTextarea id="obs" counter="display" maxlength="8000" counterTemplate="{0} Caracteres restantes." autoResize="true" value="#{eventoBean.evento.descricao}">
+                            <p:message for="obs"/>
+                        </p:inputTextarea>
+                        <h:outputText />
+                        <h:outputText class="colorDialog" id="display" />
+                    </p:panelGrid>
+
+                </div>
+            </p:outputPanel>
+            <br/>
+            <p:commandButton value="Salvar" styleClass="tamBtn" update="messages" id="btnSalvar"  icon="fa fa-save" actionListener="#{eventoBean.Salvar}" oncomplete="PF('meuCalendario').update();"/>
+        </h:form>
+        <h:form>
+            <p:commandButton value="Fechar" id="btnClose" styleClass="tamBtnClose"  icon="fa fa-close" onclick="PF('caixaDialog').hide()" />
+        </h:form>
+    </p:dialog>
+
+
+</ui:composition>
